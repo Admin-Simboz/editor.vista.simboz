@@ -8,6 +8,7 @@
           <a href="#" target="_blank">
             <Icon type="#" :size="30" />
           </a>
+      
         </span>
 
         <!-- import -->
@@ -131,6 +132,7 @@
 import importJSON from '@/components/importJSON.vue';
 import importFile from '@/components/importFile.vue';
 import fontTmpl from '@/components/fontTmpl.vue';
+
 
 // Top components
 import align from '@/components/align.vue';

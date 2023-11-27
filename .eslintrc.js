@@ -35,12 +35,7 @@ module.exports = {
     'vuejs-accessibility/click-events-have-key-events': 'off',
     'max-len': 'off',
 
-    "prettier/prettier": [
-      "error",
-      {
-        "endOfLine": "auto"
-      },
-    ],
+    "prettier/prettier": 'off',
     'no-unused-expressions': 'off', // 17
     'linebreak-style': 'off',
     'vue/multi-word-component-names': 'off', // Opening the component requires multiple words

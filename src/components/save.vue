@@ -64,7 +64,7 @@ const saveWith = debounce(function (type) {
 }, 300);
 
 /**
- * @desc clear canvas 
+ *@desc clear canvas
  */
 const clear = () => {
   canvasEditor.clear();

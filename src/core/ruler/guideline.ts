@@ -15,28 +15,28 @@ export function setupGuideLine() {
     stroke: '#4bec13',
     originX: 'center',
     originY: 'center',
-    padding: 4, // 填充，让辅助线选择范围更大，方便选中
+    padding: 4, // Fill to make the selection range of auxiliary lines larger and easier to select
     globalCompositeOperation: 'difference',
     axis: 'horizontal',
     // excludeFromExport: true,
 
     initialize(points, options) {
       const isHorizontal = options.axis === 'horizontal';
-      // 指针
+      // pointer
       this.hoverCursor = isHorizontal ? 'ns-resize' : 'ew-resize';
-      // 设置新的点
+      // Set new point
       const newPoints = isHorizontal
         ? [-999999, points, 999999, points]
         : [points, -999999, points, 999999];
-      // 锁定移动
+      // Lock movement
       options[isHorizontal ? 'lockMovementX' : 'lockMovementY'] = true;
-      // 调用父类初始化
+      // Call parent class initialization
       this.callSuper('initialize', newPoints, options);
 
-      // 绑定事件
+      // Binding event
       this.on('mousedown:before', (e) => {
         if (this.activeOn === 'down') {
-          // 设置selectable:false后激活对象才能进行移动
+          // The object can only be moved after setting selectable:false
           this.canvas.setActiveObject(this, e.e);
         }
       });
@@ -54,9 +54,9 @@ export function setupGuideLine() {
       });
 
       this.on('mouseup', (e) => {
-        // 移动到标尺上，移除辅助线
+        //The object can only be moved after setting selectable:false
         if (this.canvas.ruler.options.enabled && this.isPointOnRuler(e.e)) {
-          // console.log('移除辅助线', this);
+          // console.log('Remove guide lines', this);
           this.canvas.remove(this);
           return;
         }

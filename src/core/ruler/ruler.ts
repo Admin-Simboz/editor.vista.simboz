@@ -6,7 +6,8 @@ import { throttle } from 'lodash-es';
 import { setupGuideLine } from './guideline';
 
 /**
- * 配置
+ * 
+Configuration
  */
 export interface RulerOptions {
   /**
@@ -15,40 +16,40 @@ export interface RulerOptions {
   canvas: Canvas;
 
   /**
-   * 标尺宽高
+   * Ruler width and height
    * @default 20
    */
   ruleSize?: number;
 
   /**
-   * 字体大小
+   * font size
    * @default 10
    */
   fontSize?: number;
 
   /**
-   * 是否开启标尺
+   * Whether to enable ruler
    * @default false
    */
   enabled?: boolean;
 
   /**
-   * 背景颜色
+   * background color
    */
   backgroundColor?: string;
 
   /**
-   * 文字颜色
+   * text color
    */
   textColor?: string;
 
   /**
-   * 边框颜色
+   * border color
    */
   borderColor?: string;
 
   /**
-   * 高亮颜色
+   * Highlight color
    */
   highlightColor?: string;
 }
@@ -63,19 +64,19 @@ class CanvasRuler {
   protected ctx: CanvasRenderingContext2D;
 
   /**
-   * 配置
+   * Configuration
    */
   public options: Required<RulerOptions>;
 
   /**
-   * 标尺起始点
+   * ruler starting point
    */
   public startCalibration: undefined | Point;
 
   private activeOn: 'down' | 'up' = 'up';
 
   /**
-   * 选取对象矩形坐标
+   * Select object rectangular coordinates
    */
   private objectRect:
     | undefined
@@ -85,7 +86,7 @@ class CanvasRuler {
       };
 
   /**
-   * 事件句柄缓存
+   * Event handle cache
    */
   private eventHandler: Record<string, (...args: any) => void> = {
     // calcCalibration: this.calcCalibration.bind(this),
@@ -114,7 +115,7 @@ class CanvasRuler {
   private tempGuidelLine: fabric.GuideLine | undefined;
 
   constructor(_options: RulerOptions) {
-    // 合并默认配置
+    // Merge default configuration
     this.options = Object.assign(
       {
         ruleSize: 20,
@@ -141,13 +142,13 @@ class CanvasRuler {
     }
   }
 
-  // 销毁
+  // destroy
   public destroy() {
     this.disable();
   }
 
   /**
-   * 移除全部辅助线
+   * Remove all guide lines
    */
   public clearGuideline() {
     this.options.canvas.remove(...this.options.canvas.getObjects(fabric.GuideLine.prototype.type));
