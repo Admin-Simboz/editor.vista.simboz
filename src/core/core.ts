@@ -11,11 +11,11 @@ class Editor extends EventEmitter {
   private pluginMap: {
     [propName: string]: IPluginTempl;
   } = {};
-  // 自定义事件
+  // Custom events
   private customEvents: string[] = [];
-  // 自定义API
+  // Custom API
   private customApis: string[] = [];
-  // 生命周期函数名
+  // life cycle function name
   private hooks: IEditorHooksType[] = [
     'hookImportBefore',
     'hookImportAfter',
@@ -41,7 +41,7 @@ class Editor extends EventEmitter {
     this._initServersPlugin();
   }
 
-  // 引入组件
+  // Introduce components
   use(plugin: IPluginClass, options: IPluginOption) {
     if (this._checkPlugin(plugin)) {
       this._saveCustomAttr(plugin);
@@ -53,35 +53,35 @@ class Editor extends EventEmitter {
     }
   }
 
-  // 获取插件
+  // Get plugin
   getPlugin(name: string) {
     if (this.pluginMap[name]) {
       return this.pluginMap[name];
     }
   }
 
-  // 检查组件
+  // Check components
   private _checkPlugin(plugin: IPluginClass) {
     const { pluginName, events = [], apis = [] } = plugin;
-    //名称检查
+    //name check
     if (this.pluginMap[pluginName]) {
-      throw new Error(pluginName + '插件重复初始化');
+      throw new Error(pluginName + 'Plug-in repeated initialization');
     }
     events.forEach((eventName: string) => {
       if (this.customEvents.find((info) => info === eventName)) {
-        throw new Error(pluginName + '插件中' + eventName + '重复');
+        throw new Error(pluginName + 'in plug-in' + eventName + '重复');
       }
     });
 
     apis.forEach((apiName: string) => {
       if (this.customApis.find((info) => info === apiName)) {
-        throw new Error(pluginName + '插件中' + apiName + '重复');
+        throw new Error(pluginName + 'in plug-in' + apiName + '重复');
       }
     });
     return true;
   }
 
-  // 绑定hooks方法
+  // Binding hooks method
   private _bindingHooks(plugin: IPluginTempl) {
     this.hooks.forEach((hookName) => {
       const hook = plugin[hookName];
@@ -94,10 +94,10 @@ class Editor extends EventEmitter {
     });
   }
 
-  // 绑定快捷键
+  // Bind shortcut keys
   private _bindingHotkeys(plugin: IPluginTempl) {
     plugin?.hotkeys?.forEach((keyName: string) => {
-      // 支持 keyup
+      //Support keyup
       hotkeys(keyName, { keyup: true }, (e) => plugin.hotkeyEvent(keyName, e));
     });
   }
@@ -108,7 +108,7 @@ class Editor extends EventEmitter {
     this.customApis = this.customApis.concat(apis);
     this.customEvents = this.customEvents.concat(events);
   }
-  // 代理API事件
+  // Proxy API events
   private _bindingApis(pluginRunTime: IPluginTempl) {
     const { apis = [] } = pluginRunTime.constructor;
     apis.forEach((apiName) => {
@@ -119,7 +119,7 @@ class Editor extends EventEmitter {
     });
   }
 
-  // 右键菜单
+  // right click menu
   private _bindContextMenu() {
     this.canvas.on('mouse:down', (opt) => {
       if (opt.button === 3) {
@@ -136,7 +136,7 @@ class Editor extends EventEmitter {
     });
   }
 
-  // 渲染右键菜单
+  // Render right-click menu
   private _renderMenu(opt: fabric.IEvent, menu: IPluginMenu[]) {
     if (menu.length !== 0) {
       this.contextMenu.hideAll();
@@ -145,7 +145,7 @@ class Editor extends EventEmitter {
     }
   }
 
-  // 生命周期事件
+  // life cycle events
   _initActionHooks() {
     this.hooks.forEach((hookName) => {
       this.hooksEntity[hookName] = new AsyncSeriesHook(['data']);

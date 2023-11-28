@@ -1,11 +1,3 @@
-/*
- * @Author: 秦少卫
- * @Date: 2023-08-04 21:13:16
- * @LastEditors: 秦少卫
- * @LastEditTime: 2023-08-07 23:04:58
- * @Description: 素材插件
- */
-
 import { fabric } from 'fabric';
 import Editor from '../core';
 type IEditor = Editor;
@@ -27,7 +19,7 @@ class MaterialPlugin {
     };
   }
 
-  // 根据素材类型获取分裂列表
+  // Get split list based on material type
   async getMaterialType(typeId: string) {
     const url = this.apiMapUrl[typeId];
     const res = await axios.get(url, { params: { typeId } });

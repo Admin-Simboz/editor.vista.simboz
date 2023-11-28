@@ -1,12 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/*
- * @Author: 秦少卫
- * @Date: 2023-06-20 13:06:31
- * @LastEditors: 秦少卫
- * @LastEditTime: 2023-07-04 23:37:07
- * @Description: 历史记录插件
- */
-
 import { fabric } from 'fabric';
 import Editor from '../core';
 import { ref } from 'vue';
@@ -44,7 +35,7 @@ class HistoryPlugin {
     return this.history;
   }
   _save(event) {
-    // 过滤选择元素事件
+    // Filter selected element events
     const isSelect = event.action === undefined && event.e;
     if (isSelect || !this.canvas) return;
     const workspace = this.canvas.getObjects().find((item) => item.id === 'workspace');
@@ -77,7 +68,7 @@ class HistoryPlugin {
     });
   };
 
-  // 快捷键扩展回调
+  // Shortcut key expansion callback
   hotkeyEvent(eventName: string, e: any) {
     if (eventName === 'ctrl+z' && e.type === 'keydown') {
       this.undo();

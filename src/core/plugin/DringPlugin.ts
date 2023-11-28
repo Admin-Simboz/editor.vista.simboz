@@ -1,10 +1,3 @@
-/*
- * @Author: 秦少卫
- * @Date: 2023-05-19 08:31:34
- * @LastEditors: 秦少卫
- * @LastEditTime: 2023-06-27 23:20:25
- * @Description: 拖拽插件
- */
 
 import Editor from '../core';
 type IEditor = Editor;
@@ -108,7 +101,7 @@ class DringPlugin {
     console.log('pluginDestroy');
   }
 
-  // 快捷键扩展回调
+  // Shortcut key expansion callback
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   hotkeyEvent(eventName: string, e: any) {
     if (e.code === 'Space' && e.type === 'keydown') {

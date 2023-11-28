@@ -1,10 +1,3 @@
-/*
- * @Author: 秦少卫
- * @Date: 2023-06-22 16:11:40
- * @LastEditors: 秦少卫
- * @LastEditTime: 2023-08-07 23:24:36
- * @Description: 组内文字编辑
- */
 
 import { fabric } from 'fabric';
 import Editor from '../core';
@@ -22,11 +15,11 @@ class GroupTextEditorPlugin {
     this._init();
   }
 
-  // 组内文本输入
+  // Text input within a group
   _init() {
     this.canvas.on('mouse:down', (opt) => {
       this.isDown = true;
-      // 重置选中controls
+      // Reset selected controls
       if (
         opt.target &&
         !opt.target.lockMovementX &&
@@ -48,7 +41,7 @@ class GroupTextEditorPlugin {
         const selectedObject = this._getGroupObj(opt) as fabric.IText;
         if (!selectedObject) return;
         selectedObject.selectable = true;
-        // 由于组内的元素，双击以后会导致controls偏移，因此隐藏他
+        //Since the elements in the group will cause the controls to shift after double-clicking, they are hidden.
         if (selectedObject.hasControls) {
           selectedObject.hasControls = false;
         }
@@ -62,7 +55,7 @@ class GroupTextEditorPlugin {
     });
   }
 
-  // 获取点击区域内的组内文字元素
+  // Get the text element in the group within the click area
   _getGroupTextObj(opt: fabric.IEvent<MouseEvent>) {
     const pointer = this.canvas.getPointer(opt.e, true);
     const clickObj = this.canvas._searchPossibleTargets(opt.target?._objects, pointer);
@@ -78,7 +71,7 @@ class GroupTextEditorPlugin {
     return clickObj;
   }
 
-  // 通过组合重新组装来编辑文字，可能会耗性能。
+  // Editing text by combining and reassembling may consume performance.
   _bedingTextEditingEvent(textObject: fabric.IText, opt: fabric.IEvent<MouseEvent>) {
     if (!opt.target) return;
     const textObjectJSON = textObject.toObject();
@@ -125,7 +118,7 @@ class GroupTextEditorPlugin {
     tempText.selectAll();
 
     tempText.on('editing:exited', () => {
-      // 进入编辑模式时触发
+      //Triggered when entering edit mode
       textObject.set({
         text: tempText.text,
         visible: true,
@@ -137,7 +130,7 @@ class GroupTextEditorPlugin {
     });
   }
 
-  // 绑定编辑取消事件
+  // Bind edit cancel event
   _bedingEditingEvent(textObject: fabric.IText, opt: fabric.IEvent<MouseEvent>) {
     if (!opt.target) return;
     const left = opt.target.left;
@@ -146,10 +139,11 @@ class GroupTextEditorPlugin {
 
     const resetGroup = () => {
       const groupArr = this.canvas.getObjects().filter((item) => item.id && ids.includes(item.id));
-      // 删除元素
+      // Delete element
+
       groupArr.forEach((item) => this.canvas.remove(item));
 
-      // 生成新组
+      // Generate new group
       const group = new fabric.Group([...groupArr]);
       group.set('left', left);
       group.set('top', top);
@@ -158,11 +152,11 @@ class GroupTextEditorPlugin {
       this.canvas.add(group);
       this.canvas.discardActiveObject().renderAll();
     };
-    // 绑定取消事件
+    // Bind cancel event
     textObject.on('editing:exited', resetGroup);
   }
 
-  // 拆分组合并返回ID
+  // Split the combination and return the ID
   _unGroup() {
     const ids: string[] = [];
     const activeObj = this.canvas.getActiveObject() as fabric.Group;

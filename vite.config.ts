@@ -13,7 +13,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx';
 import eslintPlugin from 'vite-plugin-eslint'; //导入包
 import vueSetupExtend from 'vite-plugin-vue-setup-extend-plus';
 import autoImports from 'unplugin-auto-import/vite';
-// import { VitePWA } from 'vite-plugin-pwa';
+ import { VitePWA } from 'vite-plugin-pwa';
 
 type CacheStrategy =
   | 'CacheFirst'
@@ -50,28 +50,28 @@ const config = ({ mode }) => {
   const envPrefix = 'APP_';
   const { APP_TITLE = '' } = loadEnv(mode, process.cwd(), envPrefix);
   return {
-    base: isProd ? '/vue-fabric-editor/' : '/',
+    base: isProd ? '/' : '/',
     plugins: [
       vue(),
-      // VitePWA({
-      //   manifest: false,
-      //   registerType: 'autoUpdate',
-      //   workbox: {
-      //     cacheId: APP_TITLE,
-      //     runtimeCaching: [
-      //       getCache({
-      //         // js /css /ts静态资源缓存
-      //         name: 'js-css-cache',
-      //         pattern: /(.*?)\.(js|css|ts)/,
-      //       }),
-      //       getCache({
-      //         // 图片缓存
-      //         name: 'image-cache',
-      //         pattern: /(.*?)\.(png|jpe?g|svg|gif|json|psd|ttf)/,
-      //       }),
-      //     ],
-      //   },
-      // }),
+       VitePWA({
+        manifest: false,
+        registerType: 'autoUpdate',
+         workbox: {
+           cacheId: APP_TITLE,
+           runtimeCaching: [
+             getCache({
+               // js /css /ts静态资源缓存
+               name: 'js-css-cache',
+               pattern: /(.*?)\.(js|css|ts)/,
+             }),
+             getCache({
+               // 图片缓存
+               name: 'image-cache',
+               pattern: /(.*?)\.(png|jpe?g|svg|gif|json|psd|ttf)/,
+             }),
+           ],
+         },
+       }),
       autoImports({
         imports: ['vue'],
         eslintrc: {

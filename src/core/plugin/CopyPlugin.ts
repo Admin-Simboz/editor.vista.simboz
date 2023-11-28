@@ -1,10 +1,3 @@
-/*
- * @Author: 秦少卫
- * @Date: 2023-06-20 12:38:37
- * @LastEditors: 秦少卫
- * @LastEditTime: 2023-06-20 13:34:21
- * @Description: 复制插件
- */
 
 import { fabric } from 'fabric';
 import Editor from '../core';
@@ -24,19 +17,19 @@ class CopyPlugin {
     this.cache = null;
   }
 
-  // 多选对象复制
+  // Copy multiple selected objects
   _copyActiveSelection(activeObject: fabric.Object) {
-    // 间距设置
+    // Spacing settings
     const grid = 10;
     const canvas = this.canvas;
     activeObject?.clone((cloned: fabric.Object) => {
-      // 再次进行克隆，处理选择多个对象的情况
+      // Clone again to handle the selection of multiple objects
       cloned.clone((clonedObj: fabric.ActiveSelection) => {
         canvas.discardActiveObject();
         if (clonedObj.left === undefined || clonedObj.top === undefined) return;
-        // 将克隆的画布重新赋值
+        // Reassign the cloned canvas
         clonedObj.canvas = canvas;
-        // 设置位置信息
+        // Set location
         clonedObj.set({
           left: clonedObj.left + grid,
           top: clonedObj.top + grid,
@@ -47,7 +40,7 @@ class CopyPlugin {
           obj.id = uuid();
           canvas.add(obj);
         });
-        // 解决不可选择问题
+        // Solve non-choice problems
         clonedObj.setCoords();
         canvas.setActiveObject(clonedObj);
         canvas.requestRenderAll();
@@ -55,15 +48,15 @@ class CopyPlugin {
     });
   }
 
-  // 单个对象复制
+  // Single object copy
   _copyObject(activeObject: fabric.Object) {
-    // 间距设置
+    // Spacing settings
     const grid = 10;
     const canvas = this.canvas;
     activeObject?.clone((cloned: fabric.Object) => {
       if (cloned.left === undefined || cloned.top === undefined) return;
       canvas.discardActiveObject();
-      // 设置位置信息
+      // Set location
       cloned.set({
         left: cloned.left + grid,
         top: cloned.top + grid,
@@ -76,7 +69,7 @@ class CopyPlugin {
     });
   }
 
-  // 复制元素
+  // Copy element
   clone(paramsActiveObeject: fabric.ActiveSelection | fabric.Object) {
     const activeObject = paramsActiveObeject || this.canvas.getActiveObject();
     if (!activeObject) return;
@@ -87,7 +80,7 @@ class CopyPlugin {
     }
   }
 
-  // 快捷键扩展回调
+  // Shortcut key expansion callback
   hotkeyEvent(eventName: string, e: any) {
     if (eventName === 'ctrl+c' && e.type === 'keydown') {
       const activeObject = this.canvas.getActiveObject();

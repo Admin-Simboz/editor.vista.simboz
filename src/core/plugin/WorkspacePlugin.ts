@@ -1,11 +1,3 @@
-/*
- * @Author: 秦少卫
- * @Date: 2023-06-27 12:26:41
- * @LastEditors: 秦少卫
- * @LastEditTime: 2023-11-19 21:05:33
- * @Description: 画布区域插件
- */
-
 import { fabric } from 'fabric';
 import Editor from '../core';
 import { throttle } from 'lodash-es';
@@ -69,14 +61,14 @@ class WorkspacePlugin {
     });
   }
 
-  // 初始化背景
+  // Initialize background
   _initBackground() {
     this.canvas.backgroundImage = '';
     this.canvas.setWidth(this.workspaceEl.offsetWidth);
     this.canvas.setHeight(this.workspaceEl.offsetHeight);
   }
 
-  // 初始化画布
+  // Initialize canvas
   _initWorkspace() {
     const { width, height } = this.option;
     const workspace = new fabric.Rect({
@@ -97,8 +89,9 @@ class WorkspacePlugin {
   }
 
   /**
-   * 设置画布中心到指定对象中心点上
-   * @param {Object} obj 指定的对象
+
+* Set the center of the canvas to the center point of the specified object
+   * @param {Object} obj the specified object
    */
   setCenterFromObject(obj: fabric.Rect) {
     const { canvas } = this;
@@ -111,7 +104,7 @@ class WorkspacePlugin {
     canvas.renderAll();
   }
 
-  // 初始化监听器
+  // Initialize listener
   _initResizeObserve() {
     const resizeObserver = new ResizeObserver(
       throttle(() => {
@@ -125,7 +118,7 @@ class WorkspacePlugin {
     this._initBackground();
     this.option.width = width;
     this.option.height = height;
-    // 重新设置workspace
+    // Reset workspace
     this.workspace = this.canvas
       .getObjects()
       .find((item) => item.id === 'workspace') as fabric.Rect;
@@ -146,7 +139,7 @@ class WorkspacePlugin {
     if (!this.workspace) return;
     this.setCenterFromObject(this.workspace);
 
-    // 超出画布不展示
+    // Do not display beyond the canvas
     this.workspace.clone((cloned: fabric.Rect) => {
       this.canvas.clipPath = cloned;
       this.canvas.requestRenderAll();
@@ -157,14 +150,14 @@ class WorkspacePlugin {
   _getScale() {
     const viewPortWidth = this.workspaceEl.offsetWidth;
     const viewPortHeight = this.workspaceEl.offsetHeight;
-    // 按照宽度
+    // According to width
     if (viewPortWidth / viewPortHeight < this.option.width / this.option.height) {
       return viewPortWidth / this.option.width;
-    } // 按照宽度缩放
+    } // scale to width
     return viewPortHeight / this.option.height;
   }
 
-  // 放大
+  // enlarge
   big() {
     let zoomRatio = this.canvas.getZoom();
     zoomRatio += 0.05;
@@ -172,7 +165,7 @@ class WorkspacePlugin {
     this.canvas.zoomToPoint(new fabric.Point(center.left, center.top), zoomRatio);
   }
 
-  // 缩小
+  // zoom out
   small() {
     let zoomRatio = this.canvas.getZoom();
     zoomRatio -= 0.05;
@@ -183,13 +176,13 @@ class WorkspacePlugin {
     );
   }
 
-  // 自动缩放
+  // Auto scaling
   auto() {
     const scale = this._getScale();
     this.setZoomAuto(scale - 0.08);
   }
 
-  // 1:1 放大
+  //1:1 zoom
   one() {
     this.setZoomAuto(0.8 - 0.08);
     this.canvas.requestRenderAll();

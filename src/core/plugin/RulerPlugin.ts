@@ -1,11 +1,3 @@
-/*
- * @Author: 秦少卫
- * @Date: 2023-07-04 23:45:49
- * @LastEditors: 秦少卫
- * @LastEditTime: 2023-07-05 00:26:39
- * @Description: 标尺插件
- */
-
 import { fabric } from 'fabric';
 import Editor from '../core';
 // import { throttle } from 'lodash-es';

@@ -1,11 +1,3 @@
-/*
- * @Author: 秦少卫
- * @Date: 2023-06-20 13:21:10
- * @LastEditors: 秦少卫
- * @LastEditTime: 2023-06-20 13:42:32
- * @Description: 组合拆分组合插件
- */
-
 import { fabric } from 'fabric';
 import Editor from '../core';
 import { v4 as uuid } from 'uuid';
@@ -21,11 +13,11 @@ class GroupPlugin {
     this.editor = editor;
   }
 
-  // 拆分组
+  // Split group
   unGroup() {
     const activeObject = this.canvas.getActiveObject() as fabric.Group;
     if (!activeObject) return;
-    // 先获取当前选中的对象，然后打散
+    // First get the currently selected object and then scatter it
     activeObject.toActiveSelection();
     activeObject.getObjects().forEach((item: fabric.Object) => {
       item.set('id', uuid());
@@ -34,7 +26,7 @@ class GroupPlugin {
   }
 
   group() {
-    // 组合元素
+    // Combining elements
     const activeObj = this.canvas.getActiveObject() as fabric.ActiveSelection;
     if (!activeObj) return;
     const activegroup = activeObj.toGroup();

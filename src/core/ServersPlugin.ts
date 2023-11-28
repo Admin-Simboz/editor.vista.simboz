@@ -1,15 +1,11 @@
-/*
- * @Author: 秦少卫
- * @Date: 2023-06-20 12:52:09
- * @LastEditors: June
- * @LastEditTime: 2023-11-07 21:57:19
- * @Description: 内部插件
- */
+
 import { v4 as uuid } from 'uuid';
 import { selectFiles, clipboardText } from '@/utils/utils';
 // import { clipboardText } from '@/utils/utils.ts';
 import { fabric } from 'fabric';
 import Editor from '../core';
+import axios from 'axios';
+
 type IEditor = Editor;
 // import { v4 as uuid } from 'uuid';
 
@@ -33,6 +29,7 @@ function transformText(objects) {
   });
 }
 
+
 class ServersPlugin {
   public canvas: fabric.Canvas;
   public editor: IEditor;
@@ -44,6 +41,7 @@ class ServersPlugin {
     'dragAddItem',
     'clipboard',
     'saveJson',
+    'saveTemplate',
     'saveSvg',
     'saveImg',
     'clear',
@@ -111,11 +109,28 @@ class ServersPlugin {
   async saveJson() {
     const dataUrl = this.getJson();
     //Convert text to textgroup so that the import can be edited
+    console.log(dataUrl);
     await transformText(dataUrl.objects);
     const fileStr = `data:text/json;charset=utf-8,${encodeURIComponent(
       JSON.stringify(dataUrl, null, '\t')
     )}`;
     downFile(fileStr, 'json');
+  }
+
+  async saveTemplate() {
+    const dataUrl = this.getJson();
+    try {
+      // Assuming 'SERVER_ENDPOINT' is the URL where you want to send the data
+      const response = await axios.post('SERVER_ENDPOINT', {
+        dataUrl: dataUrl,
+      });
+  
+      // Handle response if needed
+      console.log('Server Response:', response.data);
+    } catch (error) {
+      // Handle error
+      console.error('Error:', error);
+    }
   }
 
   saveSvg() {

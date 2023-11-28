@@ -1,10 +1,3 @@
-/*
- * @Author: 秦少卫
- * @Date: 2023-06-22 16:19:46
- * @LastEditors: 秦少卫
- * @LastEditTime: 2023-07-16 12:14:55
- * @Description: 组对齐插件
- */
 
 import { fabric } from 'fabric';
 import Editor from '../core';
@@ -216,12 +209,12 @@ class GroupAlignPlugin {
     const { canvas } = this;
     const activeObject = canvas.getActiveObject();
 
-    // width属性不准确，需要坐标换算
+    // The width attribute is inaccurate and requires coordinate conversion.
     function getItemWidth(item) {
       return item.aCoords.tr.x - item.aCoords.tl.x;
     }
 
-    // 获取所有元素高度
+    // Get the height of all elements
     function getAllItemHeight() {
       let count = 0;
       activeObject.forEachObject((item) => {
@@ -229,14 +222,14 @@ class GroupAlignPlugin {
       });
       return count;
     }
-    // 获取平均间距
+    // Get average spacing
     function spacWidth() {
       const count = getAllItemHeight();
       const allSpac = activeObject.width - count;
       return allSpac / (activeObject._objects.length - 1);
     }
 
-    // 获取当前元素之前所有元素的高度
+    // Get the height of all elements before the current element
     function getItemLeft(i) {
       if (i === 0) return 0;
       let width = 0;
@@ -248,18 +241,18 @@ class GroupAlignPlugin {
 
     if (activeObject && activeObject.type === 'activeSelection') {
       const activeSelection = activeObject;
-      // 排序
+      // sort
       activeSelection._objects.sort((a, b) => a.left - b.left);
 
-      // 平均间距计算
+      // Average spacing calculation
       const itemSpac = spacWidth();
-      // 组原点高度
+      // Group origin height
       const yHeight = activeObject.width / 2;
 
       activeObject.forEachObject((item, i) => {
-        // 获取当前元素之前所有元素的高度
+        // Get the height of all elements before the current element
         const preHeight = getItemLeft(i);
-        // 顶部距离 间距 * 索引 + 之前元素高度 - 原点高度
+        // Top distance spacing * index + previous element height - origin height
         const top = itemSpac * i + preHeight - yHeight;
         item.set('left', top);
       });
@@ -270,11 +263,11 @@ class GroupAlignPlugin {
   yequation() {
     const { canvas } = this;
     const activeObject = canvas.getActiveObject();
-    // width属性不准确，需要坐标换算
+    // The width attribute is inaccurate and requires coordinate conversion.
     function getItemHeight(item) {
       return item.aCoords.bl.y - item.aCoords.tl.y;
     }
-    // 获取所有元素高度
+    // Get the height of all elements
     function getAllItemHeight() {
       let count = 0;
       activeObject.forEachObject((item) => {
@@ -282,14 +275,14 @@ class GroupAlignPlugin {
       });
       return count;
     }
-    // 获取平均间距
+    //Get average spacing
     function spacHeight() {
       const count = getAllItemHeight();
       const allSpac = activeObject.height - count;
       return allSpac / (activeObject._objects.length - 1);
     }
 
-    // 获取当前元素之前所有元素的高度
+    // Get the height of all elements before the current element
     function getItemTop(i) {
       if (i === 0) return 0;
       let height = 0;
@@ -301,18 +294,18 @@ class GroupAlignPlugin {
 
     if (activeObject && activeObject.type === 'activeSelection') {
       const activeSelection = activeObject;
-      // 排序
+      // sort
       activeSelection._objects.sort((a, b) => a.top - b.top);
 
-      // 平均间距计算
+      // Average spacing calculation
       const itemSpac = spacHeight();
-      // 组原点高度
+      // Group origin height
       const yHeight = activeObject.height / 2;
 
       activeObject.forEachObject((item, i) => {
-        // 获取当前元素之前所有元素的高度
+        //Get the height of all elements before the current element
         const preHeight = getItemTop(i);
-        // 顶部距离 间距 * 索引 + 之前元素高度 - 原点高度
+        // Top distance spacing * index + previous element height - origin height
         const top = itemSpac * i + preHeight - yHeight;
         item.set('top', top);
       });

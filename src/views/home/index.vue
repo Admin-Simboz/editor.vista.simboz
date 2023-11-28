@@ -423,11 +423,10 @@ provide('canvasEditor', canvasEditor);
 .ivu-menu-light.ivu-menu-vertical .ivu-menu-item-active:not(.ivu-menu-submenu) {
   background: none;
 }
-// 标尺
 .switch {
   margin-right: 10px;
 }
-// 网格背景
+
 .design-stage-grid {
   --offsetX: 0px;
   --offsetY: 0px;

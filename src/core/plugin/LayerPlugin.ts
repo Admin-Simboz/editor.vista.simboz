@@ -1,11 +1,3 @@
-/*
- * @Author: 秦少卫
- * @Date: 2023-06-15 23:23:18
- * @LastEditors: 秦少卫
- * @LastEditTime: 2023-06-27 23:07:57
- * @Description: 图层调整插件
- */
-
 import { fabric } from 'fabric';
 import Editor from '../core';
 type IEditor = Editor;
@@ -101,7 +93,7 @@ class LayerPlugin {
           ],
         },
       ];
-      // return [{ text: '复制', hotkey: 'Ctrl+V', disabled: false, onclick: () => this.clone() }];
+      //return [{ text: 'Copy', hotkey: 'Ctrl+V', disabled: false, onclick: () => this.clone() }];
     }
   }
 

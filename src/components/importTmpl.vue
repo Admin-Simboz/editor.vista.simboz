@@ -50,6 +50,7 @@ import axios from 'axios';
 import { Spin, Modal } from 'view-ui-plus';
 import { useI18n } from 'vue-i18n';
 import { cloneDeep } from 'lodash-es';
+import console from 'console';
 
 const { t } = useI18n();
 const { canvasEditor } = useSelect();
@@ -102,6 +103,11 @@ const beforeClearTip = (tmplUrl: string) => {
     onOk: () => getTempData(tmplUrl),
   });
 };
+
+const testFunction =()=>{
+  console.log("hello");
+};
+
 
 // Get template data
 const getTempData = (tmplUrl: string) => {

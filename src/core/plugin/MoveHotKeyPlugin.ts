@@ -1,11 +1,3 @@
-/*
- * @Author: 秦少卫
- * @Date: 2023-06-20 12:52:09
- * @LastEditors: 秦少卫
- * @LastEditTime: 2023-06-20 13:06:21
- * @Description: 移动快捷键
- */
-
 import { fabric } from 'fabric';
 import Editor from '../core';
 type IEditor = Editor;
@@ -21,7 +13,7 @@ class MoveHotKeyPlugin {
     this.editor = editor;
   }
 
-  // 快捷键扩展回调
+  // Shortcut key expansion callback
   hotkeyEvent(eventName: string, e: any) {
     if (e.type === 'keydown') {
       const { canvas } = this;
