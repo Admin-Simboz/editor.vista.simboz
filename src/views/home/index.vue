@@ -193,6 +193,8 @@ const canvasEditor = new Editor();
 
 const event = new CanvasEventEmitter();
 
+
+// controls the state of the object that you want to initialize 
 const state = reactive({
   menuActive: 1,
   show: false,
@@ -236,7 +238,7 @@ onMounted(() => {
   state.show = true;
 });
 
-// Get font data for font style usage
+// /* Get font data for font style usage
 // getFontJson() {
 //   const activeObject = this.canvas.getActiveObject();
 //   if (activeObject) {
@@ -249,7 +251,7 @@ onMounted(() => {
 //     const dataUrl = activeObject.toDataURL();
 //     downFile(dataUrl, 'font.png');
 //   }
-// },
+// }, */
 
 const rulerSwitch = (val) => {
   if (val) {
@@ -291,7 +293,7 @@ provide('canvasEditor', canvasEditor);
     vertical-align: super;
   }
 }
-// 左侧容器
+
 .left-bar {
   width: 65px;
   height: 100%;
@@ -303,7 +305,7 @@ provide('canvasEditor', canvasEditor);
     width: 380px;
   }
 }
-// 右侧容器
+
 .right-bar {
   width: 304px; height: 100%; padding: 10px; overflow-y: auto; background: #fff
   // width: 240px;
@@ -313,7 +315,7 @@ provide('canvasEditor', canvasEditor);
   // background: #fff;
 }
 
-// 关闭按钮
+
 .close-btn {
   width: 20px;
   height: 64px;
@@ -340,7 +342,6 @@ provide('canvasEditor', canvasEditor);
   }
 }
 
-// 属性面板样式
 :deep(.attr-item) {
   position: relative;
   margin-bottom: 12px;
@@ -389,7 +390,6 @@ provide('canvasEditor', canvasEditor);
 .canvas-box {
   position: relative;
 }
-// 画布内阴影
 .inside-shadow {
   position: absolute;
   width: 100%;

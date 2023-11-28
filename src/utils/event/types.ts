@@ -1,8 +1,8 @@
 /*
- * @Description: 自定义事件的类型
+ * @Description: Custom event types
  */
 
-// 选择模式
+// Select mode
 export enum SelectMode {
   EMPTY = '',
   ONE = 'one',
@@ -15,7 +15,7 @@ export enum SelectOneType {
   POLYGON = 'polygon',
 }
 
-// 选择事件（用于广播）
+//Select event (for broadcast)
 export enum SelectEvent {
   ONE = 'selectOne',
   MULTI = 'selectMultiple',
