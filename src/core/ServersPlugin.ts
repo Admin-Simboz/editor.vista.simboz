@@ -116,39 +116,31 @@ class ServersPlugin {
     )}`;
     downFile(fileStr, 'json');
   }
+
   async saveTemplate() {
     let dataUrl = this.getJson(); // Assuming getJson() returns the data you need
-    let data = JSON.stringify(dataUrl); // Convert data to a string
-      
-    // Convert the inner callback functions to async functions
-    const saveAfterAsync = async (dataUrl) => {
-      try {
-        const option = this._getSaveOption();
-        this.canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
-        const dataUrl2 = this.canvas.toDataURL(option);
+    let jsonData = JSON.stringify(dataUrl); // Convert data to a string
   
-        const formData = new FormData();
-        formData.append('jsonData', data);
-        formData.append('image', dataUrl2);
+    const option = this._getSaveOption();
+    this.canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
+    const dataUrl2 = this.canvas.toDataURL(option);
   
-        const response = await axios.post('https://vista.simboz.website/api/template/storeTemp', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
+    const formData = new FormData();
+    formData.append('jsonData', jsonData);
+    formData.append('image', dataUrl2);
   
-        console.log('Server Response:', response.data);
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    };
+    try {
+      const response = await axios.post('https://vista.simboz.website/api/template/storeTemp', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
   
-    // Call the async function
-    this.editor.hooksEntity.hookSaveBefore.callAsync('', async () => {
-      await saveAfterAsync(dataUrl);
-    });
+      console.log('Server Response:', response.data);
+    } catch (error) {
+      console.error('Error:', error);
+    }
   }
-  
   
   
   saveSvg() {
