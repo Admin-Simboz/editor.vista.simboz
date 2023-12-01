@@ -65,11 +65,11 @@ class ServersPlugin {
   }
 
   insertSvgFile(jsonFile) {
-    // 加载前钩子
+    // preload hook
     this.editor.hooksEntity.hookImportBefore.callAsync(jsonFile, () => {
       this.canvas.loadFromJSON(jsonFile, () => {
         this.canvas.renderAll();
-        // 加载后钩子
+        // post load hook
         this.editor.hooksEntity.hookImportAfter.callAsync(jsonFile, () => {
           this.canvas.renderAll();
         });
@@ -116,23 +116,41 @@ class ServersPlugin {
     )}`;
     downFile(fileStr, 'json');
   }
-
   async saveTemplate() {
-    const dataUrl = this.getJson();
-    try {
-      // Assuming 'SERVER_ENDPOINT' is the URL where you want to send the data
-      const response = await axios.post('SERVER_ENDPOINT', {
-        dataUrl: dataUrl,
-      });
+    let dataUrl = this.getJson(); // Assuming getJson() returns the data you need
+    let data = JSON.stringify(dataUrl); // Convert data to a string
+      
+    // Convert the inner callback functions to async functions
+    const saveAfterAsync = async (dataUrl) => {
+      try {
+        const option = this._getSaveOption();
+        this.canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
+        const dataUrl2 = this.canvas.toDataURL(option);
   
-      // Handle response if needed
-      console.log('Server Response:', response.data);
-    } catch (error) {
-      // Handle error
-      console.error('Error:', error);
-    }
+        const formData = new FormData();
+        formData.append('jsonData', data);
+        formData.append('image', dataUrl2);
+  
+        const response = await axios.post('https://vista.simboz.website/api/template/storeTemp', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+  
+        console.log('Server Response:', response.data);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+  
+    // Call the async function
+    this.editor.hooksEntity.hookSaveBefore.callAsync('', async () => {
+      await saveAfterAsync(dataUrl);
+    });
   }
-
+  
+  
+  
   saveSvg() {
     this.editor.hooksEntity.hookSaveBefore.callAsync('', () => {
       const option = this._getSaveSvgOption();

@@ -104,9 +104,6 @@ const beforeClearTip = (tmplUrl: string) => {
   });
 };
 
-const testFunction =()=>{
-  console.log("hello");
-};
 
 
 // Get template data

@@ -14,7 +14,7 @@ class MaterialPlugin {
     this.editor = editor;
 
     this.apiMapUrl = {
-      template: 'https://nihaojob.github.io/vue-fabric-editor-static/template/type.json',
+      template: 'https://vista.simboz.website/api/template',
       svg: 'https://nihaojob.github.io/vue-fabric-editor-static/svg/type.json',
     };
   }
@@ -22,7 +22,8 @@ class MaterialPlugin {
   // Get split list based on material type
   async getMaterialType(typeId: string) {
     const url = this.apiMapUrl[typeId];
-    const res = await axios.get(url, { params: { typeId } });
+    const res = await axios.get(url);
+    console.log(url);
     return res.data.data;
   }
 

@@ -80,6 +80,7 @@ const insertFile = (str) => {
 };
 // Get template data
 const getTempData = (tmplUrl) => {
+  
   Spin.show({
     render: (h) => h('div', t('alert.loading_data')),
   });
