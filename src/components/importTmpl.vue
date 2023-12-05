@@ -1,13 +1,8 @@
-<!--
- * @Author: 秦少卫
- * @Date: 2022-09-03 19:16:55
- * @LastEditors: 秦少卫
- * @LastEditTime: 2023-08-11 10:12:00
- * @Description: 导入模板
--->
 
-<template>
+
+<template >
   <div>
+     
     <div class="search-box">
       <Cascader
         :data="[allType, ...state.materialTypelist]"
@@ -25,6 +20,8 @@
       />
     </div>
 
+     <!-- To trigger from ServersPlugin.ts and refresh template-->
+    
     <div :key="item.value" v-for="item in state.materialist">
       <Divider plain orientation="left">{{ item.label }}</Divider>
       <Tooltip
@@ -50,10 +47,16 @@ import axios from 'axios';
 import { Spin, Modal } from 'view-ui-plus';
 import { useI18n } from 'vue-i18n';
 import { cloneDeep } from 'lodash-es';
-import console from 'console';
 
+const tmplKey = ref(0);
+const reloadImportTmpl = () => {
+  tmplKey.value += 1; // Increment the key to trigger a reloads
+};
 const { t } = useI18n();
 const { canvasEditor } = useSelect();
+
+let templateUrl="";
+
 
 interface materialTypeI {
   value: string;
@@ -95,6 +98,8 @@ const insertSvgFile = () => {
 
 // Replacement tips
 const beforeClearTip = (tmplUrl: string) => {
+ 
+ templateUrl = tmplUrl;
   Modal.confirm({
     title: t('Warning'),
     content: `<p>${t('replaceTip')}</p>`,
@@ -115,6 +120,7 @@ const getTempData = (tmplUrl: string) => {
   getTemp.then((res) => {
     state.jsonFile = JSON.stringify(res.data);
     Spin.hide();
+    reloadImportTmpl();
     insertSvgFile();
   });
 };

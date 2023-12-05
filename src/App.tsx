@@ -3,6 +3,9 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
   setup() {
-    return () => <router-view />;
+    return () => 
+    
+    <keep-alive><router-view /></keep-alive>
+    ;
   },
 });

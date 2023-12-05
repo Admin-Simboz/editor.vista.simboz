@@ -19,19 +19,19 @@ class EditorWorkspacePlugin {
     this.init();
   }
   init() {
-    console.log('pluginInit', this.canvas, this.editor, this.defautOption);
+    //console.log('pluginInit', this.canvas, this.editor, this.defautOption);
   }
 
   destroy() {
-    console.log('pluginDestroy');
+   // console.log('pluginDestroy');
   }
   // 保存文件前
   hookSaveBefore() {
-    console.log('pluginHookSaveBefore');
+   // console.log('pluginHookSaveBefore');
   }
   // 保存文件前
   hookSaveAfter() {
-    console.log('pluginHookSaveAfter');
+   // console.log('pluginHookSaveAfter');
   }
   // 快捷键扩展回调
   hotkeyEvent(eventName: string, e?: Event) {
@@ -82,7 +82,7 @@ class EditorWorkspacePlugin {
   }
 
   _command() {
-    console.log('pluginContextMenuCommand');
+   // console.log('pluginContextMenuCommand');
   }
 }
 

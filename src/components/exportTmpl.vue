@@ -33,6 +33,7 @@
           :key="`${i}-bai1-button`"
           placement="top"
         >
+         
           <img
             class="tmpl-img"
             :alt="info.label"
@@ -40,6 +41,7 @@
             @click="beforeClearTip(info.tempUrl)"
           />
         </Tooltip>
+        
       </div>
     </div>
   </template>
@@ -54,6 +56,7 @@
   
   const { t } = useI18n();
   const { canvasEditor } = useSelect();
+  let templateUrl = "";
   
   interface materialTypeI {
     value: string;
@@ -95,6 +98,7 @@
   
   // Replacement tips
   const beforeClearTip = (tmplUrl: string) => {
+    templateUrl= tmplUrl;
     Modal.confirm({
       title: t('Warning'),
       content: `<p>${t('replaceTip')}</p>`,
@@ -104,10 +108,9 @@
     });
   };
   
-  const testFunction =()=>{
-    console.log("hello");
+  const refreshTemplate=()=>{
+    getTempData(templateUrl);
   };
-  
   
   // Get template data
   const getTempData = (tmplUrl: string) => {

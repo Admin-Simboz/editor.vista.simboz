@@ -23,7 +23,7 @@ class MaterialPlugin {
   async getMaterialType(typeId: string) {
     const url = this.apiMapUrl[typeId];
     const res = await axios.get(url);
-    console.log(url);
+    //console.log(url);
     return res.data.data;
   }
 

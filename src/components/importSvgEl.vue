@@ -139,7 +139,7 @@ const dragItem = (event) => {
       shadow: '',
       fontFamily: 'arial',
       id: uuid(),
-      name: 'svg元素',
+      name: 'SVG Element',
     });
     canvasEditor.dragAddItem(event, item);
   });

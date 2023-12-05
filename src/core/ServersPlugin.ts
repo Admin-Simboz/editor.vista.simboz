@@ -5,6 +5,11 @@ import { selectFiles, clipboardText } from '@/utils/utils';
 import { fabric } from 'fabric';
 import Editor from '../core';
 import axios from 'axios';
+import { Spin, Modal } from 'view-ui-plus';
+import { ref, Ref } from 'vue';
+import eventBus from '@/components/eventBus.js';
+
+
 
 type IEditor = Editor;
 // import { v4 as uuid } from 'uuid';
@@ -34,6 +39,7 @@ class ServersPlugin {
   public canvas: fabric.Canvas;
   public editor: IEditor;
   static pluginName = 'ServersPlugin';
+  private hiddenButtonRef: Ref<HTMLButtonElement | null> = ref(null);
   static apis = [
     'insert',
     'insertSvgFile',
@@ -51,7 +57,14 @@ class ServersPlugin {
   constructor(canvas: fabric.Canvas, editor: IEditor) {
     this.canvas = canvas;
     this.editor = editor;
+    this.initHiddenButtonRef();
   }
+  private initHiddenButtonRef() {
+    // Assuming this is called within a Vue component
+    // Get the reference to the hidden button
+    this.hiddenButtonRef = ref(document.querySelector('#hiddenButton'));
+  }
+
 
   insert() {
     selectFiles({ accept: '.json' }).then((files) => {
@@ -109,7 +122,7 @@ class ServersPlugin {
   async saveJson() {
     const dataUrl = this.getJson();
     //Convert text to textgroup so that the import can be edited
-    console.log(dataUrl);
+    //console.log(dataUrl);
     await transformText(dataUrl.objects);
     const fileStr = `data:text/json;charset=utf-8,${encodeURIComponent(
       JSON.stringify(dataUrl, null, '\t')
@@ -128,17 +141,31 @@ class ServersPlugin {
     const formData = new FormData();
     formData.append('jsonData', jsonData);
     formData.append('image', dataUrl2);
-  
+
+    if (this.hiddenButtonRef.value) {
+      this.hiddenButtonRef.value.click();
+    }else{
+      //console.log('hiddenButtonRef empty');
+    }
+    
+    Spin.show({
+      render: (h) => h('div', 'Saving Template'),
+    });
     try {
+     
       const response = await axios.post('https://vista.simboz.website/api/template/storeTemp', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-  
-      console.log('Server Response:', response.data);
-    } catch (error) {
-      console.error('Error:', error);
+      Spin.hide();
+      //console.log('Server Response:', response.data);
+
+      eventBus.emitReloadEvent();
+    } 
+    
+    catch (error) {
+      //console.error('Error:', error);
     }
   }
   

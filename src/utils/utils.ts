@@ -94,9 +94,9 @@ export const clipboardText = async (
 ) => {
   try {
     await useClipboard({ source, ...options }).copy();
-    Message.success('复制成功');
+    Message.success('Copied successfully');
   } catch (error) {
-    Message.error('复制失败');
+    Message.error('Copy failed');
     throw error;
   }
 };

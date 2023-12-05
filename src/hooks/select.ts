@@ -1,11 +1,4 @@
-/*
- * @Descripttion: useSelect(原mixin)  类型待优化
- * @version:
- * @Author: June
- * @Date: 2023-04-23 21:10:05
- * @LastEditors: 秦少卫
- * @LastEditTime: 2023-07-05 00:47:52
- */
+
 import { inject, onBeforeMount, onMounted, reactive } from 'vue';
 import { SelectEvent, SelectMode, SelectOneType } from '@/utils/event/types';
 
@@ -21,8 +14,8 @@ export default function useSelect() {
   const state = reactive<Selector>({
     mSelectMode: SelectMode.EMPTY,
     mSelectOneType: SelectOneType.EMPTY,
-    mSelectId: '', // 选择id
-    mSelectIds: [], // 选择id
+    mSelectId: '', // Select id
+    mSelectIds: [], // Select id
     mSelectActive: [],
   });
 

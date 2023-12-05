@@ -15,7 +15,7 @@
           <DropdownItem name="saveImg">{{ $t('save_as_picture') }}</DropdownItem>
           <DropdownItem name="saveSvg">{{ $t('save_as_svg') }}</DropdownItem>
           <DropdownItem name="saveJson" divided>{{ $t('save_as_json') }}</DropdownItem>
-          <DropdownItem name="saveTemplate" divided>{{ $t('save_as_template') }}</DropdownItem>
+          <DropdownItem name="saveTemplate"  @click="triggerReload" divided>{{ $t('save_as_template') }}</DropdownItem>
         </DropdownMenu>
       </template>
     </Dropdown>
@@ -29,6 +29,8 @@ import useSelect from '@/hooks/select';
 import { debounce } from 'lodash-es';
 import { useI18n } from 'vue-i18n';
 // import { downloadFile } from '@/utils/utils';
+
+
 
 const { t } = useI18n();
 

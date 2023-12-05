@@ -26,6 +26,7 @@ import FlipPlugin from './plugin/FlipPlugin';
 import RulerPlugin from './plugin/RulerPlugin';
 import MaterialPlugin from './plugin/MaterialPlugin';
 
+
 export {
   DringPlugin,
   AlignGuidLinePlugin,
@@ -46,5 +47,6 @@ export {
   FlipPlugin,
   RulerPlugin,
   MaterialPlugin,
+
 };
 export default Editor;

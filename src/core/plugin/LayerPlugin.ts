@@ -86,7 +86,7 @@ class LayerPlugin {
               onclick: () => this.upTop(),
             },
             {
-              text: 'Okishiro',
+              text: 'Pin down',
               hotkey: 'key',
               onclick: () => this.downTop(),
             },

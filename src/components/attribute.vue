@@ -102,7 +102,7 @@
 
       <div class="flex-view">
         <div class="flex-item">
-          <span class="label">{{ $t('background') }}</span>
+          
           <div class="content">
             <ColorPicker
               v-model="fontAttr.textBackgroundColor"
@@ -110,6 +110,7 @@
               alpha
             />
           </div>
+          <span class="label" id="background">{{ $t('background') }}</span>
         </div>
       </div>
     </div>
@@ -150,8 +151,8 @@
           ></InputNumber>
         </Col>
       </Row>
-      <div class="flex-view">
-        <div class="flex-item">
+      <div  class="flex-view">
+        <div class="flex-item" id="angel">
           <span class="label">{{ $t('attributes.angle') }}</span>
           <div class="content slider-box">
             <Slider
@@ -162,8 +163,8 @@
           </div>
         </div>
       </div>
-      <div class="flex-view">
-        <div class="flex-item">
+      <div  class="flex-view">
+        <div class="flex-item" id="angel">
           <span class="label">{{ $t('attributes.opacity') }}</span>
           <div class="content slider-box">
             <Slider
@@ -749,5 +750,16 @@ onBeforeUnmount(() => {
     text-align: center;
     filter: invert(100%);
   }
+}
+
+#background{
+  padding-left: 6px;
+}
+#angel{
+  display: block;
+}
+
+#opacity{
+  display: block;
 }
 </style>

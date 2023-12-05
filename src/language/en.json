@@ -19,8 +19,8 @@
   "preview": "Preview",
   "empty": "Empty",
   "keep": "Save",
-  "copy_to_clipboard": "Copy to clipboard",
-  "save_as_picture": "Save as picture",
+  "copy_to_clipboard": "Copy to Clipboard",
+  "save_as_picture": "Save as Picture",
   "save_as_svg": "Save as SVG",
   "save_as_json": "Save as JSON",
   "save_as_template": "Save as Template",
@@ -183,5 +183,6 @@
   "clearTip": "Are you sure you want to clear it?",
   "replaceTip": "Are you sure you want to add to the canvas?",
   "ok": "ok",
-  "cancel": "cancel"
+  "cancel": "cancel",
+  "alert.loading_data":"Alert Loading Data"
 }

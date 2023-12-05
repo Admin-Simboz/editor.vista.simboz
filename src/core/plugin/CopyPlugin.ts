@@ -96,7 +96,7 @@ class CopyPlugin {
   contextMenu() {
     const activeObject = this.canvas.getActiveObject();
     if (activeObject) {
-      return [{ text: 'Copy', hotkey: 'Ctrl+V', disabled: false, onclick: () => this.clone() }];
+      return [{ text: 'Copy', hotkey: 'Ctrl+c', disabled: false, onclick: () => this.clone() }];
     }
   }
 

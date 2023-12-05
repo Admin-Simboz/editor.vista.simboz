@@ -61,7 +61,7 @@
           <div class="content" v-show="state.toolsBarShow">
             <!-- Generate template -->
             <div v-show="state.menuActive === 1" class="left-panel">
-              <import-tmpl></import-tmpl>
+              <import-tmpl ref="importTmplRef" :key="tmplKey"></import-tmpl>
             </div>
             <!-- Common elements -->
             <div v-show="state.menuActive === 2" class="left-panel">
@@ -162,6 +162,9 @@ import history from '@/components/history.vue';
 import layer from '@/components/layer.vue';
 import attribute from '@/components/attribute.vue';
 
+import eventBus from '@/components/eventBus.js'; // Import the event bus
+import { watch } from 'vue';
+
 // Functional components
 import { CanvasEventEmitter } from '@/utils/event/notifier';
 // import { downFile } from '@/utils/utils';
@@ -187,6 +190,14 @@ import Editor, {
   RulerPlugin,
   MaterialPlugin,
 } from '@/core';
+
+const tmplKey = ref(0);
+const reloadImportTmpl = () => {
+  setTimeout(() => {
+    tmplKey.value += 1; // Increment the key to trigger a reload after 2 seconds
+  }, 2000); // 2000 milliseconds = 2 seconds
+};
+
 
 // Create editor
 const canvasEditor = new Editor();
@@ -275,6 +286,14 @@ const showToolsBar = (val) => {
 const switchAttrBar = () => {
   state.attrBarShow = !state.attrBarShow;
 };
+
+// Add a watcher to listen for changes in the event bus property
+watch(
+  () => eventBus.reloadImportTmpl.value, // Watching for changes in reloadImportTmpl
+  (newValue, oldValue) => {
+    reloadImportTmpl();
+  }
+);
 
 provide('fabric', fabric);
 provide('event', event);

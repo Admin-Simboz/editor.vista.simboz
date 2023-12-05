@@ -1,10 +1,4 @@
-<!--
- * @Author: 秦少卫
- * @Date: 2022-09-03 19:16:55
- * @LastEditors: 秦少卫
- * @LastEditTime: 2023-07-24 23:13:51
- * @Description: 图层面板
--->
+
 
 <template>
   <div class="box">
@@ -88,9 +82,9 @@ const textType = (type, item) => {
     polygon: 'Polygon',
     path: 'Path',
   };
-  return typeText[type] || 'default element';
+  return typeText[type] || 'Element';
 };
-// 选中元素
+// Selected element
 const select = (id) => {
   const info = canvasEditor.canvas.getObjects().find((item) => item.id === id);
   canvasEditor.canvas.discardActiveObject();
@@ -98,7 +92,7 @@ const select = (id) => {
   canvasEditor.canvas.requestRenderAll();
 };
 
-// 按钮类型
+// button type
 const btnIconType = (type) => {
   const iconType = {
     up: '<svg t="1650442206559" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1799" width="12" height="12"><path d="M876.2 434.3L536.7 94.9c-6.6-6.6-15.5-10.3-24.7-10.3-9.3 0-18.2 3.7-24.7 10.3L147.8 434.3c-13.7 13.7-13.7 35.8 0 49.5 13.7 13.7 35.8 13.7 49.5 0L477 204.1v700.2c0 19.3 15.7 35 35 35s35-15.7 35-35V204.1l279.7 279.7c6.8 6.8 15.8 10.3 24.7 10.3s17.9-3.4 24.7-10.3c13.7-13.7 13.7-35.8 0.1-49.5z" p-id="1800"></path></svg>',
@@ -124,11 +118,11 @@ const downTop = () => {
 };
 
 const getList = () => {
-  // 不改原数组 反转
+  // Reverse the original array without changing it
   list.value = [
     ...canvasEditor.canvas.getObjects().filter((item) => {
       // return item;
-      // 过滤掉辅助线
+      // Filter out auxiliary lines
       return !(item instanceof fabric.GuideLine || item.id === 'workspace');
     }),
   ]
@@ -145,7 +139,7 @@ const getList = () => {
 };
 
 onMounted(() => {
-  // 当选择画布中的对象时，该对象不出现在顶层。
+  // When selecting an object in the canvas, the object does not appear on top.
   canvasEditor.canvas.preserveObjectStacking = true;
   canvasEditor.canvas.on('after:render', getList);
 });
