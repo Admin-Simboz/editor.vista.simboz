@@ -1,4 +1,10 @@
-
+<!--
+ * @Author: 秦少卫
+ * @Date: 2023-08-05 17:47:35
+ * @LastEditors: 秦少卫
+ * @LastEditTime: 2023-08-07 22:59:07
+ * @Description: file content
+-->
 
 <template>
   <div>
@@ -18,18 +24,18 @@
         @on-change="search"
       />
     </div>
-    
+
     <div :key="item.value" v-for="item in state.materialist">
-      <Divider plain orientation="left">{{ (item.value.toUpperCase()) }}</Divider>
+      <Divider plain orientation="left">{{ item.label }}</Divider>
       <Tooltip
-        :content="info.value"
+        :content="info.label"
         v-for="(info, i) in item.list"
         :key="`${i}-bai1-button`"
         placement="top"
       >
         <img
           class="tmpl-img"
-          :alt="info.value"
+          :alt="info.label"
           @click="addItem"
           v-lazy="info.src"
           @dragend="dragItem"
@@ -41,7 +47,7 @@
 
 <script setup name="ImportSvg" lang="ts">
 import useSelect from '@/hooks/select';
-import { cloneDeep, toUpper } from 'lodash-es';
+import { cloneDeep } from 'lodash-es';
 import { v4 as uuid } from 'uuid';
 
 const { fabric, canvasEditor } = useSelect();
@@ -107,15 +113,17 @@ const filterTypeList = (value: string) => {
     state.materialist = materialTypeInfoList;
   }
 
-// Show categories
-if (state.search) {
-  const list = cloneDeep(state.materialist);
-  // Display according to search content
-  state.materialist = list.filter((item) => {
-    return item.value.toLowerCase().includes(state.search.toLowerCase());
-  });
-}
-
+  // Show categories
+  if (state.search) {
+    const list = cloneDeep(state.materialist);
+    // Display according to search content
+    state.materialist = list.map((item) => {
+      if (item.list) {
+        item.list = item.list.filter((info) => info.label.includes(state.search));
+      }
+      return item;
+    });
+  }
 };
 
 const search = () => {
