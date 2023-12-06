@@ -430,7 +430,7 @@ const textAlignListSvg = [
 ];
 
 const getFreeFontList = () => {
-  axios.get(`${repoSrc}/font/free-font.json`).then((res) => {
+  axios.get(`https://vista.simboz.website/api/template/getFonts`).then((res) => {
     fontFamilyList.value = [
       ...fontFamilyList.value,
       ...Object.entries(res.data).map(([, value]) => value),

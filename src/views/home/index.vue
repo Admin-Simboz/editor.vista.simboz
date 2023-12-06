@@ -70,7 +70,7 @@
             </div>
             <!-- cartoon material -->
             <div v-show="state.menuActive === 3" class="left-panel">
-              <importSvgEl></importSvgEl>
+              <!-- <importSvgEl></importSvgEl> -->
             </div>
             <!-- Layer settings -->
             <div v-show="state.menuActive === 4" class="left-panel">
@@ -151,7 +151,7 @@ import waterMark from '@/components/waterMark';
 // Left components
 import importTmpl from '@/components/importTmpl.vue';
 import tools from '@/components/tools.vue';
-import importSvgEl from '@/components/importSvgEl.vue';
+/* import importSvgEl from '@/components/importSvgEl.vue'; */
 import bgBar from '@/components/bgBar.vue';
 import setSize from '@/components/setSize.vue';
 import replaceImg from '@/components/replaceImg.vue';

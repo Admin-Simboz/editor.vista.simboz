@@ -1,10 +1,4 @@
-<!--
- * @Author: 秦少卫
- * @Date: 2023-02-16 22:52:00
- * @LastEditors: 秦少卫
- * @LastEditTime: 2023-07-24 23:15:36
- * @Description: 颜色选择器
--->
+
 <template>
   <div class="box">
     <!-- color switch -->

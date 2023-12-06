@@ -1,9 +1,21 @@
 @font-face {
-  font-family: '汉体';
-  src: url('./cn/汉体.ttf');
+  font-family: 'arial';
+  src: url('./cn/arial.ttf');
 }
-
 @font-face {
-  font-family: '华康金刚黑';
-  src: url('./cn/华康金刚黑.ttf');
+  font-family: 'arial_bold';
+  src: url('./cn/arial_bold.ttf');
+}
+@font-face {
+  font-family: 'arial_light';
+  src: url('./cn/arial_light.ttf');
+}@font-face {
+  font-family: 'arial_narrow';
+  src: url('./cn/arial_narrow.ttf');
+}@font-face {
+  font-family: 'Helvetica';
+  src: url('./cn/Helvetica.ttf');
+}@font-face {
+  font-family: 'times';
+  src: url('./cn/times.ttf');
 }

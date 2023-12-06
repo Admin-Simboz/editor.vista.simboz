@@ -5,7 +5,7 @@ export default defineComponent({
   setup() {
     return () => 
     
-    <keep-alive><router-view /></keep-alive>
+    <router-view />
     ;
   },
 });
