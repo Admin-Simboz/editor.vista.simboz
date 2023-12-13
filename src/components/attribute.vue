@@ -18,24 +18,16 @@
             </Select>
           </div>
           <div class="right">
-            <InputNumber
-              v-model="fontAttr.fontSize"
-              @on-change="(value) => changeCommon('fontSize', value)"
-              append="Font size"
-              :min="1"
-            ></InputNumber>
+            <InputNumber v-model="fontAttr.fontSize" @on-change="(value) => changeCommon('fontSize', value)"
+              append="Font size" :min="1"></InputNumber>
           </div>
         </div>
       </div>
 
       <div class="flex-view">
         <div class="flex-item">
-          <RadioGroup
-            class="button-group"
-            v-model="fontAttr.textAlign"
-            @on-change="(value) => changeCommon('textAlign', value)"
-            type="button"
-          >
+          <RadioGroup class="button-group" v-model="fontAttr.textAlign"
+            @on-change="(value) => changeCommon('textAlign', value)" type="button">
             <Radio v-for="(item, i) in textAlignList" :label="item" :key="item">
               <span v-html="textAlignListSvg[i]"></span>
             </Radio>
@@ -50,32 +42,28 @@
               <svg viewBox="0 0 1024 1024" width="14" height="14">
                 <path
                   d="M793.99865 476a244 244 0 0 0 54-130.42C862.75865 192.98 743.01865 64 593.85865 64H195.01865a32 32 0 0 0-32 32v96a32 32 0 0 0 32 32h63.74v576H195.01865a32 32 0 0 0-32 32v96a32 32 0 0 0 32 32h418.64c141.6 0 268.28-103.5 282-244.8 9.48-96.9-32.78-184.12-101.66-239.2zM418.33865 224h175.52a96 96 0 0 1 0 192h-175.52z m175.52 576h-175.52V576h175.52a112 112 0 0 1 0 224z"
-                  :fill="fontAttr.fontWeight === 'bold' ? '#305ef4' : '#666'"
-                ></path>
+                  :fill="fontAttr.fontWeight === 'bold' ? '#305ef4' : '#666'"></path>
               </svg>
             </Button>
             <Button @click="changeFontStyle('fontStyle', fontAttr.fontStyle)">
               <svg viewBox="0 0 1024 1024" width="14" height="14">
                 <path
                   d="M832 96v64a32 32 0 0 1-32 32h-125.52l-160 640H608a32 32 0 0 1 32 32v64a32 32 0 0 1-32 32H224a32 32 0 0 1-32-32v-64a32 32 0 0 1 32-32h125.52l160-640H416a32 32 0 0 1-32-32V96a32 32 0 0 1 32-32h384a32 32 0 0 1 32 32z"
-                  :fill="fontAttr.fontStyle === 'italic' ? '#305ef4' : '#666'"
-                ></path>
+                  :fill="fontAttr.fontStyle === 'italic' ? '#305ef4' : '#666'"></path>
               </svg>
             </Button>
             <Button @click="changeLineThrough('linethrough', fontAttr.linethrough)">
               <svg viewBox="0 0 1024 1024" width="14" height="14">
                 <path
                   d="M893.088 501.792H125.344a32 32 0 0 0 0 64h767.744a32 32 0 0 0 0-64zM448 448h112V208h288V96H160v112h288zM448 640h112v288H448z"
-                  :fill="fontAttr.linethrough ? '#305ef4' : '#666'"
-                ></path>
+                  :fill="fontAttr.linethrough ? '#305ef4' : '#666'"></path>
               </svg>
             </Button>
             <Button @click="changeUnderline('underline', fontAttr.underline)">
               <svg viewBox="0 0 1024 1024" width="14" height="14">
                 <path
                   d="M703.232 67.008h127.488v413.248c0 158.016-142.656 286.016-318.72 286.016-176 0-318.72-128-318.72-286.016V67.008h127.488v413.248c0 39.872 18.176 78.144 51.136 107.776 36.8 32.96 86.528 51.072 140.096 51.072s103.36-18.112 140.032-51.136c33.024-29.632 51.2-67.968 51.2-107.776V67.008zM193.28 871.616h637.44v85.376H193.28v-85.376z"
-                  :fill="fontAttr.underline ? '#305ef4' : '#666'"
-                ></path>
+                  :fill="fontAttr.underline ? '#305ef4' : '#666'"></path>
               </svg>
             </Button>
           </ButtonGroup>
@@ -84,33 +72,93 @@
 
       <Row :gutter="12">
         <Col flex="1">
-          <InputNumber
-            v-model="fontAttr.lineHeight"
-            @on-change="(value) => changeCommon('lineHeight', value)"
-            :step="0.1"
-            :append="$t('attributes.line_height')"
-          ></InputNumber>
+        <InputNumber v-model="fontAttr.lineHeight" @on-change="(value) => changeCommon('lineHeight', value)" :step="0.1"
+          :append="$t('attributes.line_height')"></InputNumber>
         </Col>
         <Col flex="1">
-          <InputNumber
-            v-model="fontAttr.charSpacing"
-            @on-change="(value) => changeCommon('charSpacing', value)"
-            :append="$t('attributes.char_spacing')"
-          ></InputNumber>
+        <InputNumber v-model="fontAttr.charSpacing" @on-change="(value) => changeCommon('charSpacing', value)"
+          :append="$t('attributes.char_spacing')"></InputNumber>
         </Col>
       </Row>
 
-      <div class="flex-view">
-        <div class="flex-item">
-          
-          <div class="content">
-            <ColorPicker
-              v-model="fontAttr.textBackgroundColor"
-              @on-change="(value) => changeCommon('textBackgroundColor', value)"
-              alpha
-            />
+      <div class="fl-">
+        <div class="fl">
+
+          <div>
+
+            <div class="cmyk-inputs">
+              <div class="button-div">
+                <div><span class="label" id="background">{{ $t('background') }}</span></div>
+                <div><button class="no-color-button" @click="restCMYK">
+                    <img class="no-color-img" src="dist/images/noColor.png">
+                  </button></div>
+              </div>
+
+              <ColorPicker v-model="fontAttr.textBackgroundColor"
+                @on-change="(value) => changeCommon('textBackgroundColor', value)" basic />
+            </div>
+
+            <div class="custom-slider">
+              <div class="slider-component">
+                <label for="cInput"> <b>C</b> </label>
+              </div>
+              <div class="slider-component-cyan">
+                <input class="slider" type="range" min="0" max="100" @change="convertCMYKtoRGB" v-model.number="c"
+                  show-input />
+              </div>
+              <div class="slider-component">
+                <input class="slider-input" type="number" min="0" max="100" @change="convertCMYKtoRGB" v-model.number="c"
+                  show-input />
+                <span><b> %</b></span>
+              </div>
+
+            </div>
+            <div class="custom-slider">
+              <div class="slider-component">
+                <label for="mInput"><b>M</b> </label>
+              </div>
+              <div class="slider-component-magenta">
+                <input class="slider" type="range" min="0" max="100" @change="convertCMYKtoRGB" v-model.number="m"
+                  show-input />
+              </div>
+              <div class="slider-component">
+                <input class="slider-input" type="number" min="0" max="100" @change="convertCMYKtoRGB" v-model.number="m"
+                  show-input />
+                <span><b> %</b></span>
+              </div>
+            </div>
+            <div class="custom-slider">
+              <div class="slider-component">
+                <label for="yInput"><b>Y</b> </label>
+              </div>
+              <div class="slider-component-yellow">
+                <input class="slider" type="range" min="0" max="100" @change="convertCMYKtoRGB" v-model.number="y"
+                  show-input />
+              </div>
+              <div class="slider-component">
+                <input class="slider-input" type="number" min="0" max="100" @change="convertCMYKtoRGB" v-model.number="y"
+                  show-input />
+                <span><b> %</b></span>
+              </div>
+            </div>
+
+            <div class="custom-slider">
+              <div class="slider-component">
+                <label for="kInput"><b>K</b> </label>
+              </div>
+              <div class="slider-component-key">
+                <input class="slider" type="range" min="0" max="100" @change="convertCMYKtoRGB" v-model.number="k"
+                  show-input />
+              </div>
+              <div class="slider-component">
+                <input class="slider-input" type="number" min="0" max="100" @change="convertCMYKtoRGB" v-model.number="k"
+                  show-input />
+                <span><b> %</b></span>
+              </div>
+            </div>
+
           </div>
-          <span class="label" id="background">{{ $t('background') }}</span>
+
         </div>
       </div>
     </div>
@@ -121,56 +169,35 @@
       <!-- Number of polygon sides -->
       <Row v-if="mixinState.mSelectOneType === 'polygon'" :gutter="12">
         <Col flex="0.5">
-          <InputNumber
-            v-model="baseAttr.points.length"
-            :min="3"
-            :max="30"
-            @on-change="changeEdge"
-            append="Number of sides"
-          ></InputNumber>
+        <InputNumber v-model="baseAttr.points.length" :min="3" :max="30" @on-change="changeEdge" append="Number of sides">
+        </InputNumber>
         </Col>
       </Row>
       <!-- color -->
-      <colorSelector
-        :color="baseAttr.fill"
-        @change="(value) => changeCommon('fill', value)"
-      ></colorSelector>
+      <colorSelector :color="baseAttr.fill" @change="(value) => changeCommon('fill', value)"></colorSelector>
       <Row :gutter="12">
         <Col flex="1">
-          <InputNumber
-            v-model="baseAttr.left"
-            @on-change="(value) => changeCommon('left', value)"
-            :append="$t('attributes.left')"
-          ></InputNumber>
+        <InputNumber v-model="baseAttr.left" @on-change="(value) => changeCommon('left', value)"
+          :append="$t('attributes.left')"></InputNumber>
         </Col>
         <Col flex="1">
-          <InputNumber
-            v-model="baseAttr.top"
-            @on-change="(value) => changeCommon('top', value)"
-            :append="$t('attributes.top')"
-          ></InputNumber>
+        <InputNumber v-model="baseAttr.top" @on-change="(value) => changeCommon('top', value)"
+          :append="$t('attributes.top')"></InputNumber>
         </Col>
       </Row>
-      <div  class="flex-view">
+      <div class="flex-view">
         <div class="flex-item" id="angel">
           <span class="label">{{ $t('attributes.angle') }}</span>
           <div class="content slider-box">
-            <Slider
-              v-model="baseAttr.angle"
-              :max="360"
-              @on-input="(value) => changeCommon('angle', value)"
-            ></Slider>
+            <Slider v-model="baseAttr.angle" :max="360" @on-input="(value) => changeCommon('angle', value)"></Slider>
           </div>
         </div>
       </div>
-      <div  class="flex-view">
+      <div class="flex-view">
         <div class="flex-item" id="angel">
           <span class="label">{{ $t('attributes.opacity') }}</span>
           <div class="content slider-box">
-            <Slider
-              v-model="baseAttr.opacity"
-              @on-input="(value) => changeCommon('opacity', value)"
-            ></Slider>
+            <Slider v-model="baseAttr.opacity" @on-input="(value) => changeCommon('opacity', value)"></Slider>
           </div>
         </div>
       </div>
@@ -179,43 +206,31 @@
 
       <Row :gutter="12">
         <Col flex="1">
-          <div class="ivu-col__box">
-            <span class="label">{{ $t('color') }}</span>
-            <div class="content">
-              <ColorPicker
-                v-model="baseAttr.stroke"
-                @on-change="(value) => changeCommon('stroke', value)"
-                alpha
-              />
-            </div>
+        <div class="ivu-col__box">
+          <span class="label">{{ $t('color') }}</span>
+          <div class="content">
+            <ColorPicker v-model="baseAttr.stroke" @on-change="(value) => changeCommon('stroke', value)" basic />
           </div>
+        </div>
         </Col>
         <Col flex="1">
-          <InputNumber
-            v-model="baseAttr.strokeWidth"
-            @on-change="(value) => changeCommon('strokeWidth', value)"
-            :append="$t('width')"
-            :min="0"
-          ></InputNumber>
+        <InputNumber v-model="baseAttr.strokeWidth" @on-change="(value) => changeCommon('strokeWidth', value)"
+          :append="$t('width')" :min="0"></InputNumber>
         </Col>
       </Row>
 
       <Row :gutter="12">
         <Col flex="1">
-          <div class="ivu-col__box">
-            <span class="label">{{ $t('attributes.stroke') }}</span>
-            <div class="content">
-              <Select v-model="baseAttr.strokeDashArray" @on-change="borderSet">
-                <Option
-                  v-for="item in strokeDashList"
-                  :value="item.label"
-                  :key="`stroke-${item.label}`"
-                >
-                  {{ item.label }}
-                </Option>
-              </Select>
-            </div>
+        <div class="ivu-col__box">
+          <span class="label">{{ $t('attributes.stroke') }}</span>
+          <div class="content">
+            <Select v-model="baseAttr.strokeDashArray" @on-change="borderSet">
+              <Option v-for="item in strokeDashList" :value="item.label" :key="`stroke-${item.label}`">
+                {{ item.label }}
+              </Option>
+            </Select>
           </div>
+        </div>
         </Col>
       </Row>
 
@@ -224,60 +239,31 @@
 
       <Row :gutter="12">
         <Col flex="1">
-          <div class="ivu-col__box">
-            <span class="label">{{ $t('color') }}</span>
-            <div class="content">
-              <ColorPicker
-                v-model="baseAttr.shadow.color"
-                @on-change="(value) => changeCommon('color', value)"
-                alpha
-              />
-            </div>
+        <div class="ivu-col__box">
+          <span class="label">{{ $t('color') }}</span>
+          <div class="content">
+            <ColorPicker v-model="baseAttr.shadow.color" @on-change="(value) => changeCommon('color', value)" basic />
           </div>
+        </div>
         </Col>
         <Col flex="1">
-          <InputNumber
-            v-model="baseAttr.shadow.blur"
-            :defaultValue="0"
-            @on-change="(value) => changeShadow('blur', value)"
-            :append="$t('attributes.blur')"
-            :min="0"
-          ></InputNumber>
+        <InputNumber v-model="baseAttr.shadow.blur" :defaultValue="0" @on-change="(value) => changeShadow('blur', value)"
+          :append="$t('attributes.blur')" :min="0"></InputNumber>
         </Col>
       </Row>
 
       <Row :gutter="12">
         <Col flex="1">
-          <InputNumber
-            v-model="baseAttr.shadow.offsetX"
-            :defaultValue="0"
-            @on-change="(value) => changeShadow('offsetX', value)"
-            :append="$t('attributes.offset_x')"
-          ></InputNumber>
+        <InputNumber v-model="baseAttr.shadow.offsetX" :defaultValue="0"
+          @on-change="(value) => changeShadow('offsetX', value)" :append="$t('attributes.offset_x')"></InputNumber>
         </Col>
         <Col flex="1">
-          <InputNumber
-            v-model="baseAttr.shadow.offsetY"
-            :defaultValue="0"
-            @on-change="(value) => changeShadow('offsetY', value)"
-            :append="$t('attributes.offset_y')"
-          ></InputNumber>
+        <InputNumber v-model="baseAttr.shadow.offsetY" :defaultValue="0"
+          @on-change="(value) => changeShadow('offsetY', value)" :append="$t('attributes.offset_y')"></InputNumber>
         </Col>
       </Row>
     </div>
 
-    <!-- ID attribute -->
-    <div>
-      <Divider plain orientation="left">{{ $t('attributes.id') }}</Divider>
-      <div class="flex-view">
-        <div class="flex-item">
-          <span class="label">{{ $t('attributes.id') }}</span>
-          <div class="content slider-box">
-            <Input v-model="baseAttr.id" @on-change="changeCommon('id', baseAttr.id)"></Input>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -613,6 +599,7 @@ onBeforeUnmount(() => {
 :deep(.ivu-color-picker) {
   display: block;
 }
+
 :deep(.ivu-input-number) {
   display: block;
   width: 100%;
@@ -626,6 +613,7 @@ onBeforeUnmount(() => {
     color: #000000;
   }
 }
+
 .box {
   width: 100%;
 }
@@ -633,10 +621,254 @@ onBeforeUnmount(() => {
 .button-group {
   display: flex;
   width: 100%;
+
   .ivu-btn,
   .ivu-radio-wrapper {
     flex: 1;
   }
+}
+
+.slider-input {
+  width: 45px;
+}
+
+.no-color-img {
+  width: 20px;
+  height: 20px;
+}
+
+.slider-component {}
+
+.color-box {
+  width: 200px;
+  height: 200px;
+  border: 1px solid #000;
+  transition: background-color 0.3s ease;
+  /* Default color if RGB values are not set */
+  background-color: red;
+}
+
+.color-box-div {
+  display: flex;
+  flex-direction: column-reverse;
+  align-content: center;
+  flex-wrap: wrap;
+}
+
+.custom-slider {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  margin: 5px;
+}
+
+
+.slider {
+  width: 116%;
+
+}
+
+.img {
+  width: 50px;
+  padding: 5px;
+  background: #f5f5f5;
+  margin-left: 2px;
+  height: 70px;
+  cursor: pointer;
+}
+
+.color-box {
+  width: 200px;
+  height: 200px;
+  border: 1px solid #000;
+  transition: background-color 0.3s ease;
+  /* Default color if RGB values are not set */
+  color: black];
+}
+
+.color-list {
+  padding: 10px 0;
+
+  .item {
+    padding-bottom: 5px;
+  }
+
+  span {
+    display: inline-block;
+    margin-left: 6px;
+    background: #f5f5f5;
+    height: 20px;
+    width: 20px;
+    font-size: 12px;
+    line-height: 20px;
+    vertical-align: middle;
+    cursor: pointer;
+  }
+}
+
+:deep(.ivu-divider-plain) {
+  &.ivu-divider-with-text-left {
+    margin: 10px 0;
+    font-weight: bold;
+  }
+}
+
+.ivu-input ivu-input-small {
+  display: none;
+}
+
+.cmyk-inputs {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+.custom-slider {
+  --trackHeight: 0.5rem;
+  --thumbRadius: 1rem;
+}
+
+/* style the input element with type "range" */
+.custom-slider input[type="range"] {
+  position: relative;
+  appearance: none;
+  /* pointer-events: none; */
+  border-radius: 999px;
+  z-index: 0;
+}
+
+.custom-slider label {
+  font-size: 20px;
+}
+
+/* ::before element to replace the slider track */
+.slider-component-cyan input[type="range"]::before {
+  content: "";
+  position: absolute;
+  width: var(--ProgressPercent, 100%);
+  height: 100%;
+  background: linear-gradient(to right, #ffff 0%, #00FFFF 100%);
+  /* Use linear-gradient with 'to right' to create a gradient from left to right */
+  /* Adjust the color stops and positions as needed */
+  pointer-events: none;
+  border-radius: 999px;
+}
+
+.slider-component-magenta input[type="range"]::before {
+  content: "";
+  position: absolute;
+  width: var(--ProgressPercent, 100%);
+  height: 100%;
+  background: linear-gradient(to right, #ffff 0%, #FF00FF 100%);
+  /* Use linear-gradient with 'to right' to create a gradient from left to right */
+  /* Adjust the color stops and positions as needed */
+  pointer-events: none;
+  border-radius: 999px;
+}
+
+.slider-component-yellow input[type="range"]::before {
+  content: "";
+  position: absolute;
+  width: var(--ProgressPercent, 100%);
+  height: 100%;
+  background: linear-gradient(to right, #ffff 0%, #FFFF00 100%);
+  /* Use linear-gradient with 'to right' to create a gradient from left to right */
+  /* Adjust the color stops and positions as needed */
+  pointer-events: none;
+  border-radius: 999px;
+}
+
+.slider-component-key input[type="range"]::before {
+  content: "";
+  position: absolute;
+  width: var(--ProgressPercent, 100%);
+  height: 100%;
+  background: linear-gradient(to right, #ffff 0%, #000000 100%);
+  /* Use linear-gradient with 'to right' to create a gradient from left to right */
+  /* Adjust the color stops and positions as needed */
+  pointer-events: none;
+  border-radius: 999px;
+}
+
+/* `::-webkit-slider-runnable-track` targets the track (background) of a range slider in chrome and safari browsers. */
+.custom-slider input[type="range"]::-webkit-slider-runnable-track {
+  appearance: none;
+  background: #005a3c;
+  height: var(--trackHeight);
+  border-radius: 999px;
+}
+
+/* `::-moz-range-track` targets the track (background) of a range slider in Mozilla Firefox. */
+.custom-slider input[type="range"]::-moz-range-track {
+  appearance: none;
+  background: #005a3c;
+  height: var(--trackHeight);
+  border-radius: 999px;
+}
+
+.slider-component-cyan input[type="range"]::-webkit-slider-thumb {
+  position: relative;
+  top: 50%;
+  transform: translate(0, -50%);
+  width: var(--thumbRadius);
+  height: var(--thumbRadius);
+  /* margin-top: calc((var(--trackHeight) - var(--thumbRadius)) / 2); */
+  background: #02d3de;
+  border-radius: 999px;
+  pointer-events: all;
+  appearance: none;
+  z-index: 1;
+}
+
+
+
+.slider-component-magenta input[type="range"]::-webkit-slider-thumb {
+  position: relative;
+  top: 50%;
+  transform: translate(0, -50%);
+  width: var(--thumbRadius);
+  height: var(--thumbRadius);
+  /* margin-top: calc((var(--trackHeight) - var(--thumbRadius)) / 2); */
+  background: #da03d3;
+  border-radius: 999px;
+  pointer-events: all;
+  appearance: none;
+  z-index: 1;
+}
+
+.slider-component-yellow input[type="range"]::-webkit-slider-thumb {
+  position: relative;
+  top: 50%;
+  transform: translate(0, -50%);
+  width: var(--thumbRadius);
+  height: var(--thumbRadius);
+  /* margin-top: calc((var(--trackHeight) - var(--thumbRadius)) / 2); */
+  background: #ffea03;
+  border-radius: 999px;
+  pointer-events: all;
+  appearance: none;
+  z-index: 1;
+}
+
+.slider-component-key input[type="range"]::-webkit-slider-thumb {
+  position: relative;
+  top: 50%;
+  transform: translate(0, -50%);
+  width: var(--thumbRadius);
+  height: var(--thumbRadius);
+  /* margin-top: calc((var(--trackHeight) - var(--thumbRadius)) / 2); */
+  background: #231821;
+  border-radius: 999px;
+  pointer-events: all;
+  appearance: none;
+  z-index: 1;
+}
+
+.button-div {
+  margin-bottom: 10px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .flex-view {
@@ -648,9 +880,11 @@ onBeforeUnmount(() => {
   border-radius: 5px;
   background: #f6f7f9;
 }
+
 .flex-item {
   display: inline-flex;
   flex: 1;
+
   .label {
     width: 32px;
     height: 32px;
@@ -659,32 +893,40 @@ onBeforeUnmount(() => {
     font-size: 14px;
     // color: #333333;
   }
+
   .content {
     width: 60px;
   }
+
   .slider-box {
     width: calc(100% - 50px);
     margin-left: 10px;
   }
+
   .left {
     flex: 1;
   }
+
   .right {
     flex: 1;
     margin-left: 10px;
+
     :deep(.ivu-input-number) {
       display: block;
       width: 100%;
     }
   }
+
   :deep(.ivu-slider-wrap) {
     margin: 13px 0;
   }
+
   :deep(.ivu-radio-group-button) {
     & .ivu-radio-wrapper {
       width: 48px;
       line-height: 40px;
       text-align: center;
+
       svg {
         vertical-align: baseline;
       }
@@ -692,7 +934,7 @@ onBeforeUnmount(() => {
   }
 
   :deep(.ivu-btn-group-large) {
-    & > .ivu-btn {
+    &>.ivu-btn {
       font-size: 24px;
     }
   }
@@ -709,6 +951,7 @@ onBeforeUnmount(() => {
 
   .ivu-col {
     position: inherit;
+
     &__box {
       display: flex;
       align-items: center;
@@ -752,14 +995,15 @@ onBeforeUnmount(() => {
   }
 }
 
-#background{
+#background {
   padding-left: 6px;
 }
-#angel{
+
+#angel {
   display: block;
 }
 
-#opacity{
+#opacity {
   display: block;
 }
 </style>

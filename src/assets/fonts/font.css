@@ -7,3 +7,11 @@
   font-family: '华康金刚黑';
   src: url('./cn/华康金刚黑.ttf');
 }
+
+/* .ivu-select-dropdown.ivu-transfer-no-max-height {
+  transform-origin: center top;
+  position: static !important;
+  will-change: top, left;
+  top: 281px;
+  left: 424px;
+} */

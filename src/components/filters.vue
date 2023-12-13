@@ -15,15 +15,8 @@
           <div class="filter-box">
             <!-- no parameter filter -->
             <div class="filter-item" v-for="(value, key) in state.noParamsFilters" :key="key">
-              <img
-                :src="getImageUrl(key)"
-                alt=""
-                @click="changeFilters(key, !noParamsFilters[key])"
-              />
-              <Checkbox
-                v-model="state.noParamsFilters[key]"
-                @on-change="(val) => changeFilters(key, val)"
-              >
+              <img :src="getImageUrl(key)" alt="" @click="changeFilters(key, !noParamsFilters[key])" />
+              <Checkbox v-model="state.noParamsFilters[key]" @on-change="(val) => changeFilters(key, val)">
                 {{ $t('filters.' + key) }}
               </Checkbox>
             </div>
@@ -35,11 +28,8 @@
         <template #content>
           <!-- There are parametric filters and combined parametric filters -->
           <div>
-            <div
-              class="filter-item has-params"
-              v-for="item in [...state.paramsFilters, ...state.combinationFilters]"
-              :key="item.type"
-            >
+            <div class="filter-item has-params" v-for="item in [...state.paramsFilters, ...state.combinationFilters]"
+              :key="item.type">
               <Checkbox v-model="item.status" @on-change="changeFiltersByParams(item.type)">
                 {{ $t('filters.' + item.type) }}
               </Checkbox>
@@ -53,21 +43,11 @@
                     </RadioGroup>
                   </div>
                   <div v-if="info.uiType === uiType.NUMBER">
-                    <Slider
-                      v-model="info.value"
-                      :max="info.max"
-                      :min="info.min"
-                      :step="info.step"
-                      @on-input="changeFiltersByParams(item.type)"
-                    ></Slider>
+                    <Slider v-model="info.value" :max="info.max" :min="info.min" :step="info.step"
+                      @on-input="changeFiltersByParams(item.type)"></Slider>
                   </div>
                   <div v-if="info.uiType === uiType.COLOR">
-                    <ColorPicker
-                      v-model="info.value"
-                      alpha
-                      size="small"
-                      @on-change="changeFiltersByParams(item.type)"
-                    />
+                    <ColorPicker v-model="info.value" basic size="small" @on-change="changeFiltersByParams(item.type)" />
                   </div>
                 </div>
               </div>
@@ -282,26 +262,32 @@ function _getFabricFilterType(type) {
 <style scoped lang="less">
 .filter-box {
   overflow: hidden;
+
   .filter-item {
     float: left;
     cursor: pointer;
     width: 50%;
     margin-bottom: 10px;
+
     img {
       width: 90%;
       height: auto;
     }
   }
 }
+
 .has-params {
   display: inline-block;
   margin-bottom: 10px;
   width: 50%;
+
   .content {
     width: 90%;
   }
+
   cursor: none;
 }
+
 .box {
   margin-bottom: 12px;
 }

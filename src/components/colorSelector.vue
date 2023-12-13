@@ -1,16 +1,10 @@
-<!--
- * @Author: 秦少卫
- * @Date: 2023-02-16 22:52:00
- * @LastEditors: 秦少卫
- * @LastEditTime: 2023-07-24 23:15:36
- * @Description: 颜色选择器
--->
+
 <template>
   <div class="box">
     <!-- color switch -->
     <iSwitch v-model="isGradient" size="large" class="switch">
       <template #open>
-        <span>Gradient</span>
+        <span id="gradient-button">Gradient</span>
       </template>
       <template #close>
         <span>Solid Color</span>
@@ -21,17 +15,12 @@
       <div class="gradient-bar" :style="bgStr"></div>
       <!-- color plugin -->
 
-      <gradientColorPicker
-        :is-gradient="true"
-        :gradient="currentGradient"
-        @change="changeGradientColor"
-        :cancel-text="$t('cancel')"
-        :confirm-text="$t('ok')"
-      />
+      <gradientColorPicker :is-gradient="true" :gradient="currentGradient" @change="changeGradientColor"
+        :cancel-text="$t('cancel')" :confirm-text="$t('ok')" />
     </div>
 
     <!-- solid color selector -->
-    <ColorPicker v-show="!isGradient" v-model="fill" @on-change="changePureColor" alpha />
+    <ColorPicker v-show="!isGradient" v-model="fill" @on-change="changePureColor" basic />
   </div>
 </template>
 
@@ -262,11 +251,13 @@ onMounted(() => {
 
 // Gradient selector
 :deep(.ui-color-picker) {
+
   .picker-area,
   .gradient-controls,
   .color-preview-area {
     padding: 0;
   }
+
   border-radius: 10px;
   padding: 8px;
   margin: 0;
