@@ -276,6 +276,7 @@ import axios from 'axios';
 import { getPolygonVertices } from '@/utils/math';
 import InputNumber from '@/components/inputNumber';
 import { Spin } from 'view-ui-plus';
+import { ref, watch } from 'vue';
 
 const event = inject('event');
 const update = getCurrentInstance();
@@ -472,6 +473,85 @@ const init = () => {
   canvasEditor.canvas.on('object:modified', getObjectAttr);
 };
 
+
+var c = ref(0);
+var m = ref(0);
+var y = ref(0);
+var k = ref(0);
+
+const convertCMYKtoRGB = () => {
+  const cValue = c.value / 100;
+  const mValue = m.value / 100;
+  const yValue = y.value / 100;
+  const kValue = k.value / 100;
+
+  const r = Math.round(255 * (1 - cValue) * (1 - kValue));
+  const g = Math.round(255 * (1 - mValue) * (1 - kValue));
+  const b = Math.round(255 * (1 - yValue) * (1 - kValue));
+  //console.log(`rgb(${r},${g},${b})`);
+  let value = `rgb(${r},${g},${b})`;
+  // Example usage:
+  const hexColor = rgbToHex(r, g, b); // Replace with your RGB values
+
+  changeCommon('textBackgroundColor', hexColor);
+  fontAttr.textBackgroundColor = hexColor;
+};
+
+const convertRGBtoCMYK = (value) => {
+  const rgbColor = hexToRgb(value);
+  // Extracting individual RGB values from the rgbColor object
+  const r = rgbColor.r;
+  const g = rgbColor.g;
+  const b = rgbColor.b;
+  // Checking if RGB values are valid numbers and greater than 0
+  const red = (typeof r === 'number' && r >= 0) ? r / 255 : 0;
+  const green = (typeof g === 'number' && g >= 0) ? g / 255 : 0;
+  const blue = (typeof b === 'number' && b >= 0) ? b / 255 : 0;
+  const black = Math.min(1 - red, 1 - green, 1 - blue);
+  // Assuming c, m, y, k are variables accessible within this scope
+  c.value = Math.round(((1 - red - black) / (1 - black)) * 100);
+  m.value = Math.round(((1 - green - black) / (1 - black)) * 100);
+  y.value = Math.round(((1 - blue - black) / (1 - black)) * 100);
+  k.value = Math.round(black * 100);
+};
+
+
+
+
+const rgbToHex = (r, g, b) => {
+  // Convert each RGB component to its hexadecimal representation
+  const componentToHex = (c) => {
+    const hex = c.toString(16);
+    return hex.length === 1 ? '0' + hex : hex; // Ensure two digits in the result
+  };
+
+  // Ensure values are within valid range (0 to 255)
+  r = Math.max(0, Math.min(255, r));
+  g = Math.max(0, Math.min(255, g));
+  b = Math.max(0, Math.min(255, b));
+
+  // Convert each component to hexadecimal and concatenate them
+  return '#' + componentToHex(r) + componentToHex(g) + componentToHex(b);
+}
+
+function hexToRgb(hex) {
+  // Remove '#' if present and handle shorthand notation
+  hex = hex.replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i, (m, r, g, b) => {
+    return r + r + g + g + b + b;
+  });
+
+  // Convert the hexadecimal values to decimal
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result
+    ? {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16)
+    }
+    : null;
+}
+
+
 // Modify font
 const changeFontFamily = (fontName) => {
   if (!fontName) return;
@@ -519,6 +599,9 @@ const changeCommon = (key, value) => {
 
   // Update properties
   getObjectAttr();
+  if (key === "textBackgroundColor") {
+    convertRGBtoCMYK(value);
+  }
 };
 
 // Border settings

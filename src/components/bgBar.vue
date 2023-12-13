@@ -108,7 +108,6 @@ export default {
 
     };
 
-    let timerId = null;
 
     watch([c, m, y, k], ([newC, newM, newY, newK]) => {
       const rgbColor = convertCMYKtoRGB(newC, newM, newY, newK);

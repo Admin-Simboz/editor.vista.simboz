@@ -209,32 +209,18 @@ const addRect = (option) => {
   const outerRect = new fabric.Rect({
     ...defaultPosition,
     ...option,
-    fill: '#F57274', // Fill color for the outer rectangle
-    width: 400,
-    height: 400,
     id: uuid(),
     name: 'RectangleOuter',
-  });
+    width: 200,
+    height: 100,
+    fill: '',
+    stroke: 'black',
+    strokeWidth: 1,
+    opacity: 1
 
-  const innerRect = new fabric.Rect({
-    ...defaultPosition,
-    ...option,
-    fill: 'transparent', // Transparent fill for the inner rectangle
-    width: 200,          // Adjust the inner rectangle size as needed
-    height: 200,
-    id: uuid(),
-    name: 'RectangleInner',
   });
-
   canvasEditor.canvas.add(outerRect);
-  canvasEditor.canvas.add(innerRect);
-
-  innerRect.center(); // Center the inner rectangle
-
-  if (!option) {
-    outerRect.center();
-  }
-
+  outerRect.center();
   canvasEditor.canvas.setActiveObject(outerRect);
 };
 const drawingLineModeSwitch = (isArrow) => {
