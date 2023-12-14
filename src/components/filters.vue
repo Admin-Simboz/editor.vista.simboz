@@ -1,10 +1,4 @@
-<!--
- * @Author: 秦少卫
- * @Date: 2023-04-06 23:04:38
- * @LastEditors: 秦少卫
- * @LastEditTime: 2023-07-16 12:48:28
- * @Description: 图片滤镜
--->
+
 
 <template>
   <div v-if="mixinState.mSelectMode === 'one' && state.type === 'image'" class="box">

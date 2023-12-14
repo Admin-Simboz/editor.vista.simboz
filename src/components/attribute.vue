@@ -2,100 +2,228 @@
   <div class="box" v-if="mixinState.mSelectMode === 'one'">
     <!-- Gradient selector -->
     <div v-show="textType.includes(mixinState.mSelectOneType)">
-      <Divider plain orientation="left">{{ $t('attributes.font') }}</Divider>
-      <div class="flex-view">
-        <div class="flex-item">
-          <div class="left font-selector">
-            <Select v-model="fontAttr.fontFamily" @on-change="changeFontFamily">
-              <Option v-for="item in fontFamilyList" :value="item.name" :key="`font-${item.name}`">
-                <div class="font-item" v-if="!item.preview">{{ item.name }}</div>
-                <div class="font-item" v-else :style="`background-image:url('${item.preview}');`">
-                  {{ !item.preview ? item : '' }}
-                  <!-- Solve the problem of being unable to select -->
-                  <span style="display: none">{{ item.name }}</span>
-                </div>
-              </Option>
-            </Select>
+      <div class="dropdown cstmStyle" plain orientation="left" @click="toggleFont"><span> {{
+        $t('attributes.font') }}</span>
+        <span>+</span>
+      </div>
+      <div class="font" v-if="showFont">
+        <div class="flex-view">
+          <div class="flex-item">
+            <div class="left font-selector">
+              <Select v-model="fontAttr.fontFamily" @on-change="changeFontFamily">
+                <Option v-for="item in fontFamilyList" :value="item.name" :key="`font-${item.name}`">
+                  <div class="font-item" v-if="!item.preview">{{ item.name }}</div>
+                  <div class="font-item" v-else :style="`background-image:url('${item.preview}');`">
+                    {{ !item.preview ? item : '' }}
+                    <!-- Solve the problem of being unable to select -->
+                    <span style="display: none">{{ item.name }}</span>
+                  </div>
+                </Option>
+              </Select>
+            </div>
+            <div class="right">
+              <InputNumber v-model="fontAttr.fontSize" @on-change="(value) => changeCommon('fontSize', value)"
+                append="Font size" :min="1"></InputNumber>
+            </div>
           </div>
-          <div class="right">
-            <InputNumber v-model="fontAttr.fontSize" @on-change="(value) => changeCommon('fontSize', value)"
-              append="Font size" :min="1"></InputNumber>
+        </div>
+
+        <div class="flex-view">
+          <div class="flex-item">
+            <RadioGroup class="button-group" v-model="fontAttr.textAlign"
+              @on-change="(value) => changeCommon('textAlign', value)" type="button">
+              <Radio v-for="(item, i) in textAlignList" :label="item" :key="item">
+                <span v-html="textAlignListSvg[i]"></span>
+              </Radio>
+            </RadioGroup>
+          </div>
+        </div>
+
+        <div class="flex-view">
+          <div class="flex-item">
+            <ButtonGroup class="button-group">
+              <Button @click="changeFontWeight('fontWeight', fontAttr.fontWeight)">
+                <svg viewBox="0 0 1024 1024" width="14" height="14">
+                  <path
+                    d="M793.99865 476a244 244 0 0 0 54-130.42C862.75865 192.98 743.01865 64 593.85865 64H195.01865a32 32 0 0 0-32 32v96a32 32 0 0 0 32 32h63.74v576H195.01865a32 32 0 0 0-32 32v96a32 32 0 0 0 32 32h418.64c141.6 0 268.28-103.5 282-244.8 9.48-96.9-32.78-184.12-101.66-239.2zM418.33865 224h175.52a96 96 0 0 1 0 192h-175.52z m175.52 576h-175.52V576h175.52a112 112 0 0 1 0 224z"
+                    :fill="fontAttr.fontWeight === 'bold' ? '#305ef4' : '#666'"></path>
+                </svg>
+              </Button>
+              <Button @click="changeFontStyle('fontStyle', fontAttr.fontStyle)">
+                <svg viewBox="0 0 1024 1024" width="14" height="14">
+                  <path
+                    d="M832 96v64a32 32 0 0 1-32 32h-125.52l-160 640H608a32 32 0 0 1 32 32v64a32 32 0 0 1-32 32H224a32 32 0 0 1-32-32v-64a32 32 0 0 1 32-32h125.52l160-640H416a32 32 0 0 1-32-32V96a32 32 0 0 1 32-32h384a32 32 0 0 1 32 32z"
+                    :fill="fontAttr.fontStyle === 'italic' ? '#305ef4' : '#666'"></path>
+                </svg>
+              </Button>
+              <Button @click="changeLineThrough('linethrough', fontAttr.linethrough)">
+                <svg viewBox="0 0 1024 1024" width="14" height="14">
+                  <path
+                    d="M893.088 501.792H125.344a32 32 0 0 0 0 64h767.744a32 32 0 0 0 0-64zM448 448h112V208h288V96H160v112h288zM448 640h112v288H448z"
+                    :fill="fontAttr.linethrough ? '#305ef4' : '#666'"></path>
+                </svg>
+              </Button>
+              <Button @click="changeUnderline('underline', fontAttr.underline)">
+                <svg viewBox="0 0 1024 1024" width="14" height="14">
+                  <path
+                    d="M703.232 67.008h127.488v413.248c0 158.016-142.656 286.016-318.72 286.016-176 0-318.72-128-318.72-286.016V67.008h127.488v413.248c0 39.872 18.176 78.144 51.136 107.776 36.8 32.96 86.528 51.072 140.096 51.072s103.36-18.112 140.032-51.136c33.024-29.632 51.2-67.968 51.2-107.776V67.008zM193.28 871.616h637.44v85.376H193.28v-85.376z"
+                    :fill="fontAttr.underline ? '#305ef4' : '#666'"></path>
+                </svg>
+              </Button>
+            </ButtonGroup>
+          </div>
+        </div>
+
+        <Row :gutter="12">
+          <Col flex="1">
+          <InputNumber v-model="fontAttr.lineHeight" @on-change="(value) => changeCommon('lineHeight', value)" :step="0.1"
+            :append="$t('attributes.line_height')"></InputNumber>
+          </Col>
+          <Col flex="1">
+          <InputNumber v-model="fontAttr.charSpacing" @on-change="(value) => changeCommon('charSpacing', value)"
+            :append="$t('attributes.char_spacing')"></InputNumber>
+          </Col>
+        </Row>
+      </div>
+
+      <div class="dropdown cstmStyle" plain orientation="left" @click="toggleBackground"><span> {{
+        $t('background') }}</span>
+        <span>+</span>
+      </div>
+      <div class="font-background-color" v-if="showBackground">
+
+        <div class="cmyk-inputs">
+
+          <ColorPicker v-model="fontAttr.textBackgroundColor"
+            @on-change="(value) => changeCommon('textBackgroundColor', value)" basic />
+        </div>
+
+        <div class="custom-slider">
+          <div class="slider-component">
+            <label for="cInput"> <b>C</b> </label>
+          </div>
+          <div class="slider-component-cyan">
+            <input class="slider" type="range" min="0" max="100" @change="changeBackgroundColorFont" v-model.number="c"
+              show-input />
+          </div>
+          <div class="slider-component">
+            <input class="slider-input" type="number" min="0" max="100"
+              @change="changeBackgroundColorFont('textBackgroundColor')" v-model.number="c" show-input />
+            <span><b> %</b></span>
+          </div>
+
+        </div>
+        <div class="custom-slider">
+          <div class="slider-component">
+            <label for="mInput"><b>M</b> </label>
+          </div>
+          <div class="slider-component-magenta">
+            <input class="slider" type="range" min="0" max="100" @change="changeBackgroundColorFont" v-model.number="m"
+              show-input />
+          </div>
+          <div class="slider-component">
+            <input class="slider-input" type="number" min="0" max="100" @change="changeBackgroundColorFont"
+              v-model.number="m" show-input />
+            <span><b> %</b></span>
+          </div>
+        </div>
+        <div class="custom-slider">
+          <div class="slider-component">
+            <label for="yInput"><b>Y</b> </label>
+          </div>
+          <div class="slider-component-yellow">
+            <input class="slider" type="range" min="0" max="100" @change="changeBackgroundColorFont" v-model.number="y"
+              show-input />
+          </div>
+          <div class="slider-component">
+            <input class="slider-input" type="number" min="0" max="100" @change="changeBackgroundColorFont"
+              v-model.number="y" show-input />
+            <span><b> %</b></span>
+          </div>
+        </div>
+
+        <div class="custom-slider">
+          <div class="slider-component">
+            <label for="kInput"><b>K</b> </label>
+          </div>
+          <div class="slider-component-key">
+            <input class="slider" type="range" min="0" max="100" @change="changeBackgroundColorFont" v-model.number="k"
+              show-input />
+          </div>
+          <div class="slider-component">
+            <input class="slider-input" type="number" min="0" max="100" @change="changeBackgroundColorFont"
+              v-model.number="k" show-input />
+            <span><b> %</b></span>
+          </div>
+        </div>
+        <div class="button-div">
+
+          <button class="no-color-button" @click="restBackgroundCMYK">
+            <p>Remove</p>
+          </button>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Common properties -->
+    <div v-show="baseType.includes(mixinState.mSelectOneType)">
+      <div class="dropdown cstmStyle" plain orientation="left" @click="toggleColor"><span> {{
+        $t('attributes.exterior') }}</span>
+        <span>+</span>
+      </div>
+
+      <div v-if="showColor">
+        <!-- Number of polygon sides -->
+        <Row v-if="mixinState.mSelectOneType === 'polygon'" :gutter="12">
+          <Col flex="0.5">
+          <InputNumber v-model="baseAttr.points.length" :min="3" :max="30" @on-change="changeEdge"
+            append="Number of sides">
+          </InputNumber>
+          </Col>
+        </Row>
+        <!-- color -->
+        <colorSelector :color="baseAttr.fill" @change="(value) => changeCommon('fill', value)"></colorSelector>
+        <Row :gutter="12">
+          <Col flex="1">
+          <InputNumber v-model="baseAttr.left" @on-change="(value) => changeCommon('left', value)"
+            :append="$t('attributes.left')"></InputNumber>
+          </Col>
+          <Col flex="1">
+          <InputNumber v-model="baseAttr.top" @on-change="(value) => changeCommon('top', value)"
+            :append="$t('attributes.top')"></InputNumber>
+          </Col>
+        </Row>
+        <div class="flex-view">
+          <div class="flex-item" id="angel">
+            <span class="label">{{ $t('attributes.angle') }}</span>
+            <div class="content slider-box">
+              <Slider v-model="baseAttr.angle" :max="360" @on-input="(value) => changeCommon('angle', value)"></Slider>
+            </div>
+          </div>
+        </div>
+        <div class="flex-view">
+          <div class="flex-item" id="angel">
+            <span class="label">{{ $t('attributes.opacity') }}</span>
+            <div class="content slider-box">
+              <Slider v-model="baseAttr.opacity" @on-input="(value) => changeCommon('opacity', value)"></Slider>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="flex-view">
-        <div class="flex-item">
-          <RadioGroup class="button-group" v-model="fontAttr.textAlign"
-            @on-change="(value) => changeCommon('textAlign', value)" type="button">
-            <Radio v-for="(item, i) in textAlignList" :label="item" :key="item">
-              <span v-html="textAlignListSvg[i]"></span>
-            </Radio>
-          </RadioGroup>
-        </div>
+      <!-- frame -->
+      <div class="dropdown cstmStyle" plain orientation="left" @click="toggleStroke"><span> {{
+        $t('attributes.stroke') }}</span>
+        <span>+</span>
       </div>
 
-      <div class="flex-view">
-        <div class="flex-item">
-          <ButtonGroup class="button-group">
-            <Button @click="changeFontWeight('fontWeight', fontAttr.fontWeight)">
-              <svg viewBox="0 0 1024 1024" width="14" height="14">
-                <path
-                  d="M793.99865 476a244 244 0 0 0 54-130.42C862.75865 192.98 743.01865 64 593.85865 64H195.01865a32 32 0 0 0-32 32v96a32 32 0 0 0 32 32h63.74v576H195.01865a32 32 0 0 0-32 32v96a32 32 0 0 0 32 32h418.64c141.6 0 268.28-103.5 282-244.8 9.48-96.9-32.78-184.12-101.66-239.2zM418.33865 224h175.52a96 96 0 0 1 0 192h-175.52z m175.52 576h-175.52V576h175.52a112 112 0 0 1 0 224z"
-                  :fill="fontAttr.fontWeight === 'bold' ? '#305ef4' : '#666'"></path>
-              </svg>
-            </Button>
-            <Button @click="changeFontStyle('fontStyle', fontAttr.fontStyle)">
-              <svg viewBox="0 0 1024 1024" width="14" height="14">
-                <path
-                  d="M832 96v64a32 32 0 0 1-32 32h-125.52l-160 640H608a32 32 0 0 1 32 32v64a32 32 0 0 1-32 32H224a32 32 0 0 1-32-32v-64a32 32 0 0 1 32-32h125.52l160-640H416a32 32 0 0 1-32-32V96a32 32 0 0 1 32-32h384a32 32 0 0 1 32 32z"
-                  :fill="fontAttr.fontStyle === 'italic' ? '#305ef4' : '#666'"></path>
-              </svg>
-            </Button>
-            <Button @click="changeLineThrough('linethrough', fontAttr.linethrough)">
-              <svg viewBox="0 0 1024 1024" width="14" height="14">
-                <path
-                  d="M893.088 501.792H125.344a32 32 0 0 0 0 64h767.744a32 32 0 0 0 0-64zM448 448h112V208h288V96H160v112h288zM448 640h112v288H448z"
-                  :fill="fontAttr.linethrough ? '#305ef4' : '#666'"></path>
-              </svg>
-            </Button>
-            <Button @click="changeUnderline('underline', fontAttr.underline)">
-              <svg viewBox="0 0 1024 1024" width="14" height="14">
-                <path
-                  d="M703.232 67.008h127.488v413.248c0 158.016-142.656 286.016-318.72 286.016-176 0-318.72-128-318.72-286.016V67.008h127.488v413.248c0 39.872 18.176 78.144 51.136 107.776 36.8 32.96 86.528 51.072 140.096 51.072s103.36-18.112 140.032-51.136c33.024-29.632 51.2-67.968 51.2-107.776V67.008zM193.28 871.616h637.44v85.376H193.28v-85.376z"
-                  :fill="fontAttr.underline ? '#305ef4' : '#666'"></path>
-              </svg>
-            </Button>
-          </ButtonGroup>
-        </div>
-      </div>
-
-      <Row :gutter="12">
-        <Col flex="1">
-        <InputNumber v-model="fontAttr.lineHeight" @on-change="(value) => changeCommon('lineHeight', value)" :step="0.1"
-          :append="$t('attributes.line_height')"></InputNumber>
-        </Col>
-        <Col flex="1">
-        <InputNumber v-model="fontAttr.charSpacing" @on-change="(value) => changeCommon('charSpacing', value)"
-          :append="$t('attributes.char_spacing')"></InputNumber>
-        </Col>
-      </Row>
-
-      <div class="fl-">
-        <div class="fl">
-
-          <div>
-
+      <div class="stroke" v-if="showStroke">
+        <div class="ivu-col__box">
+          <div class="content">
             <div class="cmyk-inputs">
-              <div class="button-div">
-                <div><span class="label" id="background">{{ $t('background') }}</span></div>
-                <div><button class="no-color-button" @click="restCMYK">
-                    <img class="no-color-img" src="dist/images/noColor.png">
-                  </button></div>
-              </div>
 
-              <ColorPicker v-model="fontAttr.textBackgroundColor"
-                @on-change="(value) => changeCommon('textBackgroundColor', value)" basic />
+              <ColorPicker v-model="baseAttr.stroke" @on-change="(value) => changeCommon('stroke', value)" basic />
             </div>
 
             <div class="custom-slider">
@@ -103,12 +231,12 @@
                 <label for="cInput"> <b>C</b> </label>
               </div>
               <div class="slider-component-cyan">
-                <input class="slider" type="range" min="0" max="100" @change="convertCMYKtoRGB" v-model.number="c"
+                <input class="slider" type="range" min="0" max="100" @change="changeStrokeColor" v-model.number="cStroke"
                   show-input />
               </div>
               <div class="slider-component">
-                <input class="slider-input" type="number" min="0" max="100" @change="convertCMYKtoRGB" v-model.number="c"
-                  show-input />
+                <input class="slider-input" type="number" min="0" max="100" @change="changeStrokeColor"
+                  v-model.number="cStroke" show-input />
                 <span><b> %</b></span>
               </div>
 
@@ -118,12 +246,12 @@
                 <label for="mInput"><b>M</b> </label>
               </div>
               <div class="slider-component-magenta">
-                <input class="slider" type="range" min="0" max="100" @change="convertCMYKtoRGB" v-model.number="m"
+                <input class="slider" type="range" min="0" max="100" @change="changeStrokeColor" v-model.number="mStroke"
                   show-input />
               </div>
               <div class="slider-component">
-                <input class="slider-input" type="number" min="0" max="100" @change="convertCMYKtoRGB" v-model.number="m"
-                  show-input />
+                <input class="slider-input" type="number" min="0" max="100" @change="changeStrokeColor"
+                  v-model.number="mStroke" show-input />
                 <span><b> %</b></span>
               </div>
             </div>
@@ -132,12 +260,12 @@
                 <label for="yInput"><b>Y</b> </label>
               </div>
               <div class="slider-component-yellow">
-                <input class="slider" type="range" min="0" max="100" @change="convertCMYKtoRGB" v-model.number="y"
+                <input class="slider" type="range" min="0" max="100" @change="changeStrokeColor" v-model.number="yStroke"
                   show-input />
               </div>
               <div class="slider-component">
-                <input class="slider-input" type="number" min="0" max="100" @change="convertCMYKtoRGB" v-model.number="y"
-                  show-input />
+                <input class="slider-input" type="number" min="0" max="100" @change="changeStrokeColor"
+                  v-model.number="yStroke" show-input />
                 <span><b> %</b></span>
               </div>
             </div>
@@ -147,121 +275,145 @@
                 <label for="kInput"><b>K</b> </label>
               </div>
               <div class="slider-component-key">
-                <input class="slider" type="range" min="0" max="100" @change="convertCMYKtoRGB" v-model.number="k"
+                <input class="slider" type="range" min="0" max="100" @change="changeStrokeColor" v-model.number="kStroke"
                   show-input />
               </div>
               <div class="slider-component">
-                <input class="slider-input" type="number" min="0" max="100" @change="convertCMYKtoRGB" v-model.number="k"
+                <input class="slider-input" type="number" min="0" max="100" @change="changeStrokeColor"
+                  v-model.number="kStroke" show-input />
+                <span><b> %</b></span>
+              </div>
+            </div>
+            <div>
+              <button class="no-color-button" @click="restStrokeCMYK">
+                <p>Remove</p>
+              </button>
+            </div>
+          </div>
+        </div>
+        <Row :gutter="12">
+          <Col flex="1">
+          <div class="ivu-col__box">
+            <InputNumber v-model="baseAttr.strokeWidth" @on-change="(value) => changeCommon('strokeWidth', value)"
+              :append="$t('width')" :min="0"></InputNumber>
+          </div>
+          </Col>
+        </Row>
+
+        <Row :gutter="12">
+          <Col flex="1">
+          <div class="ivu-col__box">
+            <span class="label">{{ $t('attributes.stroke') }}</span>
+            <div class="content">
+              <Select v-model="baseAttr.strokeDashArray" @on-change="borderSet">
+                <Option v-for="item in strokeDashList" :value="item.label" :key="`stroke-${item.label}`">
+                  {{ item.label }}
+                </Option>
+              </Select>
+            </div>
+          </div>
+          </Col>
+        </Row>
+      </div>
+      <!-- shadow -->
+      <div class="dropdown cstmStyle" plain orientation="left" @click="toggleShadow"><span> {{
+        $t('attributes.shadow') }}</span>
+        <span>+</span>
+      </div>
+      <div v-if="showShadow">
+
+        <div class="ivu-col__box">
+          <div class="content">
+            <div class="cmyk-inputs">
+              <ColorPicker v-model="baseAttr.shadow.color" @on-change="(value) => changeCommon('color', value)" basic />
+            </div>
+
+            <div class="custom-slider">
+              <div class="slider-component">
+                <label for="cInput"> <b>C</b> </label>
+              </div>
+              <div class="slider-component-cyan">
+                <input class="slider" type="range" min="0" max="100" @change="changeShadowColor" v-model.number="cShadow"
                   show-input />
+              </div>
+              <div class="slider-component">
+                <input class="slider-input" type="number" min="0" max="100" @change="changeShadowColor"
+                  v-model.number="cShadow" show-input />
+                <span><b> %</b></span>
+              </div>
+
+            </div>
+            <div class="custom-slider">
+              <div class="slider-component">
+                <label for="mInput"><b>M</b> </label>
+              </div>
+              <div class="slider-component-magenta">
+                <input class="slider" type="range" min="0" max="100" @change="changeShadowColor" v-model.number="mShadow"
+                  show-input />
+              </div>
+              <div class="slider-component">
+                <input class="slider-input" type="number" min="0" max="100" @change="changeShadowColor"
+                  v-model.number="mShadow" show-input />
+                <span><b> %</b></span>
+              </div>
+            </div>
+            <div class="custom-slider">
+              <div class="slider-component">
+                <label for="yInput"><b>Y</b> </label>
+              </div>
+              <div class="slider-component-yellow">
+                <input class="slider" type="range" min="0" max="100" @change="changeShadowColor" v-model.number="yShadow"
+                  show-input />
+              </div>
+              <div class="slider-component">
+                <input class="slider-input" type="number" min="0" max="100" @change="changeShadowColor"
+                  v-model.number="yShadow" show-input />
                 <span><b> %</b></span>
               </div>
             </div>
 
+            <div class="custom-slider">
+              <div class="slider-component">
+                <label for="kInput"><b>K</b> </label>
+              </div>
+              <div class="slider-component-key">
+                <input class="slider" type="range" min="0" max="100" @change="changeShadowColor" v-model.number="kShadow"
+                  show-input />
+              </div>
+              <div class="slider-component">
+                <input class="slider-input" type="number" min="0" max="100" @change="changeShadowColor"
+                  v-model.number="kShadow" show-input />
+                <span><b> %</b></span>
+              </div>
+            </div>
+            <button class="no-color-button" @click="restStrokeCMYK">
+              <p>Remove</p>
+            </button>
           </div>
-
         </div>
+
+
+
+        <Row :gutter="12">
+          <Col flex="1">
+          <InputNumber v-model="baseAttr.shadow.blur" :defaultValue="0"
+            @on-change="(value) => changeShadow('blur', value)" :append="$t('attributes.blur')" :min="0"></InputNumber>
+          </Col>
+        </Row>
+
+        <Row :gutter="12">
+          <Col flex="1">
+          <InputNumber v-model="baseAttr.shadow.offsetX" :defaultValue="0"
+            @on-change="(value) => changeShadow('offsetX', value)" :append="$t('attributes.offset_x')"></InputNumber>
+          </Col>
+          <Col flex="1">
+          <InputNumber v-model="baseAttr.shadow.offsetY" :defaultValue="0"
+            @on-change="(value) => changeShadow('offsetY', value)" :append="$t('attributes.offset_y')"></InputNumber>
+          </Col>
+        </Row>
+
       </div>
-    </div>
 
-    <!-- Common properties -->
-    <div v-show="baseType.includes(mixinState.mSelectOneType)">
-      <Divider plain orientation="left">{{ $t('attributes.exterior') }}</Divider>
-      <!-- Number of polygon sides -->
-      <Row v-if="mixinState.mSelectOneType === 'polygon'" :gutter="12">
-        <Col flex="0.5">
-        <InputNumber v-model="baseAttr.points.length" :min="3" :max="30" @on-change="changeEdge" append="Number of sides">
-        </InputNumber>
-        </Col>
-      </Row>
-      <!-- color -->
-      <colorSelector :color="baseAttr.fill" @change="(value) => changeCommon('fill', value)"></colorSelector>
-      <Row :gutter="12">
-        <Col flex="1">
-        <InputNumber v-model="baseAttr.left" @on-change="(value) => changeCommon('left', value)"
-          :append="$t('attributes.left')"></InputNumber>
-        </Col>
-        <Col flex="1">
-        <InputNumber v-model="baseAttr.top" @on-change="(value) => changeCommon('top', value)"
-          :append="$t('attributes.top')"></InputNumber>
-        </Col>
-      </Row>
-      <div class="flex-view">
-        <div class="flex-item" id="angel">
-          <span class="label">{{ $t('attributes.angle') }}</span>
-          <div class="content slider-box">
-            <Slider v-model="baseAttr.angle" :max="360" @on-input="(value) => changeCommon('angle', value)"></Slider>
-          </div>
-        </div>
-      </div>
-      <div class="flex-view">
-        <div class="flex-item" id="angel">
-          <span class="label">{{ $t('attributes.opacity') }}</span>
-          <div class="content slider-box">
-            <Slider v-model="baseAttr.opacity" @on-input="(value) => changeCommon('opacity', value)"></Slider>
-          </div>
-        </div>
-      </div>
-      <!-- frame -->
-      <Divider plain orientation="left">{{ $t('attributes.stroke') }}</Divider>
-
-      <Row :gutter="12">
-        <Col flex="1">
-        <div class="ivu-col__box">
-          <span class="label">{{ $t('color') }}</span>
-          <div class="content">
-            <ColorPicker v-model="baseAttr.stroke" @on-change="(value) => changeCommon('stroke', value)" basic />
-          </div>
-        </div>
-        </Col>
-        <Col flex="1">
-        <InputNumber v-model="baseAttr.strokeWidth" @on-change="(value) => changeCommon('strokeWidth', value)"
-          :append="$t('width')" :min="0"></InputNumber>
-        </Col>
-      </Row>
-
-      <Row :gutter="12">
-        <Col flex="1">
-        <div class="ivu-col__box">
-          <span class="label">{{ $t('attributes.stroke') }}</span>
-          <div class="content">
-            <Select v-model="baseAttr.strokeDashArray" @on-change="borderSet">
-              <Option v-for="item in strokeDashList" :value="item.label" :key="`stroke-${item.label}`">
-                {{ item.label }}
-              </Option>
-            </Select>
-          </div>
-        </div>
-        </Col>
-      </Row>
-
-      <!-- shadow -->
-      <Divider plain orientation="left">{{ $t('attributes.shadow') }}</Divider>
-
-      <Row :gutter="12">
-        <Col flex="1">
-        <div class="ivu-col__box">
-          <span class="label">{{ $t('color') }}</span>
-          <div class="content">
-            <ColorPicker v-model="baseAttr.shadow.color" @on-change="(value) => changeCommon('color', value)" basic />
-          </div>
-        </div>
-        </Col>
-        <Col flex="1">
-        <InputNumber v-model="baseAttr.shadow.blur" :defaultValue="0" @on-change="(value) => changeShadow('blur', value)"
-          :append="$t('attributes.blur')" :min="0"></InputNumber>
-        </Col>
-      </Row>
-
-      <Row :gutter="12">
-        <Col flex="1">
-        <InputNumber v-model="baseAttr.shadow.offsetX" :defaultValue="0"
-          @on-change="(value) => changeShadow('offsetX', value)" :append="$t('attributes.offset_x')"></InputNumber>
-        </Col>
-        <Col flex="1">
-        <InputNumber v-model="baseAttr.shadow.offsetY" :defaultValue="0"
-          @on-change="(value) => changeShadow('offsetY', value)" :append="$t('attributes.offset_y')"></InputNumber>
-        </Col>
-      </Row>
     </div>
 
   </div>
@@ -278,10 +430,43 @@ import InputNumber from '@/components/inputNumber';
 import { Spin } from 'view-ui-plus';
 import { ref, watch } from 'vue';
 
+
 const event = inject('event');
 const update = getCurrentInstance();
 const repoSrc = import.meta.env.APP_REPO;
 const { fabric, mixinState, canvasEditor } = useSelect();
+
+
+
+
+//Show Div on click
+const showBackground = ref(false);
+const showFont = ref(false);
+const showStroke = ref(false);
+const showShadow = ref(false);
+const showColor = ref(false);
+
+const toggleColor = () => {
+  showColor.value = !showColor.value;
+};
+const toggleShadow = () => {
+  showShadow.value = !showShadow.value;
+};
+const toggleFont = () => {
+  showFont.value = !showFont.value;
+};
+
+const toggleBackground = () => {
+  showBackground.value = !showBackground.value;
+};
+
+const toggleStroke = () => {
+  showStroke.value = !showStroke.value;
+};
+
+
+
+
 // common elements
 const baseType = [
   'Text',
@@ -478,8 +663,17 @@ var c = ref(0);
 var m = ref(0);
 var y = ref(0);
 var k = ref(0);
+var cStroke = ref(0);
+var mStroke = ref(0);
+var yStroke = ref(0);
+var kStroke = ref(0);
+var cShadow = ref(0);
+var mShadow = ref(0);
+var yShadow = ref(0);
+var kShadow = ref(0);
+var testValue = 0;
 
-const convertCMYKtoRGB = () => {
+const changeBackgroundColorFont = () => {
   const cValue = c.value / 100;
   const mValue = m.value / 100;
   const yValue = y.value / 100;
@@ -492,12 +686,12 @@ const convertCMYKtoRGB = () => {
   let value = `rgb(${r},${g},${b})`;
   // Example usage:
   const hexColor = rgbToHex(r, g, b); // Replace with your RGB values
-
+  testValue = 1;
   changeCommon('textBackgroundColor', hexColor);
   fontAttr.textBackgroundColor = hexColor;
 };
 
-const convertRGBtoCMYK = (value) => {
+const sliderBackgroundColor = (value) => {
   const rgbColor = hexToRgb(value);
   // Extracting individual RGB values from the rgbColor object
   const r = rgbColor.r;
@@ -514,9 +708,97 @@ const convertRGBtoCMYK = (value) => {
   y.value = Math.round(((1 - blue - black) / (1 - black)) * 100);
   k.value = Math.round(black * 100);
 };
+const restBackgroundCMYK = () => {
+  c.value = 0;
+  m.value = 0;
+  y.value = 0;
+  k.value = 0;
+  const hexColor = '#ffffff'; // Replace with your RGB values
+  testValue = 1;
+  changeCommon('textBackgroundColor', hexColor);
+  fontAttr.textBackgroundColor = hexColor;
+};
 
+const changeShadowColor = () => {
+  const cValue = cShadow.value / 100;
+  const mValue = mShadow.value / 100;
+  const yValue = yShadow.value / 100;
+  const kValue = kShadow.value / 100;
 
+  const r = Math.round(255 * (1 - cValue) * (1 - kValue));
+  const g = Math.round(255 * (1 - mValue) * (1 - kValue));
+  const b = Math.round(255 * (1 - yValue) * (1 - kValue));
+  //console.log(`rgb(${r},${g},${b})`);
+  let value = `rgb(${r},${g},${b})`;
+  // Example usage:
+  const hexColor = rgbToHex(r, g, b); // Replace with your RGB values
+  testValue = 1;
+  baseAttr.shadow.color = hexColor;
+};
 
+const sliderShadowColor = (value) => {
+  const rgbColor = hexToRgb(value);
+  // Extracting individual RGB values from the rgbColor object
+  const r = rgbColor.r;
+  const g = rgbColor.g;
+  const b = rgbColor.b;
+  // Checking if RGB values are valid numbers and greater than 0
+  const red = (typeof r === 'number' && r >= 0) ? r / 255 : 0;
+  const green = (typeof g === 'number' && g >= 0) ? g / 255 : 0;
+  const blue = (typeof b === 'number' && b >= 0) ? b / 255 : 0;
+  const black = Math.min(1 - red, 1 - green, 1 - blue);
+  // Assuming c, m, y, k are variables accessible within this scope
+  cShadow.value = Math.round(((1 - red - black) / (1 - black)) * 100);
+  mShadow.value = Math.round(((1 - green - black) / (1 - black)) * 100);
+  yShadow.value = Math.round(((1 - blue - black) / (1 - black)) * 100);
+  kShadow.value = Math.round(black * 100);
+};
+const restShadowCMYK = () => {
+  cShadow.value = 0;
+  mShadow.value = 0;
+  yShadow.value = 0;
+  kShadow.value = 0;
+  const hexColor = '#ffffff'; // Replace with your RGB values
+  testValue = 1;
+  changeCommon('color', hexColor);
+  fontAttr.textBackgroundColor = hexColor;
+};
+
+const changeStrokeColor = () => {
+  const cValue = cStroke.value / 100;
+  const mValue = mStroke.value / 100;
+  const yValue = yStroke.value / 100;
+  const kValue = kStroke.value / 100;
+
+  const r = Math.round(255 * (1 - cValue) * (1 - kValue));
+  const g = Math.round(255 * (1 - mValue) * (1 - kValue));
+  const b = Math.round(255 * (1 - yValue) * (1 - kValue));
+  //console.log(`rgb(${r},${g},${b})`);
+  let value = `rgb(${r},${g},${b})`;
+  // Example usage:
+  const hexColor = rgbToHex(r, g, b); // Replace with your RGB values
+  testValue = 1;
+  changeCommon('stroke', hexColor);
+  baseAttr.stroke = hexColor;
+};
+
+const sliderStrokeColor = (value) => {
+  const rgbColor = hexToRgb(value);
+  // Extracting individual RGB values from the rgbColor object
+  const r = rgbColor.r;
+  const g = rgbColor.g;
+  const b = rgbColor.b;
+  // Checking if RGB values are valid numbers and greater than 0
+  const red = (typeof r === 'number' && r >= 0) ? r / 255 : 0;
+  const green = (typeof g === 'number' && g >= 0) ? g / 255 : 0;
+  const blue = (typeof b === 'number' && b >= 0) ? b / 255 : 0;
+  const black = Math.min(1 - red, 1 - green, 1 - blue);
+  // Assuming c, m, y, k are variables accessible within this scope
+  cStroke.value = Math.round(((1 - red - black) / (1 - black)) * 100);
+  mStroke.value = Math.round(((1 - green - black) / (1 - black)) * 100);
+  yStroke.value = Math.round(((1 - blue - black) / (1 - black)) * 100);
+  kStroke.value = Math.round(black * 100);
+};
 
 const rgbToHex = (r, g, b) => {
   // Convert each RGB component to its hexadecimal representation
@@ -532,7 +814,7 @@ const rgbToHex = (r, g, b) => {
 
   // Convert each component to hexadecimal and concatenate them
   return '#' + componentToHex(r) + componentToHex(g) + componentToHex(b);
-}
+};
 
 function hexToRgb(hex) {
   // Remove '#' if present and handle shorthand notation
@@ -550,7 +832,15 @@ function hexToRgb(hex) {
     }
     : null;
 }
-
+const restStrokeCMYK = () => {
+  cStroke.value = 0;
+  mStroke.value = 0;
+  yStroke.value = 0;
+  kStroke.value = 0;
+  const hexColor = '#ffff';
+  changeCommon('stroke', hexColor);
+  fontAttr.textBackgroundColor = hexColor
+};
 
 // Modify font
 const changeFontFamily = (fontName) => {
@@ -599,9 +889,16 @@ const changeCommon = (key, value) => {
 
   // Update properties
   getObjectAttr();
-  if (key === "textBackgroundColor") {
-    convertRGBtoCMYK(value);
+  if (testValue === 0 && key === 'textBackgroundColor') {
+    sliderBackgroundColor(value);
   }
+  if (testValue === 0 && key === 'textBackgroundColor') {
+    sliderBackgroundColor(value);
+  }
+  if (testValue === 0 && key === 'color') {
+    sliderShadowColor(value);
+  }
+  testValue = 0;
 };
 
 // Border settings
@@ -676,7 +973,6 @@ onBeforeUnmount(() => {
   canvasEditor.canvas.off('object:modified', getObjectAttr);
 });
 </script>
-
 <style scoped lang="less">
 // @import url('vue-color-gradient-picker/dist/index.css');
 :deep(.ivu-color-picker) {
@@ -947,12 +1243,6 @@ onBeforeUnmount(() => {
   z-index: 1;
 }
 
-.button-div {
-  margin-bottom: 10px;
-  margin-top: 10px;
-  display: flex;
-  justify-content: space-between;
-}
 
 .flex-view {
   width: 100%;
@@ -1088,5 +1378,54 @@ onBeforeUnmount(() => {
 
 #opacity {
   display: block;
+}
+
+.dropdown {
+  cursor: pointer;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  position: relative;
+  display: flex;
+  margin-top: 10px;
+}
+
+.icon {
+  position: absolute;
+  top: 50%;
+  right: 5px;
+  transform: translateY(-50%);
+}
+
+.icon-rotate {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.dropdown-menu {
+  list-style: none;
+  padding: 0;
+  margin: 5px 0 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  display: inline-block;
+  position: absolute;
+  background-color: #fff;
+}
+
+.cstmStyle {
+  display: flex;
+  justify-content: space-between;
+}
+
+.no-color-button {
+  width: 100%;
+  background-color: #F6F7F9;
+  border-color: #9a9ca0;
+  padding: 4px;
+  color: #9a9ca0;
+  border-width: 1px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  /* Other styles for the button */
 }
 </style>
