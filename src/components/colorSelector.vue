@@ -40,7 +40,6 @@
               show-input />
             <span><b> %</b></span>
           </div>
-
         </div>
         <div class="custom-slider">
           <div class="slider-component">
@@ -502,6 +501,8 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .custom-slider {
@@ -829,5 +830,11 @@ onMounted(() => {
   margin-top: 8px;
   margin-bottom: 8px;
   /* Other styles for the button */
+}
+
+.custom-slider {
+  background-color: #F6F7F9;
+  padding: 6px;
+  border-radius: 4%;
 }
 </style>

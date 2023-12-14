@@ -6,9 +6,7 @@
     <div class="cmyk-inputs">
       <div class="button-div">
         <ColorPicker v-model="color" :colors="colors" @on-change="convertHEXtoRGB" basic />
-        <button class="no-color-button" @click="restCMYK">
-          <img class="no-color-img" src="dist/images/noColor.png">
-        </button>
+
       </div>
 
 
@@ -66,6 +64,10 @@
           <span><b> %</b></span>
         </div>
       </div>
+
+      <button class="no-color-button" @click="restCMYK">
+        <p>Remove</p>
+      </button>
 
     </div>
   </div>
@@ -420,5 +422,22 @@ export default {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+}
+
+.custom-slider {
+  background-color: #F6F7F9;
+  padding: 6px;
+  border-radius: 4%;
+}
+
+.no-color-button {
+  width: 100%;
+  background-color: #F6F7F9;
+  border-color: #9a9ca0;
+  padding: 4px;
+  color: #9a9ca0;
+  border-width: 1px;
+  margin-top: 8px;
+  margin-bottom: 8px;
 }
 </style>
