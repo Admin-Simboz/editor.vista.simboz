@@ -2,40 +2,20 @@
 
 <template >
   <div>
-     
+
     <div class="search-box">
-      <Cascader
-        :data="[allType, ...state.materialTypelist]"
-        v-model="state.materialType"
-        @on-change="handleChange"
-      >
+      <Cascader :data="[allType, ...state.materialTypelist]" v-model="state.materialType" @on-change="handleChange">
         <Button icon="ios-menu"></Button>
       </Cascader>
-      <Input
-        class="input"
-        :placeholder="state.placeholder"
-        v-model="state.search"
-        search
-        @on-change="search"
-      />
+      <Input class="input" :placeholder="state.placeholder" v-model="state.search" search @on-change="search" />
     </div>
 
-     <!-- To trigger from ServersPlugin.ts and refresh template-->
-    
+    <!-- To trigger from ServersPlugin.ts and refresh template-->
+
     <div :key="item.value" v-for="item in state.materialist">
       <Divider plain orientation="left">{{ item.label }}</Divider>
-      <Tooltip
-        :content="info.label"
-        v-for="(info, i) in item.list"
-        :key="`${i}-bai1-button`"
-        placement="top"
-      >
-        <img
-          class="tmpl-img"
-          :alt="info.label"
-          v-lazy="info.src"
-          @click="beforeClearTip(info.tempUrl)"
-        />
+      <Tooltip :content="info.label" v-for="(info, i) in item.list" :key="`${i}-bai1-button`" placement="top">
+        <img class="tmpl-img" :alt="info.label" v-lazy="info.src" @click="beforeClearTip(info.tempUrl)" />
       </Tooltip>
     </div>
   </div>
@@ -47,15 +27,13 @@ import axios from 'axios';
 import { Spin, Modal } from 'view-ui-plus';
 import { useI18n } from 'vue-i18n';
 import { cloneDeep } from 'lodash-es';
+import { sharedState } from '@/components/sharedState.js'; // Import the shared state
+import { onMounted } from 'vue';
 
-const tmplKey = ref(0);
-const reloadImportTmpl = () => {
-  tmplKey.value += 1; // Increment the key to trigger a reloads
-};
+
+
 const { t } = useI18n();
 const { canvasEditor } = useSelect();
-
-let templateUrl="";
 
 
 interface materialTypeI {
@@ -98,8 +76,7 @@ const insertSvgFile = () => {
 
 // Replacement tips
 const beforeClearTip = (tmplUrl: string) => {
- 
- templateUrl = tmplUrl;
+
   Modal.confirm({
     title: t('Warning'),
     content: `<p>${t('replaceTip')}</p>`,
@@ -112,18 +89,37 @@ const beforeClearTip = (tmplUrl: string) => {
 
 
 // Get template data
+
 const getTempData = (tmplUrl: string) => {
+
   Spin.show({
     render: (h) => h('div', t('alert.loading_data')),
   });
+
+
   const getTemp = axios.get(tmplUrl);
-  getTemp.then((res) => {
-    state.jsonFile = JSON.stringify(res.data);
-    Spin.hide();
-    reloadImportTmpl();
-    insertSvgFile();
-  });
+
+  getTemp
+    .then((res) => {
+      const { data } = res.data;
+      if (data && data.front) {
+        state.jsonFile = data.front;
+        Spin.hide();
+        insertSvgFile();
+      } else {
+        console.error('Invalid or empty front data');
+        Spin.hide(); // Ensure to hide Spin even in case of an error
+        // Handle the case when the 'front' data is invalid or empty
+      }
+    })
+    .catch((error) => {
+      console.error('Error fetching data:', error);
+      Spin.hide(); // Ensure to hide Spin even in case of an error
+      // Handle the error here or display an error message
+    });
 };
+
+
 // Switch material type
 const handleChange = (e, item) => {
   // Search box text settings
@@ -162,16 +158,25 @@ const search = () => {
   const [typeValue] = state.materialType;
   filterTypeList(typeValue);
 };
+const loadUserTemp = () => {
+  state.jsonFile = sharedState.front;
+  insertSvgFile();
+  // Modify the shared state
+};
+
+
 </script>
 
 <style scoped lang="less">
 .search-box {
   padding-top: 10px;
   display: flex;
+
   .input {
     margin-left: 10px;
   }
 }
+
 .tmpl-img {
   width: 132px;
   cursor: pointer;

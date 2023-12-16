@@ -4,12 +4,8 @@
 
     <!-- CMYK Input Boxes -->
     <div class="cmyk-inputs">
-      <div class="button-div">
-        <ColorPicker v-model="color" :colors="colors" @on-change="convertHEXtoRGB" basic />
 
-      </div>
-
-
+      <ColorPicker v-model="color" :colors="colors" @on-change="convertHEXtoRGB" basic />
       <div class="custom-slider">
         <div class="slider-component">
           <label for="cInput"> <b>C</b> </label>
@@ -291,7 +287,7 @@ export default {
 }
 
 .custom-slider label {
-  font-size: 20px;
+  font-size: 15px;
 }
 
 /* ::before element to replace the slider track */
@@ -427,7 +423,7 @@ export default {
 .custom-slider {
   background-color: #F6F7F9;
   padding: 6px;
-  border-radius: 4%;
+  border-radius: 4px;
 }
 
 .no-color-button {
@@ -439,5 +435,6 @@ export default {
   border-width: 1px;
   margin-top: 8px;
   margin-bottom: 8px;
+  border-radius: 4px;
 }
 </style>

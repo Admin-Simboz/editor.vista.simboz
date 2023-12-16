@@ -520,7 +520,7 @@ onMounted(() => {
 }
 
 .custom-slider label {
-  font-size: 20px;
+  font-size: 15px;
 }
 
 /* ::before element to replace the slider track */
@@ -829,6 +829,7 @@ onMounted(() => {
   border-width: 1px;
   margin-top: 8px;
   margin-bottom: 8px;
+  border-radius: 4px;
   /* Other styles for the button */
 }
 

@@ -1,30 +1,14 @@
-<!--
- * @Author: June
- * @Description:
- * @Date: 2023-11-01 11:54:10
- * @LastEditors: June
- * @LastEditTime: 2023-11-04 16:11:12
--->
+
 <template>
   <Button type="text" @click="addWaterMark">
     {{ $t('waterMark.text') }}
   </Button>
 
-  <Modal
-    v-model="showWaterMadal"
-    :title="$t('waterMark.modalTitle')"
-    @on-ok="onModalOk"
-    @on-cancel="onMadalCancel"
-  >
+  <Modal v-model="showWaterMadal" :title="$t('waterMark.modalTitle')" @on-ok="onModalOk" @on-cancel="onMadalCancel">
     <div class="setting-item">
       <span class="mr-10px">{{ $t('waterMark.setting.name') }}</span>
-      <Input
-        class="w-320"
-        v-model="waterMarkState.text"
-        maxlength="15"
-        show-word-limit
-        :placeholder="$t('placeholder')"
-      />
+      <Input class="w-320" v-model="waterMarkState.text" maxlength="15" show-word-limit
+        :placeholder="$t('placeholder')" />
     </div>
     <div class="setting-item">
       <span class="mr-10px">{{ $t('waterMark.setting.size') }}</span>
@@ -179,7 +163,7 @@ const drawWaterMark: Record<string, any> = {
 };
 
 const onModalOk = () => {
-  if (!waterMarkState.text) return Message.warning('水印名字不能为空');
+  if (!waterMarkState.text) return Message.warning('Watermark name cannot be empty');
   const workspace = canvasEditor.canvas.getObjects().find((item: any) => item.id === 'workspace');
   const { width, height, left, top } = workspace;
   drawWaterMark[waterMarkState.position](width, height, (imgString: string) => {
@@ -207,9 +191,11 @@ const addWaterMark = debounce(function () {
 .mr-10px {
   margin-right: 10px;
 }
+
 .w-320 {
   width: 320px;
 }
+
 .setting-item {
   width: 100%;
   display: flex;

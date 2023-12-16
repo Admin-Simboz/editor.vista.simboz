@@ -52,6 +52,7 @@ class ServersPlugin {
     'saveImg',
     'clear',
     'preview',
+    'getUserTemplate',
   ];
   // public hotkeys: string[] = ['left', 'right', 'down', 'up'];
   constructor(canvas: fabric.Canvas, editor: IEditor) {
@@ -168,7 +169,34 @@ class ServersPlugin {
       //console.error('Error:', error);
     }
   }
+
   
+  
+  async getUserTemplate (value :string){
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+    if (id) {
+      let idFromURL = id; // Set idFromURL if id exists in URL
+      try {
+         const response = await axios.get(
+          
+          `https://vista.simboz.website/api/template/storeTemp/${idFromURL}/${value}`, 
+        {
+          headers: {
+            Accept: 'application/json',
+          },
+        });
+        Spin.hide();
+        //console.log('Server Response:', response.data);
+  
+        eventBus.emitReloadEvent();
+      } 
+      
+      catch (error) {
+        //console.error('Error:', error);
+      }
+    }
+  }
   
   saveSvg() {
     this.editor.hooksEntity.hookSaveBefore.callAsync('', () => {

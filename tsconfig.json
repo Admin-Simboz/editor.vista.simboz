@@ -24,8 +24,9 @@
     "src/**/*.d.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
+    "src/**/*.js",
     "typings/**/*.ts",
     "./auto-imports.d.ts"
-, "src/components/eventBus.js"  ],
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

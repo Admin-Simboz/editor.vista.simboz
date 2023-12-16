@@ -8,7 +8,7 @@
           <a href="#" target="_blank">
             <Icon type="#" :size="30" />
           </a>
-      
+
         </span>
 
         <!-- import -->
@@ -18,43 +18,41 @@
         <Divider type="vertical" />
         <!-- scale switch -->
         <Tooltip :content="$t('grid')">
-          <iSwitch
-            v-model="state.ruler"
-            @on-change="rulerSwitch"
-            size="small"
-            class="switch"
-          ></iSwitch>
+          <iSwitch v-model="state.ruler" @on-change="rulerSwitch" size="small" class="switch"></iSwitch>
         </Tooltip>
         <Divider type="vertical" />
         <history></history>
 
         <div style="float: right">
           <!-- Preview -->
+
+
           <previewCurrent />
           <waterMark />
           <save></save>
           <!-- <lang></lang> -->
         </div>
       </Header>
+
       <Content style="display: flex; height: calc(100vh - 64px)">
         <!-- left area -->
         <div v-if="state.show" :class="`left-bar ${state.toolsBarShow && 'show-tools-bar'}`">
           <Menu :active-name="state.menuActive" accordion @on-select="showToolsBar" width="65px">
             <MenuItem :name="1" class="menu-item">
-              <Icon type="md-book" size="24" />
-              <div>{{ $t('templates') }}</div>
+            <Icon type="md-book" size="24" />
+            <div>{{ $t('templates') }}</div>
             </MenuItem>
             <MenuItem :name="2" class="menu-item">
-              <Icon type="md-images" size="24" />
-              <div>{{ $t('elements') }}</div>
+            <Icon type="md-images" size="24" />
+            <div>{{ $t('elements') }}</div>
             </MenuItem>
             <MenuItem :name="3" class="menu-item">
-              <Icon type="ios-leaf-outline" size="24" />
-              <div>{{ $t('material.cartoon') }}</div>
+            <Icon type="ios-leaf-outline" size="24" />
+            <div>{{ $t('material.cartoon') }}</div>
             </MenuItem>
             <MenuItem :name="4" class="menu-item">
-              <Icon type="md-reorder" size="24" />
-              <div>{{ $t('layers') }}</div>
+            <Icon type="md-reorder" size="24" />
+            <div>{{ $t('layers') }}</div>
             </MenuItem>
           </Menu>
 
@@ -81,7 +79,10 @@
           <!-- close button -->
           <div class="close-btn" v-show="state.toolsBarShow" @click="hideToolsBar"></div>
         </div>
+        <div class="preview-template">
+          <userTemplate />
 
+        </div>
         <!-- canvas area -->
         <div id="workspace">
           <div class="canvas-box">
@@ -118,10 +119,7 @@
           <attribute v-if="state.show"></attribute>
         </div>
         <!-- right close button -->
-        <div
-          :class="`close-btn right-btn ${state.attrBarShow && 'right-btn-open'}`"
-          @click="switchAttrBar"
-        ></div>
+        <div :class="`close-btn right-btn ${state.attrBarShow && 'right-btn-open'}`" @click="switchAttrBar"></div>
       </Content>
     </Layout>
   </div>
@@ -132,7 +130,7 @@
 import importJSON from '@/components/importJSON.vue';
 import importFile from '@/components/importFile.vue';
 import fontTmpl from '@/components/fontTmpl.vue';
-
+import userTemplate from '@/components/userTemplate.vue'
 
 // Top components
 import align from '@/components/align.vue';
@@ -308,6 +306,7 @@ provide('canvasEditor', canvasEditor);
   margin-right: 10px;
   text-align: center;
   vertical-align: middle;
+
   .ivu-icon {
     vertical-align: super;
   }
@@ -326,12 +325,15 @@ provide('canvasEditor', canvasEditor);
 }
 
 .right-bar {
-  width: 304px; height: 100%; padding: 10px; overflow-y: auto; background: #fff
-  // width: 240px;
-  // height: 100%;
-  // padding: 10px;
-  // overflow-y: auto;
-  // background: #fff;
+  width: 304px;
+  height: 100%;
+  padding: 10px;
+  overflow-y: auto;
+  background: #fff // width: 240px;
+    // height: 100%;
+    // padding: 10px;
+    // overflow-y: auto;
+    // background: #fff;
 }
 
 
@@ -371,6 +373,7 @@ provide('canvasEditor', canvasEditor);
   border-radius: 4px;
   display: flex;
   align-items: center;
+
   .ivu-tooltip {
     text-align: center;
     flex: 1;
@@ -383,7 +386,7 @@ provide('canvasEditor', canvasEditor);
   box-sizing: border-box;
   font-size: 12px;
 
-  & > i {
+  &>i {
     margin: 0;
   }
 }
@@ -409,6 +412,7 @@ provide('canvasEditor', canvasEditor);
 .canvas-box {
   position: relative;
 }
+
 .inside-shadow {
   position: absolute;
   width: 100%;
@@ -426,7 +430,9 @@ provide('canvasEditor', canvasEditor);
 
 #workspace {
   flex: 1;
-  width: 100%; position: relative; background: #f1f1f1;
+  width: 100%;
+  position: relative;
+  background: #f1f1f1;
   overflow: hidden;
 }
 
@@ -442,6 +448,7 @@ provide('canvasEditor', canvasEditor);
 .ivu-menu-light.ivu-menu-vertical .ivu-menu-item-active:not(.ivu-menu-submenu) {
   background: none;
 }
+
 .switch {
   margin-right: 10px;
 }
@@ -451,16 +458,18 @@ provide('canvasEditor', canvasEditor);
   --offsetY: 0px;
   --size: 16px;
   --color: #dedcdc;
-  background-image: linear-gradient(
-      45deg,
+  background-image: linear-gradient(45deg,
       var(--color) 25%,
       transparent 0,
       transparent 75%,
-      var(--color) 0
-    ),
+      var(--color) 0),
     linear-gradient(45deg, var(--color) 25%, transparent 0, transparent 75%, var(--color) 0);
   background-position: var(--offsetX) var(--offsetY),
     calc(var(--size) + var(--offsetX)) calc(var(--size) + var(--offsetY));
   background-size: calc(var(--size) * 2) calc(var(--size) * 2);
+}
+
+.preview-template {
+  width: 8%;
 }
 </style>

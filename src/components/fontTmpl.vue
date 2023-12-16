@@ -9,18 +9,8 @@
 <template>
   <div style="display: inline-block">
     <Divider plain orientation="left">{{ $t('title_template') }}</Divider>
-    <Tooltip
-      :content="item.label"
-      v-for="(item, i) in list"
-      :key="`${i}-bai1-button`"
-      placement="top"
-    >
-      <img
-        class="tmpl-img"
-        :alt="item.label"
-        v-lazy="item.src"
-        @click="getTempData(item.tempUrl)"
-      />
+    <Tooltip :content="item.label" v-for="(item, i) in list" :key="`${i}-bai1-button`" placement="top">
+      <img class="tmpl-img" :alt="item.label" v-lazy="item.src" @click="getTempData(item.tempUrl)" />
     </Tooltip>
   </div>
 </template>
@@ -80,7 +70,7 @@ const insertFile = (str) => {
 };
 // Get template data
 const getTempData = (tmplUrl) => {
-  
+
   Spin.show({
     render: (h) => h('div', t('alert.loading_data')),
   });

@@ -16,3 +16,9 @@ declare module '@/components/eventBus.js' {
     };
     export default eventBus;
   }
+
+declare module '@/components/sharedState.js' {
+  export const sharedState: {
+    value: string; // Update this type based on your object structure
+  };
+}
