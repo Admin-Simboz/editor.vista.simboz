@@ -1,10 +1,3 @@
-/*
- * @Author: 秦少卫
- * @Date: 2023-06-15 22:49:42
- * @LastEditors: 秦少卫
- * @LastEditTime: 2023-06-27 23:10:47
- * @Description: 居中对齐插件
- */
 
 import { fabric } from 'fabric';
 import Editor from '../core';

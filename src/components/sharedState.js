@@ -4,10 +4,11 @@ import axios from 'axios';
 // Create a shared reactive object
 export const sharedState = reactive({
     front: '',
-    back: '', // Initialize value as an empty string
+    back: '',
+    position: '', // Initialize value as an empty string
 });
 
-// Perform the API call
+// Perform the API callz
 axios.get("https://vista.simboz.website/api/template/showTemp/144")
     .then((res) => {
         const { data } = res.data;
@@ -15,6 +16,7 @@ axios.get("https://vista.simboz.website/api/template/showTemp/144")
             // Update the value in sharedState once the data is available
             sharedState.front = data.front;
             sharedState.back = data.back;
+            sharedState.position = data.position;
         } else {
             console.error('Invalid or empty front data');
             // Handle the case when the 'front' data is invalid or empty

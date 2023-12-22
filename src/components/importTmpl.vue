@@ -28,7 +28,7 @@ import { Spin, Modal } from 'view-ui-plus';
 import { useI18n } from 'vue-i18n';
 import { cloneDeep } from 'lodash-es';
 import { sharedState } from '@/components/sharedState.js'; // Import the shared state
-import { onMounted } from 'vue';
+
 
 
 
@@ -57,7 +57,8 @@ const allType: materialTypeI = {
 const state = reactive({
   search: '',
   placeholder: <undefined | string>'',
-  jsonFile: <any>null,
+  frontJson: <any>null,
+  backJson: <any>null,
   materialType: [''], // Select category
   materialTypelist: <materialTypeI[]>[], // Category List
   materialist: <materialTypeI[]>[], // List content
@@ -70,9 +71,6 @@ canvasEditor.getMaterialType('template').then((list: materialTypeI[]) => {
 });
 
 // Insert file
-const insertSvgFile = () => {
-  canvasEditor.insertSvgFile(state.jsonFile);
-};
 
 // Replacement tips
 const beforeClearTip = (tmplUrl: string) => {
@@ -86,6 +84,10 @@ const beforeClearTip = (tmplUrl: string) => {
   });
 };
 
+
+const updateValues = () => {
+  canvasEditor.updateValues();
+};
 
 
 // Get template data
@@ -103,12 +105,18 @@ const getTempData = (tmplUrl: string) => {
     .then((res) => {
       const { data } = res.data;
       if (data && data.front) {
-        state.jsonFile = data.front;
+        sharedState.front = data.front;
+        sharedState.back = data.back;
+        sharedState.frontImgUrl = data.frontImgUrl;
+        console.log(sharedState.position);
+        sharedState.backImgUrl = data.backImgUrl;
+        //console.log(data.back);
+        updateValues();
         Spin.hide();
-        insertSvgFile();
+
       } else {
         console.error('Invalid or empty front data');
-        Spin.hide(); // Ensure to hide Spin even in case of an error
+        Spin.hide(); // Ensure to hide Spin even in case of an erroritem
         // Handle the case when the 'front' data is invalid or empty
       }
     })
@@ -157,11 +165,6 @@ const filterTypeList = (value: string) => {
 const search = () => {
   const [typeValue] = state.materialType;
   filterTypeList(typeValue);
-};
-const loadUserTemp = () => {
-  state.jsonFile = sharedState.front;
-  insertSvgFile();
-  // Modify the shared state
 };
 
 

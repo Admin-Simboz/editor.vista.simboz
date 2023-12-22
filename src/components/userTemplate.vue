@@ -1,17 +1,17 @@
 
 <template>
     <div class="preview-image">
-        <div class="section" @click="addTemplate('front')">
+        <div class=" section" @click="addTemplate('front')">
             <div class="image-frame">
-                <img id="image" src="dist/images/test.png">
+                <img id="image" :src=frontImgUrl>
             </div>
             <div class="frontButton">
                 <p>Front</p>
             </div>
         </div>
-        <div class="section" @click="addTemplate('back')">
+        <div class=" section" @click="addTemplate('back')">
             <div class="image-frame">
-                <img id="image" src="dist/images/test.png">
+                <img id="image" :src=backImgUrl>
             </div>
             <div class="frontButton">
                 <p>Back</p>
@@ -25,55 +25,45 @@ import { Spin, Modal } from 'view-ui-plus';
 import useSelect from '@/hooks/select';
 import axios from 'axios';
 import { sharedState } from '@/components/sharedState.js'; // Import the shared state
-
-const increment = () => {
-    console.log('test');
-    // Modify the shared state
-};
-
-increment();
-
-
-
-
-
+import { ref, watch } from 'vue';
 
 const { canvasEditor }: any = useSelect();
 
+const front = ref<string | null>(null);
+const frontImgUrl = ref<string | null>(null);
+const back = ref<string | null>(null);
+const backImgUrl = ref<string | null>(null);
+
 
 const addTemplate = async (value: string) => {
-    const urlParams = new URLSearchParams(window.location.search);
-    let id = urlParams.get('id');
-    id = '5'; // For testing purposes
 
-    if (id) {
-        Spin.show({
-            render: (h) => h('div', 'Loading Template'),
-        });
+    if (value === "front") {
+        // console.log('add temp user');
+        canvasEditor.toggleTemplate(value);
+    }
 
-        try {
-            const response = await axios.get(
-                `https://vista.simboz.website/api/template/showTemp/144`,
-                {
-                    headers: {
-                        Accept: 'application/json',
-                    },
-                }
-            );
-
-            // Process response directly without using .then()
-            var data = JSON.stringify(response.data);
-            console.log(data);
-            canvasEditor.insertSvgFile(data.data);
-            Spin.hide();
-
-        } catch (error) {
-            console.log("Failed to load");
-            Spin.hide();
-        }
+    if (value === "back") {
+        // console.log('add temp user');
+        canvasEditor.toggleTemplate(value);
     }
 };
-addTemplate('back');
+
+//runs when the sharedState change in the toggleTemp inside ServerPlugins.ts 
+const getUserTemplate = () => {
+    if (sharedState.front) {
+        back.value = sharedState.back;
+        frontImgUrl.value = sharedState.frontImgUrl;
+        console.log(sharedState.backImgUrl, sharedState.frontImgUrl)
+        backImgUrl.value = sharedState.backImgUrl;
+        front.value = sharedState.front;
+        canvasEditor.insertSvgFile(sharedState.front);
+    }
+};
+
+// Watch for changes in sharedState.front and call addTemplate when it becomes available
+watch(sharedState, (newVal) => {
+    getUserTemplate();
+});
 
 
 </script>

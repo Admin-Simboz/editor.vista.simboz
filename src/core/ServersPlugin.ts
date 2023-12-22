@@ -8,8 +8,7 @@ import axios from 'axios';
 import { Spin, Modal } from 'view-ui-plus';
 import { ref, Ref } from 'vue';
 import eventBus from '@/components/eventBus.js';
-
-
+import { sharedState } from '@/components/sharedState.js';
 
 type IEditor = Editor;
 // import { v4 as uuid } from 'uuid';
@@ -39,6 +38,16 @@ class ServersPlugin {
   public canvas: fabric.Canvas;
   public editor: IEditor;
   static pluginName = 'ServersPlugin';
+  private frontTempJson: string | undefined;
+  private backTempJson: string | undefined;
+  private frontSaveOptions: string = ''; // Initialize with an empty string or with a default value
+  private backSaveOptions: string = '';
+  private currentTemp: 'front' | 'back' = 'front';
+  private sharedState:any;  
+  
+  
+ 
+
   private hiddenButtonRef: Ref<HTMLButtonElement | null> = ref(null);
   static apis = [
     'insert',
@@ -52,14 +61,36 @@ class ServersPlugin {
     'saveImg',
     'clear',
     'preview',
-    'getUserTemplate',
+    'toggleTemplate',
+    'updateValues'
   ];
+  
+
   // public hotkeys: string[] = ['left', 'right', 'down', 'up'];
-  constructor(canvas: fabric.Canvas, editor: IEditor) {
+  constructor(canvas: fabric.Canvas, editor: IEditor,sharedState: any) {
     this.canvas = canvas;
     this.editor = editor;
     this.initHiddenButtonRef();
+    this.sharedState= sharedState;
+    this.currentTemp="front";
+    this.waitForSharedState();
   }
+
+
+  private waitForSharedState() {
+    const interval = setInterval(() => {
+      // Check if sharedState values are not empty strings
+      if (sharedState.front !== '' && sharedState.back !== '') {
+        // Assign the values to Serve class properties
+        this.frontTempJson = sharedState.front;
+        this.backTempJson = sharedState.back;
+        // Stop the interval as values are now available
+        clearInterval(interval);
+        // Proceed with further initialization or actions here
+      }
+    }, 500); // Adjust the interval duration as needed
+  }
+
   private initHiddenButtonRef() {
     // Assuming this is called within a Vue component
     // Get the reference to the hidden button
@@ -78,7 +109,9 @@ class ServersPlugin {
     });
   }
 
-  insertSvgFile(jsonFile) {
+
+  insertSvgFile(jsonFile:string) {
+    //console.log(jsonFile); 
     // preload hook
     this.editor.hooksEntity.hookImportBefore.callAsync(jsonFile, () => {
       this.canvas.loadFromJSON(jsonFile, () => {
@@ -88,7 +121,7 @@ class ServersPlugin {
           this.canvas.renderAll();
         });
       });
-    });
+    }); 
   }
 
   getJson() {
@@ -131,17 +164,55 @@ class ServersPlugin {
     downFile(fileStr, 'json');
   }
 
+  updateValues(){
+    this.frontTempJson = sharedState.front;
+    //console.log(this.frontTempJson);
+    this.backTempJson = sharedState.back;
+  }
+  
+  toggleTemplate(value: 'front' | 'back') {
+   // console.log('inside toggle temp');
+    if (value === this.currentTemp) {
+      //console.log('inside return');
+      return; // Skip if the value is already the current one
+    }
+    if (value === 'front') {
+      //console.log('inside front');
+      this.backTempJson = JSON.stringify(this.getJson());
+      const option = this._getSaveOption();
+      this.canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
+      this.backSaveOptions = this.canvas.toDataURL(option);
+      //console.log(this.frontTempJson);
+      this.insertSvgFile(this.frontTempJson);
+      this.currentTemp = 'front';
+    }
+
+    if (value === 'back') {
+      this.frontTempJson = JSON.stringify(this.getJson());
+      const option = this._getSaveOption();
+      this.canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
+      this.frontSaveOptions = this.canvas.toDataURL(option);
+      //console.log(this.backTempJson);
+      this.insertSvgFile(this.backTempJson);
+      this.currentTemp = 'back';
+    }
+  }
+
+  
+
   async saveTemplate() {
-    let dataUrl = this.getJson(); // Assuming getJson() returns the data you need
-    let jsonData = JSON.stringify(dataUrl); // Convert data to a string
-  
-    const option = this._getSaveOption();
-    this.canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
-    const dataUrl2 = this.canvas.toDataURL(option);
-  
+    let frontJson = this.frontTempJson; 
+    let backJson = this.backTempJson;
+
+    
     const formData = new FormData();
-    formData.append('jsonData', jsonData);
-    formData.append('image', dataUrl2);
+    
+    formData.append('frontJsonData', frontJson);
+    formData.append('backJsonData', backJson);
+
+    
+    formData.append('frontImage', this.frontSaveOptions);
+    formData.append('backImage', this.backSaveOptions);
 
     if (this.hiddenButtonRef.value) {
       this.hiddenButtonRef.value.click();
@@ -149,9 +220,9 @@ class ServersPlugin {
       //console.log('hiddenButtonRef empty');
     }
     
-    Spin.show({
+   /*  Spin.show({
       render: (h) => h('div', 'Saving Template'),
-    });
+    }); */
     try {
      
       const response = await axios.post('https://vista.simboz.website/api/template/storeTemp', formData, {
@@ -159,7 +230,7 @@ class ServersPlugin {
           'Content-Type': 'multipart/form-data',
         },
       });
-      Spin.hide();
+      /* Spin.hide(); */
       //console.log('Server Response:', response.data);
 
       eventBus.emitReloadEvent();
@@ -171,32 +242,6 @@ class ServersPlugin {
   }
 
   
-  
-  async getUserTemplate (value :string){
-    const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get('id');
-    if (id) {
-      let idFromURL = id; // Set idFromURL if id exists in URL
-      try {
-         const response = await axios.get(
-          
-          `https://vista.simboz.website/api/template/storeTemp/${idFromURL}/${value}`, 
-        {
-          headers: {
-            Accept: 'application/json',
-          },
-        });
-        Spin.hide();
-        //console.log('Server Response:', response.data);
-  
-        eventBus.emitReloadEvent();
-      } 
-      
-      catch (error) {
-        //console.error('Error:', error);
-      }
-    }
-  }
   
   saveSvg() {
     this.editor.hooksEntity.hookSaveBefore.callAsync('', () => {
@@ -215,7 +260,7 @@ class ServersPlugin {
       this.canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
       const dataUrl = this.canvas.toDataURL(option);
       this.editor.hooksEntity.hookSaveAfter.callAsync(dataUrl, () => {
-        downFile(dataUrl, 'png');
+        downFile(dataUrl, 'jpg');
       });
     });
   }
