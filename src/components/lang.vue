@@ -1,11 +1,4 @@
-<!--
- * @Descripttion:
- * @version:
- * @Author: June
- * @Date: 2023-05-20 09:18:28
- * @LastEditors: 秦少卫
- * @LastEditTime: 2023-07-29 22:24:03
--->
+
 <template>
   <Dropdown @on-click="setLang">
     <Button type="text">

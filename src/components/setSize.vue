@@ -1,10 +1,4 @@
-<!--
- * @Author: 秦少卫
- * @Date: 2022-09-03 19:16:55
- * @LastEditors: 秦少卫
- * @LastEditTime: 2023-11-19 15:58:59
- * @Description: 尺寸设置
--->
+
 
 <template>
   <div v-if="!mixinState.mSelectMode">

@@ -1,10 +1,4 @@
-<!--
- * @Author: Qin Shaowei
- * @Date: 2022-09-03 19:16:55
- * @LastEditors: Qin Shaowei
- * @LastEditTime: 2023-07-16 12:15:26
- * @Description: Alignment of combination elements
--->
+
 
 <template>
   <div v-if="mixinState.mSelectMode === 'multiple'" class="box attr-item">
@@ -99,11 +93,13 @@ const yequation = () => {
 .box {
   display: flex;
   align-items: center;
+
   .ivu-tooltip {
     text-align: center;
     flex: 1;
   }
 }
+
 :deep(.ivu-btn) {
   &[disabled] {
     svg {

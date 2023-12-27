@@ -229,7 +229,7 @@ class ServersPlugin {
        Spin.hide(); 
       //console.log('Server Response:', response.data);
 
-      eventBus.ReloadTemplate();
+      eventBus.ReloadTemplate("userTemp");
     } 
     
     catch (error) {
@@ -287,7 +287,7 @@ async getUserUploads(id: string): Promise<any[]> {
     if (response.status === 200) {
       // Extract the 'data' property from the Axios response
       return response.data.data; // Assuming response.data is an object with a 'data' property holding the array
-      eventBus.ReloadTemplate();
+      eventBus.ReloadTemplate("userUploads");
       Spin.hide(); 
     } else {
       // Handle other response status codes if needed

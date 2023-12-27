@@ -20,6 +20,8 @@ import useSelect from '@/hooks/select';
 import axios from 'axios';
 import { v4 as uuid } from 'uuid';
 import { fabric } from 'fabric';
+import { Spin } from 'view-ui-plus';
+import eventBus from '@/components/eventBus.js';
 
 
 const HANDLEMAP = {
@@ -69,10 +71,10 @@ async function sendImage(file: string, name: string) {
     const formData = new FormData();
     formData.append('image', file);
     formData.append('user_id', '12');
-    /* 
-        Spin.show({
-            render: (h) => h('div', 'Uploading...'),
-        }); */
+
+    Spin.show({
+        render: (h) => h('div', 'Uploading...'),
+    });
 
     try {
         const response = await axios.post('https://vista.simboz.website/api/template/uploadImage', formData, {
@@ -80,7 +82,9 @@ async function sendImage(file: string, name: string) {
                 'Content-Type': 'multipart/form-data',
             },
         });
-        /* Spin.hide(); */
+
+        eventBus.ReloadTemplate("userUploads");
+        Spin.hide();
         // Handle the response if needed
     } catch (error) {
         console.error('Error:', error);
@@ -121,12 +125,12 @@ canvasEditor.getUserUploads(12).then((list: materialTypeI[]) => {
     //state.materialTypelist = [...list];
 
     state.materialist = list;
-    console.log(state.materialist);
+    //console.log(state.materialist);
 });
 const beforeClearTip = (tmplUrl: string) => {
 
     //getTempData(tmplUrl)
-    console.log(tmplUrl);
+    // console.log(tmplUrl);
     insertImgFile(tmplUrl);
 };
 

@@ -71,22 +71,22 @@ class LayerPlugin {
           hotkey: '❯',
           subitems: [
             {
-              text: 'Previous',
+              text: 'Move back',
               hotkey: 'key',
               onclick: () => this.up(),
             },
             {
-              text: 'Next',
+              text: 'Move up',
               hotkey: 'key',
               onclick: () => this.down(),
             },
             {
-              text: 'Pin to top',
+              text: 'Front',
               hotkey: 'key',
               onclick: () => this.upTop(),
             },
             {
-              text: 'Pin down',
+              text: 'Back',
               hotkey: 'key',
               onclick: () => this.downTop(),
             },

@@ -13,7 +13,7 @@ const urlParams = new URLSearchParams(window.location.search);
 let id = urlParams.get('id');
 // Perform the API call
 //axios.get(`https://vista.simboz.website/api/template/showTemp/${id}`)
-axios.get(`https://vista.simboz.website/api/template/showTemp/171`)
+axios.get(`https://vista.simboz.website/api/template/showTemp/225/front`)
     .then((res) => {
         const { data } = res.data;
         if (data) {

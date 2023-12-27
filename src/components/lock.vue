@@ -1,10 +1,3 @@
-<!--
- * @Author: 秦少卫
- * @Date: 2022-09-03 19:16:55
- * @LastEditors: 秦少卫
- * @LastEditTime: 2023-07-16 12:39:51
- * @Description: 锁定元素
--->
 
 <template>
   <Tooltip :content="$t('Lock')" v-if="mixinState.mSelectMode === 'one'">
@@ -77,15 +70,17 @@ onBeforeUnmount(() => {
 h3 {
   margin: 40px 0 0;
 }
+
 ul {
   list-style-type: none;
   padding: 0;
 }
+
 li {
   display: inline-block;
   margin: 0 10px;
 }
+
 a {
   color: #42b983;
-}
-</style>
+}</style>

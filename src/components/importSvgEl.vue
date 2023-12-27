@@ -1,45 +1,17 @@
-<!--
- * @Author: 秦少卫
- * @Date: 2023-08-05 17:47:35
- * @LastEditors: 秦少卫
- * @LastEditTime: 2023-08-07 22:59:07
- * @Description: file content
--->
 
 <template>
   <div>
     <div class="search-box">
-      <Cascader
-        :data="[allType, ...state.materialTypelist]"
-        v-model="state.materialType"
-        @on-change="handleChange"
-      >
+      <Cascader :data="[allType, ...state.materialTypelist]" v-model="state.materialType" @on-change="handleChange">
         <Button icon="ios-menu"></Button>
       </Cascader>
-      <Input
-        class="input"
-        :placeholder="state.placeholder"
-        v-model="state.search"
-        search
-        @on-change="search"
-      />
+      <Input class="input" :placeholder="state.placeholder" v-model="state.search" search @on-change="search" />
     </div>
 
     <div :key="item.value" v-for="item in state.materialist">
       <Divider plain orientation="left">{{ item.label }}</Divider>
-      <Tooltip
-        :content="info.label"
-        v-for="(info, i) in item.list"
-        :key="`${i}-bai1-button`"
-        placement="top"
-      >
-        <img
-          class="tmpl-img"
-          :alt="info.label"
-          @click="addItem"
-          v-lazy="info.src"
-          @dragend="dragItem"
-        />
+      <Tooltip :content="info.label" v-for="(info, i) in item.list" :key="`${i}-bai1-button`" placement="top">
+        <img class="tmpl-img" :alt="info.label" @click="addItem" v-lazy="info.src" @dragend="dragItem" />
       </Tooltip>
     </div>
   </div>
@@ -166,10 +138,12 @@ const addItem = (e) => {
 .search-box {
   padding-top: 10px;
   display: flex;
+
   .input {
     margin-left: 10px;
   }
 }
+
 .tmpl-img {
   display: inline-block;
   width: 53px;

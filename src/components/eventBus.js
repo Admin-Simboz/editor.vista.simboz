@@ -2,12 +2,14 @@ import { ref } from 'vue';
 
 const eventBus = {
   reloadImportTmpl: ref(0),
-  reloadUserUploadTmpl: ref(0), // Initialize as a ref
-  ReloadTemplate() {
-    this.reloadImportTmpl.value++; // Increment the value
-  },
-  ReloadUserImages() {
-    this.reloadUserUploadTmpl.value++; // Increment the value
+  // Initialize as a ref
+  ReloadTemplate(value) {
+    if (value === "userTemp") {
+      this.reloadImportTmpl.value = "userTemp";
+    }
+    if (value === "userUploads") {
+      this.reloadImportTmpl.value = "userUploads";
+    }
   },
 };
 

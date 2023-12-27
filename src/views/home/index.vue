@@ -211,7 +211,7 @@ const reloadImportTmpl = () => {
 };
 const reloadUserImages = () => {
   setTimeout(() => {
-    tmplKey.value += 1; // Increment the key to trigger a reload after 2 seconds
+    userUploadKey.value += 1; // Increment the key to trigger a reload after 2 seconds
   }, 2000); // 2000 milliseconds = 2 seconds
 };
 
@@ -308,9 +308,18 @@ const switchAttrBar = () => {
 watch(
   () => eventBus.reloadImportTmpl.value, // Watching for changes in reloadImportTmpl
   (newValue, oldValue) => {
-    reloadImportTmpl();
+    if (newValue === "userTemp") {
+      // Perform an action only if the new value is different from the old value
+      reloadImportTmpl();
+    }
+    if (newValue === "userUploads") {
+      // Perform an action only if the new value is different from the old value
+      reloadUserImages();
+      console.log("test");
+    }
   }
 );
+
 
 /* watch(
   {

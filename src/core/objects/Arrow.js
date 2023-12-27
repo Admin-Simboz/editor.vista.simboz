@@ -1,10 +1,4 @@
-/*
- * @Author: 秦少卫
- * @Date: 2023-01-07 01:15:50
- * @LastEditors: 秦少卫
- * @LastEditTime: 2023-02-08 00:08:40
- * @Description: 箭头元素
- */
+
 import { fabric } from 'fabric';
 
 fabric.Arrow = fabric.util.createClass(fabric.Line, {

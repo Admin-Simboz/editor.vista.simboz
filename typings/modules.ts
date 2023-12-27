@@ -13,8 +13,6 @@ declare module '@/components/eventBus.js' {
       reloadImportTmpl: boolean;
       ReloadTemplate: () => void;
 
-      reloadUserUploadTmpl: boolean;
-      ReloadUserImages: () => void;
       // ...other properties or methods
     };
     export default eventBus;

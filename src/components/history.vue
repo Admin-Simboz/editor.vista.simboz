@@ -1,10 +1,4 @@
-<!--
- * @Author: 秦少卫
- * @Date: 2022-09-03 19:16:55
- * @LastEditors: 秦少卫
- * @LastEditTime: 2023-07-16 12:31:25
- * @Description: 回退重做
--->
+
 
 <template>
   <div style="display: inline-block">
@@ -50,6 +44,7 @@ span.active {
     fill: #2d8cf0;
   }
 }
+
 .time {
   color: #c1c1c1;
 }
