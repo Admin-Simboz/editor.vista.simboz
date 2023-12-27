@@ -53,10 +53,14 @@ const getUserTemplate = () => {
     if (sharedState.front) {
         back.value = sharedState.back;
         frontImgUrl.value = sharedState.frontImgUrl;
-        console.log(sharedState.backImgUrl, sharedState.frontImgUrl)
         backImgUrl.value = sharedState.backImgUrl;
         front.value = sharedState.front;
-        canvasEditor.insertSvgFile(sharedState.front);
+        if (sharedState.position === 'front') {
+            canvasEditor.insertSvgFile(sharedState.front);
+        } else {
+            canvasEditor.insertSvgFile(sharedState.back);
+        }
+
     }
 };
 

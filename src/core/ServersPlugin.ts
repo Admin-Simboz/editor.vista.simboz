@@ -4,7 +4,7 @@ import { selectFiles, clipboardText } from '@/utils/utils';
 // import { clipboardText } from '@/utils/utils.ts';
 import { fabric } from 'fabric';
 import Editor from '../core';
-import axios from 'axios';
+import axios,{ AxiosResponse } from 'axios';
 import { Spin, Modal } from 'view-ui-plus';
 import { ref, Ref } from 'vue';
 import eventBus from '@/components/eventBus.js';
@@ -62,7 +62,8 @@ class ServersPlugin {
     'clear',
     'preview',
     'toggleTemplate',
-    'updateValues'
+    'waitForSharedState',
+    'getUserUploads',
   ];
   
 
@@ -84,6 +85,7 @@ class ServersPlugin {
         // Assign the values to Serve class properties
         this.frontTempJson = sharedState.front;
         this.backTempJson = sharedState.back;
+        this.currentTemp = sharedState.position;
         // Stop the interval as values are now available
         clearInterval(interval);
         // Proceed with further initialization or actions here
@@ -164,12 +166,6 @@ class ServersPlugin {
     downFile(fileStr, 'json');
   }
 
-  updateValues(){
-    this.frontTempJson = sharedState.front;
-    //console.log(this.frontTempJson);
-    this.backTempJson = sharedState.back;
-  }
-  
   toggleTemplate(value: 'front' | 'back') {
    // console.log('inside toggle temp');
     if (value === this.currentTemp) {
@@ -220,9 +216,9 @@ class ServersPlugin {
       //console.log('hiddenButtonRef empty');
     }
     
-   /*  Spin.show({
+     Spin.show({
       render: (h) => h('div', 'Saving Template'),
-    }); */
+    }); 
     try {
      
       const response = await axios.post('https://vista.simboz.website/api/template/storeTemp', formData, {
@@ -230,10 +226,10 @@ class ServersPlugin {
           'Content-Type': 'multipart/form-data',
         },
       });
-      /* Spin.hide(); */
+       Spin.hide(); 
       //console.log('Server Response:', response.data);
 
-      eventBus.emitReloadEvent();
+      eventBus.ReloadTemplate();
     } 
     
     catch (error) {
@@ -278,6 +274,33 @@ class ServersPlugin {
       });
     });
   }
+
+  //get the urls for the user uploaded images 
+ 
+
+async getUserUploads(id: string): Promise<any[]> {
+  
+  try {
+    
+    const response: AxiosResponse<any> = await axios.get(`https://vista.simboz.website/api/template/loadUserImages/${id}`);
+    // Check if the response is successful (status code 200)
+    if (response.status === 200) {
+      // Extract the 'data' property from the Axios response
+      return response.data.data; // Assuming response.data is an object with a 'data' property holding the array
+      eventBus.ReloadTemplate();
+      Spin.hide(); 
+    } else {
+      // Handle other response status codes if needed
+      console.error('Non-200 status code:', response.status);
+      return []; // or throw an error or return a specific value
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    // Handle error, throw, or return a specific value if needed
+    return []; // or throw an error or return a specific value
+  }
+}
+
 
   _getSaveSvgOption() {
     const workspace = this.canvas.getObjects().find((item) => item.id === 'workspace');

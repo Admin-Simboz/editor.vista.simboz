@@ -1,10 +1,3 @@
-<!--
- * @Author: 秦少卫
- * @Date: 2022-09-03 19:16:55
- * @LastEditors: 秦少卫
- * @LastEditTime: 2023-07-16 12:51:11
- * @Description: 插入SVG元素
--->
 
 <template>
   <div style="display: inline-block">
@@ -16,7 +9,7 @@
       <template #list>
         <DropdownMenu>
           <!-- picture -->
-          <DropdownItem name="insertImg">{{ $t('insertFile.insert_picture') }}</DropdownItem>
+          <DropdownItem name="insertImg">{{ $t('insertFile.upload_image') }}</DropdownItem>
           <!-- SVG -->
           <DropdownItem name="insertSvg">{{ $t('insertFile.insert_SVG') }}</DropdownItem>
           <!-- SVG string -->
@@ -25,18 +18,10 @@
       </template>
     </Dropdown>
     <!-- Insert string svg element -->
-    <Modal
-      v-model="state.showModal"
-      :title="$t('insertFile.modal_tittle')"
-      @on-ok="insertTypeHand('insertSvgStr')"
-      @on-cancel="showModal = false"
-    >
-      <Input
-        v-model="state.svgStr"
-        show-word-limit
-        type="textarea"
-        :placeholder="$t('insertFile.insert_SVGStr_placeholder')"
-      />
+    <Modal v-model="state.showModal" :title="$t('insertFile.modal_tittle')" @on-ok="insertTypeHand('insertSvgStr')"
+      @on-cancel="showModal = false">
+      <Input v-model="state.svgStr" show-word-limit type="textarea"
+        :placeholder="$t('insertFile.insert_SVGStr_placeholder')" />
     </Modal>
   </div>
 </template>

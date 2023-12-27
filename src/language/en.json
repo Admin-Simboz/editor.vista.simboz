@@ -25,6 +25,7 @@
   "save_as_json": "Save as JSON",
   "save_as_template": "Save as Template",
   "layers": "Layers",
+  "images": "Images",
   "title_template": "Title Template",
   "insert_svg": "Insert SVG",
   "select_svg": "Select SVG",
@@ -104,7 +105,7 @@
   "insert": "Insert",
   "insertFile": {
     "insert": "Insert",
-    "insert_picture": "Insert picture",
+    "upload_image": "Upload Images",
     "insert_SVG": "Insert SVG",
     "insert_PSD": "insert PSD",
     "insert_SVGStr": "Insert SVG String",

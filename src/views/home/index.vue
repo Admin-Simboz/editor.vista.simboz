@@ -12,10 +12,12 @@
         </span>
 
         <!-- import -->
-        <import-JSON></import-JSON>
+        <!-- if you want to import as a json file -->
+        <!-- <import-JSON></import-JSON>  
         <Divider type="vertical" />
-        <import-file></import-file>
-        <Divider type="vertical" />
+        if you want to import images
+        <import-file></import-file> 
+        <Divider type="vertical" /> -->
         <!-- scale switch -->
         <Tooltip :content="$t('grid')">
           <iSwitch v-model="state.ruler" @on-change="rulerSwitch" size="small" class="switch"></iSwitch>
@@ -54,6 +56,10 @@
             <Icon type="md-reorder" size="24" />
             <div>{{ $t('layers') }}</div>
             </MenuItem>
+            <MenuItem :name="5" class="menu-item">
+            <Icon type="md-images" size="24" />
+            <div>{{ $t('images') }}</div>
+            </MenuItem>
           </Menu>
 
           <div class="content" v-show="state.toolsBarShow">
@@ -73,6 +79,10 @@
             <!-- Layer settings -->
             <div v-show="state.menuActive === 4" class="left-panel">
               <layer></layer>
+            </div>
+            <!-- Images -->
+            <div v-show="state.menuActive === 5" class="left-panel">
+              <images :key="userUploadKey"></images>
             </div>
           </div>
 
@@ -131,6 +141,8 @@ import importJSON from '@/components/importJSON.vue';
 import importFile from '@/components/importFile.vue';
 import fontTmpl from '@/components/fontTmpl.vue';
 import userTemplate from '@/components/userTemplate.vue'
+import images from '@/components/image.vue';
+
 
 // Top components
 import align from '@/components/align.vue';
@@ -190,7 +202,14 @@ import Editor, {
 } from '@/core';
 
 const tmplKey = ref(0);
+const userUploadKey = ref(0);
+
 const reloadImportTmpl = () => {
+  setTimeout(() => {
+    tmplKey.value += 1; // Increment the key to trigger a reload after 2 seconds
+  }, 2000); // 2000 milliseconds = 2 seconds
+};
+const reloadUserImages = () => {
   setTimeout(() => {
     tmplKey.value += 1; // Increment the key to trigger a reload after 2 seconds
   }, 2000); // 2000 milliseconds = 2 seconds
@@ -292,6 +311,28 @@ watch(
     reloadImportTmpl();
   }
 );
+
+/* watch(
+  {
+    reloadImportTmpl: () => eventBus.reloadImportTmpl.value,
+    reloadUserImages: () => eventBus.ReloadUserImages.value,
+    // Add more properties as needed
+  },
+  (newValues, oldValues) => {
+    if (newValues.reloadImportTmpl !== oldValues.reloadImportTmpl) {
+      reloadImportTmpl();
+    }
+
+    if (newValues.reloadUserImages !== oldValues.reloadUserImages) {
+      reloadUserImages();
+    }
+  }
+); */
+
+
+
+
+
 
 provide('fabric', fabric);
 provide('event', event);

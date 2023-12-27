@@ -1,5 +1,4 @@
 
-
 <template >
   <div>
 
@@ -86,14 +85,13 @@ const beforeClearTip = (tmplUrl: string) => {
 
 
 const updateValues = () => {
-  canvasEditor.updateValues();
+  canvasEditor.waitForSharedState();
 };
 
 
 // Get template data
 
 const getTempData = (tmplUrl: string) => {
-
   Spin.show({
     render: (h) => h('div', t('alert.loading_data')),
   });
@@ -104,14 +102,14 @@ const getTempData = (tmplUrl: string) => {
   getTemp
     .then((res) => {
       const { data } = res.data;
+      //assigining value here means watch function inside userTemplate.vue will work and update the template 
       if (data && data.front) {
         sharedState.front = data.front;
         sharedState.back = data.back;
         sharedState.frontImgUrl = data.frontImgUrl;
-        console.log(sharedState.position);
+        sharedState.position = data.position;
         sharedState.backImgUrl = data.backImgUrl;
-        //console.log(data.back);
-        updateValues();
+        updateValues();//to update sharedState values inside ServersPlugins.ts
         Spin.hide();
 
       } else {

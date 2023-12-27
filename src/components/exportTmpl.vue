@@ -31,7 +31,7 @@ import console from 'console';
 
 
 const { t } = useI18n();
-const { canvasEditor } = useSelect();
+const { canvasEditor }: any = useSelect();
 let templateUrl = "";
 
 interface materialTypeI {

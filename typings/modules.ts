@@ -11,7 +11,10 @@ declare module '@/components/eventBus.js' {
     const eventBus: {
       // Your module structure
       reloadImportTmpl: boolean;
-      emitReloadEvent: () => void;
+      ReloadTemplate: () => void;
+
+      reloadUserUploadTmpl: boolean;
+      ReloadUserImages: () => void;
       // ...other properties or methods
     };
     export default eventBus;
