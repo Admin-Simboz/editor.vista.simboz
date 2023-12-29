@@ -13,11 +13,10 @@
 
         <!-- import -->
         <!-- if you want to import as a json file -->
-        <!-- <import-JSON></import-JSON>  
+        <import-JSON></import-JSON>
         <Divider type="vertical" />
-        if you want to import images
-        <import-file></import-file> 
-        <Divider type="vertical" /> -->
+        <import-file></import-file>
+        <Divider type="vertical" />
         <!-- scale switch -->
         <Tooltip :content="$t('grid')">
           <iSwitch v-model="state.ruler" @on-change="rulerSwitch" size="small" class="switch"></iSwitch>

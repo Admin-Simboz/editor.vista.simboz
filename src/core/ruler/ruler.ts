@@ -96,7 +96,7 @@ class CanvasRuler {
     canvasMouseMove: throttle(this.canvasMouseMove.bind(this), 15),
     canvasMouseUp: this.canvasMouseUp.bind(this),
     render: (e: any) => {
-      // 避免多次渲染
+      // Avoid multiple renderings
       if (!e.ctx) return;
       this.render();
     },
@@ -291,8 +291,8 @@ class CanvasRuler {
     // Ruler text display
     for (let i = 0; i + startOffset <= Math.ceil(unitLength); i += gap) {
       const position = (startOffset + i) * zoom;
-      const textValue = startValue + i + '';
-      const textLength = (10 * textValue.length) / 4;
+      const textValue =  Math.ceil(startValue/96 + i/96) + '';
+      const textLength = Math.ceil((10 * textValue.length) / 4/96);
       const textX = isHorizontal
         ? position - textLength - 1
         : this.options.ruleSize / 2 - this.options.fontSize / 2 - 4;
@@ -334,11 +334,12 @@ class CanvasRuler {
         }
 
         // Get the value of a number
-        const roundFactor = (x: number) => Math.round(x / zoom + startCalibration) + '';
-        const leftTextVal = roundFactor(isHorizontal ? rect.left : rect.top);
+        const roundFactor = (x: number) => (Math.round((x / zoom + startCalibration / 96) * 10) / 10).toFixed(1);
+        const leftTextVal = roundFactor(isHorizontal ? rect.left / 96 : rect.top / 96);
         const rightTextVal = roundFactor(
-          isHorizontal ? rect.left + rect.width : rect.top + rect.height
+          isHorizontal ? rect.left / 96 + rect.width / 96 : rect.top / 96 + rect.height / 96
         );
+
 
         const isSameText = leftTextVal === rightTextVal;
 

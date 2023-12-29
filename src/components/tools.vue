@@ -97,7 +97,7 @@ const addText = (option) => {
   const text = new fabric.IText(t('Text'), {
     ...defaultPosition,
     ...option,
-    fontSize: 80,
+    fontSize: 500,
     id: uuid(),
   });
   canvasEditor.canvas.add(text);
@@ -122,8 +122,8 @@ const addTriangle = (option) => {
   const triangle = new fabric.Triangle({
     ...defaultPosition,
     ...option,
-    width: 400,
-    height: 400,
+    width: 800,
+    height: 800,
     fill: 'transparent', // Set fill to transparent
     stroke: '#000000', // Border color (black in this case)
     strokeWidth: 2, // Border thickness (adjust as needed)
@@ -149,8 +149,8 @@ const addPolygon = (option) => {
     name: 'Polygon',
   });
   polygon.set({
-    width: 400,
-    height: 400,
+    width: 800,
+    height: 800,
     pathOffset: {
       x: 0,
       y: 0,
@@ -186,27 +186,17 @@ const addRect = (option) => {
   const outerRect = new fabric.Rect({
     ...defaultPosition,
     ...option,
-    fill: '#F57274', // Fill color for the outer rectangle
-    width: 400,
-    height: 400,
+    fill: 'transparent', // Fill color for the outer rectangle
+    strokeWidth: 2,
+    stroke: '#000000',
+    width: 800,
+    height: 800,
     id: uuid(),
-    name: 'RectangleOuter',
+    name: 'Rectangle',
   });
 
-  const innerRect = new fabric.Rect({
-    ...defaultPosition,
-    ...option,
-    fill: 'transparent', // Transparent fill for the inner rectangle
-    width: 200,          // Adjust the inner rectangle size as needed
-    height: 200,
-    id: uuid(),
-    name: 'RectangleInner',
-  });
 
   canvasEditor.canvas.add(outerRect);
-  canvasEditor.canvas.add(innerRect);
-
-  innerRect.center(); // Center the inner rectangle
 
   if (!option) {
     outerRect.center();

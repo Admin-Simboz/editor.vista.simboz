@@ -13,21 +13,11 @@
     </Form>
     <Button type="primary" @click="() => (showModal = true)">Resize</Button>
 
-    <Modal
-      v-model="showModal"
-      :title="$t('setSizeTip')"
-      @on-ok="handleConfirm"
-      @on-cancel="handleClose"
-    >
+    <Modal v-model="showModal" :title="$t('setSizeTip')" @on-ok="handleConfirm" @on-cancel="handleClose">
       <p>{{ $t('default_size') }}</p>
       <ButtonGroup vertical style="margin: 10px 0">
-        <Button
-          v-for="(item, i) in presetSize"
-          :key="`${i}presetSize`"
-          size="small"
-          style="text-align: left"
-          @click="setSizeBy(item.width, item.height)"
-        >
+        <Button v-for="(item, i) in presetSize" :key="`${i}presetSize`" size="small" style="text-align: left"
+          @click="setSizeBy(item.width, item.height)">
           {{ item.label }}:{{ item.width }}x{{ item.height }}
         </Button>
       </ButtonGroup>
@@ -37,7 +27,7 @@
           <InputNumber :min="1" :max="5000" v-model="modalData.width"></InputNumber>
         </FormItem>
         <FormItem :label="$t('height')" prop="name">
-          <InputNumber :min="1" :max="5000" v-model="modalData.height"></InputNumber>
+          <InputNumber :min="1" v-model="modalData.height"></InputNumber>
         </FormItem>
       </Form>
     </Modal>
@@ -53,9 +43,11 @@ const { mixinState, canvasEditor } = useSelect();
 const { t } = useI18n();
 
 const DefaultSize = {
-  width: 900,
-  height: 1200,
+  width: 3456,
+  height: 6912,
 };
+const widthInch = DefaultSize.width;
+const heightInch = DefaultSize.height;
 
 const showModal = ref(false);
 const modalData = reactive({
@@ -131,6 +123,7 @@ const handleConfirm = () => {
 :deep(.ivu-form-item) {
   margin-bottom: 0;
 }
+
 :deep(.ivu-divider-plain) {
   &.ivu-divider-with-text-left {
     margin: 10px 0;

@@ -2,9 +2,9 @@ import type { Rect } from './ruler';
 import { fabric } from 'fabric';
 
 /**
- * 计算尺子间距
- * @param zoom 缩放比例
- * @returns 返回计算出的尺子间距
+ * Calculate ruler spacing
+ * @param zoom scaling ratio
+ * @returns Returns the calculated ruler spacing
  */
 const getGap = (zoom: number) => {
   const zooms = [0.02, 0.03, 0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10, 18];
@@ -19,32 +19,32 @@ const getGap = (zoom: number) => {
 };
 
 /**
- * 线段合并
- * @param rect Rect数组
+* Line segment merging
+ * @param rect Rect array
  * @param isHorizontal
- * @returns 合并后的Rect数组
+ * @returns Merged Rect array
  */
 const mergeLines = (rect: Rect[], isHorizontal: boolean) => {
   const axis = isHorizontal ? 'left' : 'top';
   const length = isHorizontal ? 'width' : 'height';
-  // 先按照 axis 的大小排序
+  // First sort according to the size of axis
   rect.sort((a, b) => a[axis] - b[axis]);
   const mergedLines = [];
   let currentLine = Object.assign({}, rect[0]);
   for (const item of rect) {
     const line = Object.assign({}, item);
     if (currentLine[axis] + currentLine[length] >= line[axis]) {
-      // 当前线段和下一个线段相交，合并宽度
+      // The current line segment intersects the next line segment, and the combined width
       currentLine[length] =
         Math.max(currentLine[axis] + currentLine[length], line[axis] + line[length]) -
         currentLine[axis];
     } else {
-      // 当前线段和下一个线段不相交，将当前线段加入结果数组中，并更新当前线段为下一个线段
+      // The current line segment does not intersect with the next line segment. Add the current line segment to the result array and update the current line segment to the next line segment.
       mergedLines.push(currentLine);
       currentLine = Object.assign({}, line);
     }
   }
-  // 加入数组
+  // Join array
   mergedLines.push(currentLine);
   return mergedLines;
 };

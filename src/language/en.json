@@ -113,7 +113,7 @@
     "modal_tittle": "Please enter"
   },
   "history": {
-    "revocation": "Revocation",
+    "revocation": "Undo",
     "redo": "Redo"
   },
   "select_image": "Select image",

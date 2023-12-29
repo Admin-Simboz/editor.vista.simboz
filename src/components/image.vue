@@ -1,13 +1,14 @@
 <template>
     <div>
         <div style="display: inline-block">
-            <button @click="insertTypeHand('insertImg')" class="ivu-btn ivu-btn-primary">
+            <button id="imageUploadButton" @click="insertTypeHand('insertImg')" class="ivu-btn ivu-btn-primary">
                 {{ $t('insertFile.upload_image') }}
             </button>
         </div>
         <div :key="item.value" v-for="item in state.materialist">
             <Divider plain orientation="left">{{ item.label }}</Divider>
-            <Tooltip :content="info.label" v-for="(info, i) in item.list" :key="`${i}-bai1-button`" placement="top">
+            <Tooltip id="uploadedImageContainer" :content="info.label" v-for="(info, i) in item.list"
+                :key="`${i}-bai1-button`" placement="top">
                 <img class="tmpl-img" :alt="info.label" v-lazy="info.src" @click="beforeClearTip(info.tempUrl)" />
             </Tooltip>
         </div>
@@ -42,21 +43,28 @@ const insertTypeHand = (type) => {
     const cb = HANDLEMAP[type];
     cb && typeof cb === 'function' && cb();
 };
-// Insert picture file
-function insertImgFile(src: File) {
-    if (!src) throw new Error('file is undefined');
+
+function insertImgFile(file) {
+    if (!file) throw new Error('file is undefined');
     const imgEl = document.createElement('img');
-    imgEl.src = src;
+
+    imgEl.src = file;
     // insert page
     document.body.appendChild(imgEl);
     imgEl.onload = () => {
+        const widthInPixels = imgEl.naturalWidth; // Get the natural width of the image in pixels
+        const heightInPixels = imgEl.naturalHeight; // Get 
+        console.log(widthInPixels, widthInPixels / 96)
         // Create picture object
         const imgInstance = new fabric.Image(imgEl, {
             id: uuid(),
-            name: 'Pic 1',
-            left: 100,
-            top: 100,
+            name: '图片1',
+            scaleX: 1,
+            scaleY: 1,
+            left: 1,
+            top: 1,
         });
+
         // Set zoom
         canvasEditor.canvas.add(imgInstance);
         canvasEditor.canvas.setActiveObject(imgInstance);
@@ -139,8 +147,19 @@ const beforeClearTip = (tmplUrl: string) => {
   
 <style scoped lang="less">
 .tmpl-img {
-    width: 50%;
+    width: 100%;
     height: 50%;
+}
+
+#imageUploadButton {
+    margin: 10px;
+}
+
+#uploadedImageContainer {
+    background-color: #F6F7F9;
+    padding: 6px;
+    border-radius: 4px;
+    margin: 5px;
 }
 </style>
   
