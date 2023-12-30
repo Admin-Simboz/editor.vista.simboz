@@ -5,10 +5,10 @@
     <Divider plain orientation="left">{{ $t('size') }}</Divider>
     <Form :label-width="40" class="form-wrap">
       <FormItem :label="$t('width')" prop="name">
-        <InputNumber disabled v-model="width" @on-change="setSize"></InputNumber>
+        <InputNumber v-model="width" @on-change="setSize"></InputNumber>
       </FormItem>
       <FormItem :label="$t('height')" prop="name">
-        <InputNumber disabled v-model="height" @on-change="setSize"></InputNumber>
+        <InputNumber v-model="height" @on-change="setSize"></InputNumber>
       </FormItem>
     </Form>
     <Button type="primary" @click="() => (showModal = true)">Resize</Button>
@@ -43,11 +43,9 @@ const { mixinState, canvasEditor } = useSelect();
 const { t } = useI18n();
 
 const DefaultSize = {
-  width: 3456,
-  height: 6912,
+  width: 96,
+  height: 96,
 };
-const widthInch = DefaultSize.width;
-const heightInch = DefaultSize.height;
 
 const showModal = ref(false);
 const modalData = reactive({
@@ -103,20 +101,25 @@ const setSizeBy = (w, h) => {
   modalData.height = h;
 };
 const setSize = () => {
-  canvasEditor.setSize(width.value, height.value);
-  // canvas.editor.editorWorkspace.setSize(width.value, height.value);
+  const inchesToPixelsWidth = width.value * 96;
+  const inchesToPixelsHeight = height.value * 96;
+  canvasEditor.setSize(inchesToPixelsWidth, inchesToPixelsHeight);
 };
+
 
 const handleClose = () => {
   showModal.value = false;
 };
 
 const handleConfirm = () => {
+  const inchesToPixelsNewWidth = modalData.width * 96;
+  const inchesToPixelsNewHeight = modalData.height * 96;
   width.value = modalData.width;
   height.value = modalData.height;
-  setSize();
+  canvasEditor.setSize(inchesToPixelsNewWidth, inchesToPixelsNewHeight);
   handleClose();
 };
+
 </script>
 
 <style scoped lang="less">

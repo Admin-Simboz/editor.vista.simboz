@@ -272,7 +272,7 @@ class CanvasRuler {
 
     const gap = getGap(zoom);
     const unitLength = rulerLength / zoom;
-    const startValue = Math[startCalibration > 0 ? 'floor' : 'ceil'](startCalibration / gap) * gap;
+    const startValue = Math[startCalibration > 0 ? 'floor' : 'floor'](startCalibration / gap) * gap;
     const startOffset = startValue - startCalibration;
 
     // ruler background
@@ -289,10 +289,10 @@ class CanvasRuler {
     // color
     const textColor = new fabric.Color(this.options.textColor);
     // Ruler text display
-    for (let i = 0; i + startOffset <= Math.ceil(unitLength); i += gap) {
+    for (let i = 0; i + startOffset <= Math.floor(unitLength); i += gap) {
       const position = (startOffset + i) * zoom;
-      const textValue =  Math.ceil(startValue/96 + i/96) + '';
-      const textLength = Math.ceil((10 * textValue.length) / 4/96);
+      const textValue =  Math.round((startValue + i)/96) + '';
+      const textLength = Math.floor(((10 * textValue.length) /4) /96);
       const textX = isHorizontal
         ? position - textLength - 1
         : this.options.ruleSize / 2 - this.options.fontSize / 2 - 4;
@@ -309,8 +309,8 @@ class CanvasRuler {
     }
 
     // ruler tick mark display
-    for (let j = 0; j + startOffset <= Math.ceil(unitLength); j += gap) {
-      const position = Math.round((startOffset + j) * zoom);
+    for (let j = 0; j + startOffset <= Math.floor(unitLength); j += gap) {
+      const position = Math.floor((startOffset + j) * zoom);
       const left = isHorizontal ? position : this.options.ruleSize - 8;
       const top = isHorizontal ? this.options.ruleSize - 8 : position;
       const width = isHorizontal ? 0 : 8;
@@ -334,7 +334,7 @@ class CanvasRuler {
         }
 
         // Get the value of a number
-        const roundFactor = (x: number) => (Math.round((x / zoom + startCalibration / 96) * 10) / 10).toFixed(1);
+        const roundFactor = (x: number) => (((x / zoom + startCalibration / 96) * 10) / 10).toFixed(1);
         const leftTextVal = roundFactor(isHorizontal ? rect.left / 96 : rect.top / 96);
         const rightTextVal = roundFactor(
           isHorizontal ? rect.left / 96 + rect.width / 96 : rect.top / 96 + rect.height / 96
