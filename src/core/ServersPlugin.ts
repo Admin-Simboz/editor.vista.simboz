@@ -64,6 +64,7 @@ class ServersPlugin {
     'toggleTemplate',
     'waitForSharedState',
     'getUserUploads',
+    'sendImage',
   ];
   
 
@@ -276,7 +277,8 @@ class ServersPlugin {
   }
 
   //get the urls for the user uploaded images 
- 
+
+  
 
 async getUserUploads(id: string): Promise<any[]> {
   
@@ -301,6 +303,31 @@ async getUserUploads(id: string): Promise<any[]> {
   }
 }
 
+async sendImage(file: string, name: string) {
+
+  const formData = new FormData();
+  formData.append('image', file);
+  formData.append('user_id', '12');
+
+  /* Spin.show({
+      render: (h) => h('div', 'Uploading...'),
+  }); */
+
+  try {
+      const response = await axios.post('https://vista.simboz.website/api/template/uploadImage', formData, {
+          headers: {
+              'Content-Type': 'multipart/form-data',
+          },
+      });
+
+      eventBus.ReloadTemplate("userUploads");
+      /* Spin.hide(); */
+      // Handle the response if needed
+  } catch (error) {
+      console.error('Error:', error);
+      // Handle error, throw, or return a specific value if needed
+  }
+}
 
   _getSaveSvgOption() {
     const workspace = this.canvas.getObjects().find((item) => item.id === 'workspace');

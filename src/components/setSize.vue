@@ -2,7 +2,7 @@
 
 <template>
   <div v-if="!mixinState.mSelectMode">
-    <Divider plain orientation="left">{{ $t('size') }}</Divider>
+    <Divider plain orientation="left">{{ $t('size') }} (Inch)</Divider>
     <Form :label-width="40" class="form-wrap">
       <FormItem :label="$t('width')" prop="name">
         <InputNumber v-model="width" @on-change="setSize"></InputNumber>
@@ -43,8 +43,8 @@ const { mixinState, canvasEditor } = useSelect();
 const { t } = useI18n();
 
 const DefaultSize = {
-  width: 96,
-  height: 96,
+  width: 3456,
+  height: 6912,
 };
 
 const showModal = ref(false);

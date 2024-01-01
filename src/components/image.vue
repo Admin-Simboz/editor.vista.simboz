@@ -74,31 +74,11 @@ function insertImgFile(file) {
     };
 }
 
-async function sendImage(file: string, name: string) {
-
-    const formData = new FormData();
-    formData.append('image', file);
-    formData.append('user_id', '12');
-
-    Spin.show({
-        render: (h) => h('div', 'Uploading...'),
-    });
-
-    try {
-        const response = await axios.post('https://vista.simboz.website/api/template/uploadImage', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        });
-
-        eventBus.ReloadTemplate("userUploads");
-        Spin.hide();
-        // Handle the response if needed
-    } catch (error) {
-        console.error('Error:', error);
-        // Handle error, throw, or return a specific value if needed
-    }
+function sendImage(file, name) {
+    canvasEditor.sendImage(file, name);
+    console.log("HELLO");
 }
+
 
 
 const { canvasEditor } = useSelect();
