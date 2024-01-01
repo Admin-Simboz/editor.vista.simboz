@@ -99,6 +99,7 @@ const addText = (option) => {
     ...option,
     fontSize: 500,
     id: uuid(),
+    hasControls: false,
   });
   canvasEditor.canvas.add(text);
   if (!option) {

@@ -28,6 +28,13 @@ class GroupTextEditorPlugin {
         !opt.target.lockScalingX &&
         !opt.target.lockScalingY
       ) {
+        //if text size change with this it doesnot appear in the svg so i have blocked these control for text
+        if(opt.target.type==='i-text'){
+        opt.target.hasControls = true;
+        opt.target.lockScalingY = true;
+        opt.target.lockScalingX = false;
+        opt.target.hasBorders = false;
+        }
         opt.target.hasControls = true;
       }
     });

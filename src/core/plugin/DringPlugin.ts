@@ -41,7 +41,7 @@ class DringPlugin {
     this.canvas.renderAll();
   }
 
-  // 拖拽模式;
+  // Drag and drop mode;
   _initDring() {
     const This = this;
     this.canvas.on('mouse:down', function (this: ExtCanvas, opt) {

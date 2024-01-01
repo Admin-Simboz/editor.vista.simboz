@@ -464,9 +464,6 @@ const toggleStroke = () => {
   showStroke.value = !showStroke.value;
 };
 
-
-
-
 // common elements
 const baseType = [
   'Text',

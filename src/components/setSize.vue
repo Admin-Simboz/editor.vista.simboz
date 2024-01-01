@@ -43,8 +43,8 @@ const { mixinState, canvasEditor } = useSelect();
 const { t } = useI18n();
 
 const DefaultSize = {
-  width: 3456,
-  height: 6912,
+  width: 6,
+  height: 12,
 };
 
 const showModal = ref(false);
@@ -83,7 +83,7 @@ let presetSize = reactive([
 ]);
 
 onMounted(() => {
-  canvasEditor.setSize(width.value, height.value);
+  canvasEditor.setSize(width.value * 96, height.value * 96);
   canvasEditor.on('sizeChange', (width, height) => {
     width.value = width;
     height.value = height;
