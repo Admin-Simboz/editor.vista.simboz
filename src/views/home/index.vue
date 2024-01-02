@@ -126,6 +126,8 @@
             <flip></flip>
           </div>
           <attribute v-if="state.show"></attribute>
+          <shapeAttribute v-if="state.show"></shapeAttribute>
+
         </div>
         <!-- right close button -->
         <div :class="`close-btn right-btn ${state.attrBarShow && 'right-btn-open'}`" @click="switchAttrBar"></div>
@@ -170,6 +172,7 @@ import filters from '@/components/filters.vue';
 import history from '@/components/history.vue';
 import layer from '@/components/layer.vue';
 import attribute from '@/components/attribute.vue';
+import shapeAttribute from '@/components/shapeAttributes.vue';
 
 import eventBus from '@/components/eventBus.js'; // Import the event bus
 import { watch } from 'vue';
@@ -305,16 +308,21 @@ const switchAttrBar = () => {
 
 // Add a watcher to listen for changes in the event bus property
 watch(
-  () => eventBus.reloadImportTmpl.value, // Watching for changes in reloadImportTmpl
-  (newValue, oldValue) => {
-    if (newValue === "userTemp") {
-      // Perform an action only if the new value is different from the old value
+  () => [eventBus.reloadImportTmpl.value, eventBus.reloadUserUpoload.value],
+  ([importTmplValue, userUploadValue]) => {
+    // Perform different actions based on the changed variable
+    if (importTmplValue > 0) {
+      // Handle reloadImportTmpl change
+      console.log('reloadImportTmpl changed');
       reloadImportTmpl();
+      // Perform actions related to reloadImportTmpl change
     }
-    if (newValue === "userUploads") {
-      // Perform an action only if the new value is different from the old value
+
+    if (userUploadValue > 0) {
       reloadUserImages();
-      console.log("test");
+      // Handle reloadUserUpoload change
+      console.log('reloadUserUpoload changed');
+      // Perform actions related to reloadUserUpoload change
     }
   }
 );

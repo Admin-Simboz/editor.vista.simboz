@@ -64,7 +64,7 @@ class ServersPlugin {
     'toggleTemplate',
     'waitForSharedState',
     'getUserUploads',
-    'sendImage',
+    'uploadImage',
   ];
   
 
@@ -177,8 +177,9 @@ class ServersPlugin {
       //console.log('inside front');
       this.backTempJson = JSON.stringify(this.getJson());
       const option = this._getSaveOption();
-      this.canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
-      this.backSaveOptions = this.canvas.toDataURL(option);
+      console.log(option);
+      
+      this.backSaveOptions = this.canvas.toSVG(option);
       //console.log(this.frontTempJson);
       this.insertSvgFile(this.frontTempJson);
       this.currentTemp = 'front';
@@ -187,15 +188,14 @@ class ServersPlugin {
     if (value === 'back') {
       this.frontTempJson = JSON.stringify(this.getJson());
       const option = this._getSaveOption();
-      this.canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
-      this.frontSaveOptions = this.canvas.toDataURL(option);
+      
+      this.frontSaveOptions = this.canvas.toSVG(option);
       //console.log(this.backTempJson);
       this.insertSvgFile(this.backTempJson);
       this.currentTemp = 'back';
     }
   }
 
-  
 
   async saveTemplate() {
     let frontJson = this.frontTempJson; 
@@ -217,19 +217,19 @@ class ServersPlugin {
       //console.log('hiddenButtonRef empty');
     }
     
-     Spin.show({
+   /*   Spin.show({
       render: (h) => h('div', 'Saving Template'),
-    }); 
+    });  */
     try {
      
       const response = await axios.post('https://vista.simboz.website/api/template/storeTemp', formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          'Content-Type': 'application/json', // Set appropriate content type
         },
       });
-       Spin.hide(); 
+     /*   Spin.hide(); 
       //console.log('Server Response:', response.data);
-
+ */
       eventBus.ReloadTemplate("userTemp");
     } 
     
@@ -303,7 +303,7 @@ async getUserUploads(id: string): Promise<any[]> {
   }
 }
 
-async sendImage(file: string, name: string) {
+async uploadImage(file: string, name: string) {
 
   const formData = new FormData();
   formData.append('image', file);
@@ -351,7 +351,7 @@ async sendImage(file: string, name: string) {
     const { left, top, width, height } = workspace as fabric.Object;
     const option = {
       name: 'New Image',
-      format: 'png',
+      format: 'svg',
       quality: 1,
       width,
       height,

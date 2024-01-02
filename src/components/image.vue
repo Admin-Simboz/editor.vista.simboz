@@ -18,11 +18,9 @@
 <script name="ImportFile" lang="ts" setup>
 import { getImgStr, selectFiles } from '@/utils/utils';
 import useSelect from '@/hooks/select';
-import axios from 'axios';
 import { v4 as uuid } from 'uuid';
 import { fabric } from 'fabric';
-import { Spin } from 'view-ui-plus';
-import eventBus from '@/components/eventBus.js';
+
 
 
 const HANDLEMAP = {
@@ -32,7 +30,7 @@ const HANDLEMAP = {
             Array.from(fileList).forEach((item) => {
                 getImgStr(item).then((file) => {
                     // Pass the image name to the sendImage function
-                    sendImage(file, item.name);
+                    uploadImage(file, item.name);
                 });
             });
         });
@@ -52,9 +50,6 @@ function insertImgFile(file) {
     // insert page
     document.body.appendChild(imgEl);
     imgEl.onload = () => {
-        const widthInPixels = imgEl.naturalWidth; // Get the natural width of the image in pixels
-        const heightInPixels = imgEl.naturalHeight; // Get 
-        console.log(widthInPixels, widthInPixels / 96)
         // Create picture object
         const imgInstance = new fabric.Image(imgEl, {
             id: uuid(),
@@ -74,9 +69,8 @@ function insertImgFile(file) {
     };
 }
 
-function sendImage(file, name) {
-    canvasEditor.sendImage(file, name);
-    console.log("HELLO");
+function uploadImage(file, name) {
+    canvasEditor.uploadImage(file, name);
 }
 
 
