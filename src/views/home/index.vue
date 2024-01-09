@@ -6,7 +6,7 @@
         <!-- logo -->
         <span class="logo">
           <a href="#" target="_blank">
-            <Icon type="#" :size="30" />
+            <img src="../images/logo.png">
           </a>
 
         </span>
@@ -88,10 +88,8 @@
           <!-- close button -->
           <div class="close-btn" v-show="state.toolsBarShow" @click="hideToolsBar"></div>
         </div>
-        <div class="preview-template">
-          <userTemplate />
 
-        </div>
+
         <!-- canvas area -->
         <div id="workspace">
           <div class="canvas-box">
@@ -105,6 +103,7 @@
 
         <!-- Property area 380-->
         <div class="right-bar" v-show="state.attrBarShow">
+          <userTemplate />
           <div v-if="state.show" style="padding-top: 10px">
             <!-- Added font style usage -->
             <!-- <Button @click="getFontJson" size="small">Get Font Data</Button> -->
@@ -126,7 +125,6 @@
             <flip></flip>
           </div>
           <attribute v-if="state.show"></attribute>
-          <shapeAttribute v-if="state.show"></shapeAttribute>
 
         </div>
         <!-- right close button -->
@@ -172,7 +170,6 @@ import filters from '@/components/filters.vue';
 import history from '@/components/history.vue';
 import layer from '@/components/layer.vue';
 import attribute from '@/components/attribute.vue';
-import shapeAttribute from '@/components/shapeAttributes.vue';
 
 import eventBus from '@/components/eventBus.js'; // Import the event bus
 import { watch } from 'vue';
@@ -326,28 +323,6 @@ watch(
     }
   }
 );
-
-
-/* watch(
-  {
-    reloadImportTmpl: () => eventBus.reloadImportTmpl.value,
-    reloadUserImages: () => eventBus.ReloadUserImages.value,
-    // Add more properties as needed
-  },
-  (newValues, oldValues) => {
-    if (newValues.reloadImportTmpl !== oldValues.reloadImportTmpl) {
-      reloadImportTmpl();
-    }
-
-    if (newValues.reloadUserImages !== oldValues.reloadUserImages) {
-      reloadUserImages();
-    }
-  }
-); */
-
-
-
-
 
 
 provide('fabric', fabric);
@@ -524,9 +499,5 @@ provide('canvasEditor', canvasEditor);
   background-position: var(--offsetX) var(--offsetY),
     calc(var(--size) + var(--offsetX)) calc(var(--size) + var(--offsetY));
   background-size: calc(var(--size) * 2) calc(var(--size) * 2);
-}
-
-.preview-template {
-  width: 8%;
 }
 </style>

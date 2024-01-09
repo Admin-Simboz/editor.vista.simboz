@@ -167,7 +167,7 @@
     </div>
 
     <!-- Common properties -->
-    <div v-show="baseType.includes(mixinState.mSelectOneType)">
+    <div>
       <div class="dropdown cstmStyle" plain orientation="left" @click="toggleColor"><span> {{
         $t('attributes.exterior') }}</span>
         <span>+</span>
@@ -386,7 +386,7 @@
                 <span><b> %</b></span>
               </div>
             </div>
-            <button class="no-color-button" @click="restStrokeCMYK">
+            <button class="no-color-button" @click="restShadowCMYK">
               <p>Remove</p>
             </button>
           </div>
@@ -758,7 +758,7 @@ const restShadowCMYK = () => {
   kShadow.value = 0;
   const hexColor = '#ffffff'; // Replace with your RGB values
   testValue = 1;
-  changeCommon('color', hexColor);
+  changeCommon('shadow', hexColor);
   fontAttr.textBackgroundColor = hexColor;
 };
 

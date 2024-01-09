@@ -9,7 +9,7 @@
             <Divider plain orientation="left">{{ item.label }}</Divider>
             <Tooltip id="uploadedImageContainer" :content="info.label" v-for="(info, i) in item.list"
                 :key="`${i}-bai1-button`" placement="top">
-                <img class="tmpl-img" :alt="info.label" v-lazy="info.src" @click="beforeClearTip(info.tempUrl)" />
+                <img class="tmpl-img" :alt="info.label" v-lazy="info.src" @click="beforeClearTip(info.image_id)" />
             </Tooltip>
         </div>
     </div>
@@ -20,6 +20,8 @@ import { getImgStr, selectFiles } from '@/utils/utils';
 import useSelect from '@/hooks/select';
 import { v4 as uuid } from 'uuid';
 import { fabric } from 'fabric';
+import axios from 'axios';
+import { Spin } from 'view-ui-plus';
 
 
 
@@ -53,7 +55,7 @@ function insertImgFile(file) {
         // Create picture object
         const imgInstance = new fabric.Image(imgEl, {
             id: uuid(),
-            name: '图片1',
+            name: 'Image',
             scaleX: 1,
             scaleY: 1,
             left: 1,
@@ -87,7 +89,7 @@ interface materialTypeI {
 interface materialItemI {
     value: string;
     label: string;
-    tempUrl: string;
+    image_id: string;
     src: string;
 }
 
@@ -105,16 +107,24 @@ const state = reactive({
 // Get material classification
 canvasEditor.getUserUploads(12).then((list: materialTypeI[]) => {
     //state.materialTypelist = [...list];
-
     state.materialist = list;
     //console.log(state.materialist);
 });
-const beforeClearTip = (tmplUrl: string) => {
 
-    //getTempData(tmplUrl)
-    // console.log(tmplUrl);
-    insertImgFile(tmplUrl);
+const beforeClearTip = async (tmplUrl: string) => {
+    Spin.show();
+    try {
+
+        let response = await axios.get(`https://vista.simboz.website/api/template/getImage/${tmplUrl}`);
+        console.log(response.data.image);
+        insertImgFile(response.data.image);
+        Spin.hide();
+    } catch (error) {
+        // Handle errors here
+        console.error('Error fetching data:', error);
+    }
 };
+
 
 
 </script>

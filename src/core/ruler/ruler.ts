@@ -292,9 +292,9 @@ class CanvasRuler {
     for (let i = 0; i + startOffset <= Math.floor(unitLength); i += gap) {
       const position = (startOffset + i) * zoom;
       const textValue =  Math.floor(startValue/96 + i/96) + '';
-      const textLength = Math.floor((10 * textValue.length) /4 /96);
+      const textLength = Math.floor(((10 * textValue.length) /4) /96);
       const textX = isHorizontal
-        ? position - textLength - 1
+        ? position - textLength - 1/96
         : this.options.ruleSize / 2 - this.options.fontSize / 2 - 4;
       const textY = isHorizontal
         ? this.options.ruleSize / 2 - this.options.fontSize / 2 - 4

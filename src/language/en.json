@@ -1,7 +1,7 @@
 {
   "templates": "Templates",
   "elements": "Elements",
-  "background": "Font Background",
+  "background": "Background",
   "placeholder": "Please input",
   "size": "Size",
   "width": "Width",
@@ -160,7 +160,7 @@
   "phone_wallpaper": "Phone Wallpaper",
   "attributes": {
     "id": "ID",
-    "font": "Font Style",
+    "font": "Style",
     "align": "Align",
     "bold": "Bold:",
     "italic": "Italic:",
@@ -169,7 +169,7 @@
     "swipe_up": "Swipe UP:",
     "line_height": "Line height",
     "char_spacing": "Spacing",
-    "exterior": "Font Color",
+    "exterior": "Color",
     "angle": "Angle",
     "left": "Left",
     "top": "Top",

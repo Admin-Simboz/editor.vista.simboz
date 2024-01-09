@@ -65,6 +65,7 @@ class ServersPlugin {
     'waitForSharedState',
     'getUserUploads',
     'uploadImage',
+    'insertSvgString',
   ];
   
 
@@ -127,6 +128,21 @@ class ServersPlugin {
     }); 
   }
 
+  insertSvgString (svgString: string) {
+    fabric.loadSVGFromString(svgString, (objects, options) => {
+        const item = fabric.util.groupSVGElements(objects, {
+            ...options,
+            name: 'SVG  ',
+            id: uuid(),
+        });
+        
+        this.canvas.add(item)
+        this.canvas.renderAll();
+    });
+
+}
+  
+
   getJson() {
     return this.canvas.toJSON(['id', 'gradientAngle', 'selectable', 'hasControls']);
   }
@@ -174,38 +190,38 @@ class ServersPlugin {
       return; // Skip if the value is already the current one
     }
     if (value === 'front') {
-      //console.log('inside front');
-      this.backTempJson = JSON.stringify(this.getJson());
-      const option = this._getSaveOption();
-      console.log(option);
+      this.editor.hooksEntity.hookSaveBefore.callAsync('', () => {
+        const option = this._getSaveSvgOption();
+        this.backSaveOptions = this.canvas.toSVG(option);
+        
+      });
       
-      this.backSaveOptions = this.canvas.toSVG(option);
-      //console.log(this.frontTempJson);
-      this.insertSvgFile(this.frontTempJson);
+      console.log(this.frontSaveOptions);
+      this.insertSvgString(this.frontSaveOptions);
       this.currentTemp = 'front';
     }
 
     if (value === 'back') {
-      this.frontTempJson = JSON.stringify(this.getJson());
-      const option = this._getSaveOption();
+      this.editor.hooksEntity.hookSaveBefore.callAsync('', () => {
+        const option = this._getSaveSvgOption();
+        this.frontSaveOptions = this.canvas.toSVG(option);
+       
+      });
+      console.log(this.backSaveOptions);
+      this.insertSvgString(this.backSaveOptions);
       
-      this.frontSaveOptions = this.canvas.toSVG(option);
-      //console.log(this.backTempJson);
-      this.insertSvgFile(this.backTempJson);
       this.currentTemp = 'back';
     }
   }
-
 
   async saveTemplate() {
     let frontJson = this.frontTempJson; 
     let backJson = this.backTempJson;
 
-    
     const formData = new FormData();
     
-    formData.append('frontJsonData', frontJson);
-    formData.append('backJsonData', backJson);
+    /* formData.append('frontJsonData', frontJson);
+    formData.append('backJsonData', backJson); */
 
     
     formData.append('frontImage', this.frontSaveOptions);
@@ -244,6 +260,7 @@ class ServersPlugin {
     this.editor.hooksEntity.hookSaveBefore.callAsync('', () => {
       const option = this._getSaveSvgOption();
       const dataUrl = this.canvas.toSVG(option);
+      console.log(dataUrl);
       const fileStr = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(dataUrl)}`;
       this.editor.hooksEntity.hookSaveAfter.callAsync(fileStr, () => {
         downFile(fileStr, 'svg');
@@ -288,7 +305,9 @@ async getUserUploads(id: string): Promise<any[]> {
     // Check if the response is successful (status code 200)
     if (response.status === 200) {
       // Extract the 'data' property from the Axios response
+      console.log(response.data.data);
       return response.data.data; // Assuming response.data is an object with a 'data' property holding the array
+      
       eventBus.ReloadTemplate("userUploads");//to reload the div containing images
       Spin.hide(); 
     } else {
@@ -353,8 +372,8 @@ async uploadImage(file: string, name: string) {
       name: 'New Image',
       format: 'svg',
       quality: 1,
-      width,
-      height,
+      /* width:3072,
+      height:6912, */
       left,
       top,
     };

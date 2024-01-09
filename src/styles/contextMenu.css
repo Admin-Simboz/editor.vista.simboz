@@ -58,3 +58,8 @@
   color: #878b90;
   float: right;
 }
+
+.ivu-switch-large {
+  width: 56px;
+  margin-top: 5px;
+}

@@ -56,9 +56,9 @@ const getUserTemplate = () => {
         backImgUrl.value = sharedState.backImgUrl;
         front.value = sharedState.front;
         if (sharedState.position === 'front') {
-            canvasEditor.insertSvgFile(sharedState.front);
+            canvasEditor.insertSvgString(sharedState.front);
         } else {
-            canvasEditor.insertSvgFile(sharedState.back);
+            canvasEditor.insertSvgString(sharedState.back);
         }
 
     }
@@ -85,7 +85,7 @@ watch(sharedState, (newVal) => {
     border: 8px;
     border-color: aqua;
     position: relative;
-    margin-top: 150px;
+    display: flex;
 
 }
 
@@ -95,6 +95,7 @@ watch(sharedState, (newVal) => {
     margin: 5px;
     background-color: #f6f7f8;
     border: 2px solid #c3bfbf;
+
 }
 
 p {

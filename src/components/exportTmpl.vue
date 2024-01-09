@@ -92,7 +92,7 @@ const refreshTemplate = () => {
 const getTempData = (tmplUrl: string) => {
 
   Spin.show({
-    render: (h) => h('div', t('alert.loading_data')),
+    render: (h) => h('div', t('testing')),
   });
   const getTemp = axios.get(tmplUrl);
   getTemp.then((res) => {
