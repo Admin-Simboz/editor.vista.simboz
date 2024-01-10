@@ -7,8 +7,8 @@ import { fabric } from 'fabric';
  * @returns Returns the calculated ruler spacing
  */
 const getGap = (zoom: number) => {
-  const zooms = [0.02, 0.03, 0.05, 0.1, 0.2, 0.5];
-  const gaps = [4992, 2496, 960, 480, 240, 96];
+  const zooms = [0.5];
+  const gaps = [10];
 
   let i = 0;
   while (i < zooms.length && zooms[i] < zoom) {
