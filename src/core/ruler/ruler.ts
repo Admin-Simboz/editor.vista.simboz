@@ -272,6 +272,7 @@ class CanvasRuler {
 
     const gap = getGap(zoom);
     const unitLength = rulerLength / zoom;
+    console.log(zoom);
     const startValue = Math[startCalibration > 0 ? 'floor' : 'floor'](startCalibration / gap) * gap;
     const startOffset = startValue - startCalibration;
 

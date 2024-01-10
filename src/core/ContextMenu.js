@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 
 /* eslint-disable no-prototype-builtins */
 /*
@@ -8,6 +9,8 @@
  * @Description: 右键菜单
  */
 /* Author: @UnrealSec */
+=======
+>>>>>>> Stashed changes
 import '@/styles/contextMenu.css';
 
 class ContextMenu {
