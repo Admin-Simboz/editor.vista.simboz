@@ -184,6 +184,7 @@ class ServersPlugin {
   }
 
   toggleTemplate(value: 'front' | 'back') {
+    
    // console.log('inside toggle temp');
     if (value === this.currentTemp) {
       //console.log('inside return');
@@ -197,6 +198,8 @@ class ServersPlugin {
       });
       
       console.log(this.frontSaveOptions);
+      
+      console.log(this.frontSaveOptions);
       this.insertSvgString(this.frontSaveOptions);
       this.currentTemp = 'front';
     }
@@ -205,9 +208,9 @@ class ServersPlugin {
       this.editor.hooksEntity.hookSaveBefore.callAsync('', () => {
         const option = this._getSaveSvgOption();
         this.frontSaveOptions = this.canvas.toSVG(option);
-       
       });
       console.log(this.backSaveOptions);
+      
       this.insertSvgString(this.backSaveOptions);
       
       this.currentTemp = 'back';
