@@ -1,5 +1,6 @@
 import { reactive } from 'vue';
 import axios from 'axios';
+import { Spin } from 'view-ui-plus';
 
 // Create a shared reactive object with initial empty strings for front and back
 export const sharedState = reactive({
@@ -12,8 +13,10 @@ export const sharedState = reactive({
 const urlParams = new URLSearchParams(window.location.search);
 let id = urlParams.get('id');
 // Perform the API call
-//axios.get(`https://vista.simboz.website/api/template/showTemp/${id}`)
-axios.get(`https://vista.simboz.website/api/template/showTemp/225/front`)
+Spin.show({
+    render: (h) => h('div', 'Loading Template'),
+});
+axios.get(`https://vista.simboz.website/api/template/showTemp/12/front`)
     .then((res) => {
         const { data } = res.data;
         if (data) {
@@ -37,6 +40,7 @@ axios.get(`https://vista.simboz.website/api/template/showTemp/225/front`)
         } else {
             console.error('Invalid data received from the API');
         }
+        Spin.hide();
     })
     .catch((error) => {
         console.error('Error fetching data:', error);

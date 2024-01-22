@@ -6,7 +6,7 @@
         <!-- logo -->
         <span class="logo">
           <a href="#" target="_blank">
-            <img src="../images/logo.png">
+
           </a>
 
         </span>
