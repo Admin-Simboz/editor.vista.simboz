@@ -174,6 +174,19 @@ import attribute from '@/components/attribute.vue';
 import eventBus from '@/components/eventBus.js'; // Import the event bus
 import { watch } from 'vue';
 
+
+
+
+import { useStore } from 'vuex';
+
+const store = useStore();
+const messageFromLaravel = computed(() => store.state.messageFromLaravel);
+
+console.log("index.vue", messageFromLaravel);
+
+
+
+
 // Functional components
 import { CanvasEventEmitter } from '@/utils/event/notifier';
 // import { downFile } from '@/utils/utils';
@@ -237,7 +250,10 @@ onMounted(() => {
     fireRightClick: true, // Enable right-click, button number 3
     stopContextMenu: true, // Disable default right-click menu
     controlsAboveOverlay: true, // Display controls even beyond clipPath
+
   });
+
+
 
   // Initialize editor
   canvasEditor.init(canvas);

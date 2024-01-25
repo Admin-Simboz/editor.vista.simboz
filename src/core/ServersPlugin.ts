@@ -197,9 +197,9 @@ class ServersPlugin {
         
       });
       
-      console.log(this.frontSaveOptions);
+      //console.log(this.frontSaveOptions);
       
-      console.log(this.frontSaveOptions);
+      //console.log(this.frontSaveOptions);
       this.insertSvgString(this.frontSaveOptions);
       this.currentTemp = 'front';
     }
@@ -209,7 +209,7 @@ class ServersPlugin {
         const option = this._getSaveSvgOption();
         this.frontSaveOptions = this.canvas.toSVG(option);
       });
-      console.log(this.backSaveOptions);
+      //console.log(this.backSaveOptions);
       
       this.insertSvgString(this.backSaveOptions);
       
@@ -263,7 +263,7 @@ class ServersPlugin {
     this.editor.hooksEntity.hookSaveBefore.callAsync('', () => {
       const option = this._getSaveSvgOption();
       const dataUrl = this.canvas.toSVG(option);
-      console.log(dataUrl);
+      //console.log(dataUrl);
       const fileStr = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(dataUrl)}`;
       this.editor.hooksEntity.hookSaveAfter.callAsync(fileStr, () => {
         downFile(fileStr, 'svg');
@@ -308,18 +308,18 @@ async getUserUploads(id: string): Promise<any[]> {
     // Check if the response is successful (status code 200)
     if (response.status === 200) {
       // Extract the 'data' property from the Axios response
-      console.log(response.data.data);
+      //console.log(response.data.data);
       return response.data.data; // Assuming response.data is an object with a 'data' property holding the array
       
       eventBus.ReloadTemplate("userUploads");//to reload the div containing images
       Spin.hide(); 
     } else {
       // Handle other response status codes if needed
-      console.error('Non-200 status code:', response.status);
+      //console.error('Non-200 status code:', response.status);
       return []; // or throw an error or return a specific value
     }
   } catch (error) {
-    console.error('Error:', error);
+    //console.error('Error:', error);
     // Handle error, throw, or return a specific value if needed
     return []; // or throw an error or return a specific value
   }
@@ -346,7 +346,7 @@ async uploadImage(file: string, name: string) {
       /* Spin.hide(); */
       // Handle the response if needed
   } catch (error) {
-      console.error('Error:', error);
+     // console.error('Error:', error);
       // Handle error, throw, or return a specific value if needed
   }
 }
@@ -394,7 +394,7 @@ async uploadImage(file: string, name: string) {
   }
 
   destroy() {
-    console.log('pluginDestroy');
+    //console.log('pluginDestroy');
   }
 }
 
