@@ -9,6 +9,10 @@ import { Spin, Modal } from 'view-ui-plus';
 import { ref, Ref } from 'vue';
 import eventBus from '@/components/eventBus.js';
 import { sharedState } from '@/components/sharedState.js';
+import { useStore } from 'vuex';
+
+
+
 
 type IEditor = Editor;
 // import { v4 as uuid } from 'uuid';
@@ -44,9 +48,14 @@ class ServersPlugin {
   private backSaveOptions: string = '';
   private currentTemp: 'front' | 'back' = 'front';
   private sharedState:any;  
-  
-  
- 
+
+  private store = useStore();
+  private apiToken= ref(this.store.state.token);
+  private product_id= ref(this.store.state.product_id);
+  private userId= ref(this.store.state.userId);
+  private template_width= ref(this.store.state.template_width);
+  private template_height= ref(this.store.state.template_height);
+  private role= ref(this.store.state.role);
 
   private hiddenButtonRef: Ref<HTMLButtonElement | null> = ref(null);
   static apis = [
@@ -66,6 +75,7 @@ class ServersPlugin {
     'getUserUploads',
     'uploadImage',
     'insertSvgString',
+    'saveExit',
   ];
   
 
@@ -217,10 +227,62 @@ class ServersPlugin {
     }
   }
 
+  async saveExit(){
+    let frontJson = this.frontTempJson; 
+    let backJson = this.backTempJson;
+    const formData = new FormData();
+    
+    /* formData.append('frontJsonData', frontJson);
+    formData.append('backJsonData', backJson); */
+
+    
+    formData.append('frontImage', this.frontSaveOptions);
+    formData.append('backImage', this.backSaveOptions);
+    formData.append('userId', String(this.userId));
+    formData.append('product_id', String(this.product_id));
+    formData.append('templateHeight', String(this.template_height));
+    formData.append('templateWidth', String(this.template_width));
+    formData.append('role', String(this.role));
+ 
+
+    if (this.hiddenButtonRef.value) {
+      this.hiddenButtonRef.value.click();
+    }else{
+      //console.log('hiddenButtonRef empty');
+    }
+   
+
+   /*   Spin.show({
+      render: (h) => h('div', 'Saving Template'),
+    });  */
+    try {
+      
+      const response = await axios.post(`http://127.0.0.1:8000/api/template/saveExit/`, formData, {
+        
+      headers: {
+          'Content-Type': 'application/json', // Set appropriate content type
+          'Authorization': `Bearer ${this.apiToken.value}`,
+        }
+      }).then(response => { 
+        console.log('Data sent successfully:', response.data);
+
+        // Redirect to Laravel home page
+        window.location.href = '/';
+      });
+     /*   Spin.hide(); 
+      //console.log('Server Response:', response.data);
+ */
+      eventBus.ReloadTemplate("userTemp");
+    } 
+    
+    catch (error) {
+      //console.error('Error:', error);
+    }
+  }
+
   async saveTemplate() {
     let frontJson = this.frontTempJson; 
     let backJson = this.backTempJson;
-
     const formData = new FormData();
     
     /* formData.append('frontJsonData', frontJson);
@@ -235,15 +297,17 @@ class ServersPlugin {
     }else{
       //console.log('hiddenButtonRef empty');
     }
-    
+   
+
    /*   Spin.show({
       render: (h) => h('div', 'Saving Template'),
     });  */
     try {
-     
-      const response = await axios.post('https://vista.simboz.website/api/template/storeTemp', formData, {
+      
+      const response = await axios.post('http://127.0.0.1:8000/api/template/storeTemp', formData, {
         headers: {
           'Content-Type': 'application/json', // Set appropriate content type
+          'Authorization': `Bearer ${this.apiToken.value}`,
         },
       });
      /*   Spin.hide(); 
@@ -300,30 +364,36 @@ class ServersPlugin {
 
   
 
-async getUserUploads(id: string): Promise<any[]> {
+
+  async getUserUploads(id: number): Promise<any[]> {
+    try {
+      axios.defaults.headers.common['X-CSRF-TOKEN'] = this.apiToken;
   
-  try {
-    
-    const response: AxiosResponse<any> = await axios.get(`https://vista.simboz.website/api/template/loadUserImages/${id}`);
-    // Check if the response is successful (status code 200)
-    if (response.status === 200) {
-      // Extract the 'data' property from the Axios response
-      //console.log(response.data.data);
-      return response.data.data; // Assuming response.data is an object with a 'data' property holding the array
-      
-      eventBus.ReloadTemplate("userUploads");//to reload the div containing images
-      Spin.hide(); 
-    } else {
-      // Handle other response status codes if needed
-      //console.error('Non-200 status code:', response.status);
+      const response: AxiosResponse<any> = await axios.get(` /api/template/loadUserImages/${id}`);
+  
+      // Check if the response is successful (status code 200)
+      if (response.status === 200) {
+        // Extract the 'data' property from the Axios response
+        const data = response.data.data;
+        
+        // Reload the div containing images
+        eventBus.ReloadTemplate("userUploads");
+  
+        // Hide the loading spinner
+        Spin.hide();
+  
+        return data; // Assuming response.data is an object with a 'data' property holding the array
+      } else {
+        // Handle other response status codes if needed
+        // console.error('Non-200 status code:', response.status);
+        return []; // or throw an error or return a specific value
+      }
+    } catch (error) {
+      // Handle error, throw, or return a specific value if needed
+      // console.error('Error:', error);
       return []; // or throw an error or return a specific value
     }
-  } catch (error) {
-    //console.error('Error:', error);
-    // Handle error, throw, or return a specific value if needed
-    return []; // or throw an error or return a specific value
   }
-}
 
 async uploadImage(file: string, name: string) {
 
@@ -336,9 +406,10 @@ async uploadImage(file: string, name: string) {
   }); */
 
   try {
-      const response = await axios.post('https://vista.simboz.website/api/template/uploadImage', formData, {
+      const response = await axios.post('http://127.0.0.1:8000/template/uploadImage', formData, {
           headers: {
               'Content-Type': 'multipart/form-data',
+              'Authorization': `Bearer ${this.apiToken.value}`,
           },
       });
 

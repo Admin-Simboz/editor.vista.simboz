@@ -38,11 +38,19 @@
 import { Modal } from 'view-ui-plus';
 import useSelect from '@/hooks/select';
 import { useI18n } from 'vue-i18n';
+import { useStore } from 'vuex';
+
+const store = useStore();
+var defaultWidth = computed(() => store.state.template_width);
+var defaultHeight = computed(() => store.state.template_height);
+
 
 const { mixinState, canvasEditor } = useSelect();
 const { t } = useI18n();
 
-const DefaultSize = {
+const DefaultSize = {/* 
+  width: defaultWidth.value,
+  height: defaultHeight.value, */
   width: 36,
   height: 72,
 };

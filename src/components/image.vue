@@ -105,7 +105,7 @@ const state = reactive({
 });
 
 // Get material classification
-canvasEditor.getUserUploads(12).then((list: materialTypeI[]) => {
+canvasEditor.getUserUploads().then((list: materialTypeI[]) => {
     //state.materialTypelist = [...list];
     state.materialist = list;
     //console.log(state.materialist);
@@ -115,7 +115,7 @@ const beforeClearTip = async (tmplUrl: string) => {
     Spin.show();
     try {
 
-        let response = await axios.get(`https://vista.simboz.website/api/template/getImage/${tmplUrl}`);
+        let response = await axios.get(`127.0.0.1:8000/api/template/getImage/${tmplUrl}`);
         console.log(response.data.image);
         insertImgFile(response.data.image);
         Spin.hide();

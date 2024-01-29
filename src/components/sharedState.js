@@ -1,7 +1,7 @@
 import { reactive } from 'vue';
 import axios from 'axios';
 import { Spin } from 'view-ui-plus';
-
+import { useStore } from 'vuex';
 
 // Create a shared reactive object with initial empty strings for front and back
 export const sharedState = reactive({
@@ -17,7 +17,16 @@ let id = urlParams.get('id');
 /* Spin.show({
     render: (h) => h('div', 'Loading Template'),
 }); */
-axios.get(`https://vista.simboz.website/api/template/showTemp/12/front`)
+
+const store = useStore();
+var token = computed(() => store.state.token);
+
+
+axios.get(`http://localhost:8000/api/template/showTemp/12/front`, {
+    headers: {
+        'Authorization': token,
+    }
+})
     .then((res) => {
         const { data } = res.data;
         if (data) {
