@@ -10,6 +10,7 @@ import { ref, Ref } from 'vue';
 import eventBus from '@/components/eventBus.js';
 import { sharedState } from '@/components/sharedState.js';
 import { useStore } from 'vuex';
+import html2pdf from 'html2pdf.js';
 
 
 
@@ -280,46 +281,61 @@ class ServersPlugin {
     }
   }
 
+
+
+
+
+
+
+
+
+
+
+
   async saveTemplate() {
     let frontJson = this.frontTempJson; 
     let backJson = this.backTempJson;
-    const formData = new FormData();
-    
-    /* formData.append('frontJsonData', frontJson);
-    formData.append('backJsonData', backJson); */
+    if (frontJson) {
+      console.log('saveTemplate',frontJson);
+      let serializer = new XMLSerializer();
+      let source = serializer.serializeToString(frontJson);
 
-    
-    formData.append('frontImage', this.frontSaveOptions);
-    formData.append('backImage', this.backSaveOptions);
+      // Convert XML to Image and draw on canvas
+      let img = new Image();
+      img.src = "data:image/svg+xml;base64," + btoa(source);
 
-    if (this.hiddenButtonRef.value) {
-      this.hiddenButtonRef.value.click();
-    }else{
-      //console.log('hiddenButtonRef empty');
-    }
-   
-
-   /*   Spin.show({
-      render: (h) => h('div', 'Saving Template'),
-    });  */
-    try {
-      
-      const response = await axios.post('http://127.0.0.1:8000/api/template/storeTemp', formData, {
-        headers: {
-          'Content-Type': 'application/json', // Set appropriate content type
-          'Authorization': `Bearer ${this.apiToken.value}`,
-        },
+      // Use await to wait for the image to load
+      await new Promise((resolve) => {
+        img.onload = resolve;
       });
-     /*   Spin.hide(); 
-      //console.log('Server Response:', response.data);
- */
-      eventBus.ReloadTemplate("userTemp");
-    } 
-    
-    catch (error) {
-      //console.error('Error:', error);
+
+      let canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      let ctx = canvas.getContext("2d");
+
+      if (ctx) {
+        ctx.drawImage(img, 0, 0);
+
+        // Convert canvas to PDF
+        ServersPlugin.saveAsPDF(canvas, 'output.pdf');
+      }
     }
+
   }
+
+  static saveAsPDF(canvas: HTMLCanvasElement, fileName: string) {
+    // Your implementation to save the canvas as a PDF goes here
+    // Example using html2pdf:
+    console.log('save pdf',fileName)
+    html2pdf(canvas, { filename: fileName });
+  }
+
+
+
+
+
+
 
   
   

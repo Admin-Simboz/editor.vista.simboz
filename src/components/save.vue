@@ -16,7 +16,7 @@
             <DropdownItem name="saveImg">{{ $t('save_as_picture') }}</DropdownItem>
             <DropdownItem name="saveSvg">{{ $t('save_as_svg') }}</DropdownItem>
             <DropdownItem name="saveJson" divided>{{ $t('save_as_json') }}</DropdownItem>
-            <DropdownItem name="saveTemplate" @click="triggerReload" divided>{{ $t('save_as_template') }}</DropdownItem>
+            <DropdownItem name="saveTemplate" @click="saveTemplate" divided>{{ $t('save_as_template') }}</DropdownItem>
           </DropdownMenu>
         </template>
       </Dropdown>
