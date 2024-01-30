@@ -13,13 +13,10 @@
 
         <!-- import -->
         <!-- if you want to import as a json file -->
-        <div>
-          <import-JSON></import-JSON>
-          <Divider type="vertical" />
-          <import-file></import-file>
-          <Divider type="vertical" />
-        </div>
-
+        <import-JSON></import-JSON>
+        <Divider type="vertical" />
+        <import-file></import-file>
+        <Divider type="vertical" />
         <!-- scale switch -->
         <Tooltip :content="$t('grid')">
           <iSwitch v-model="state.ruler" @on-change="rulerSwitch" size="small" class="switch"></iSwitch>
@@ -176,7 +173,18 @@ import attribute from '@/components/attribute.vue';
 
 import eventBus from '@/components/eventBus.js'; // Import the event bus
 import { watch } from 'vue';
+
+
+
+
 import { useStore } from 'vuex';
+
+const store = useStore();
+const messageFromLaravel = computed(() => store.state.messageFromLaravel);
+
+console.log("index.vue", messageFromLaravel);
+
+
 
 
 // Functional components
@@ -224,10 +232,6 @@ const reloadUserImages = () => {
 const canvasEditor = new Editor();
 
 const event = new CanvasEventEmitter();
-const store = useStore();
-var role = computed(() => store.state.role);
-
-console.log("index.vue", role);
 
 
 // controls the state of the object that you want to initialize 
@@ -238,7 +242,6 @@ const state = reactive({
   attrBarShow: true,
   select: null,
   ruler: false,
-  role: role.value,
 });
 
 onMounted(() => {
