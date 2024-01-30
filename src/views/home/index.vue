@@ -13,7 +13,7 @@
 
         <!-- import -->
         <!-- if you want to import as a json file -->
-        <div v-if="state.role">
+        <div>
           <import-JSON></import-JSON>
           <Divider type="vertical" />
           <import-file></import-file>
@@ -32,7 +32,7 @@
 
 
           <previewCurrent />
-          <waterMark v-if="state.role" />
+          <waterMark />
           <save></save>
           <!-- <lang></lang> -->
         </div>

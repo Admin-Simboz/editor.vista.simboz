@@ -281,64 +281,43 @@ class ServersPlugin {
     }
   }
 
-
-
-
-
-
-
-
-
-
-
-
   async saveTemplate() {
-    let frontJson = this.frontTempJson; 
-    let backJson = this.backTempJson;
-    if (frontJson) {
-      console.log('saveTemplate',frontJson);
-      let serializer = new XMLSerializer();
-      let source = serializer.serializeToString(frontJson);
+    console.log(this.frontSaveOptions);
+    const svgString = this.frontSaveOptions;
 
-      // Convert XML to Image and draw on canvas
-      let img = new Image();
-      img.src = "data:image/svg+xml;base64," + btoa(source);
+    if (svgString) {
+      // Convert SVG string to Image
+      const img = new Image();
+      img.src = "data:image/svg+xml;base64," + btoa(svgString);
 
       // Use await to wait for the image to load
       await new Promise((resolve) => {
         img.onload = resolve;
       });
 
-      let canvas = document.createElement("canvas");
+      const canvas = document.createElement("canvas");
       canvas.width = img.width;
       canvas.height = img.height;
-      let ctx = canvas.getContext("2d");
+      const ctx = canvas.getContext("2d");
 
       if (ctx) {
         ctx.drawImage(img, 0, 0);
 
         // Convert canvas to PDF
-        ServersPlugin.saveAsPDF(canvas, 'output.pdf');
+        await ServersPlugin.saveAsPDF(canvas, 'output.pdf');
       }
     }
-
   }
 
-  static saveAsPDF(canvas: HTMLCanvasElement, fileName: string) {
-    // Your implementation to save the canvas as a PDF goes here
+  // Your existing saveAsPDF method
+  static async saveAsPDF(canvas: HTMLCanvasElement, fileName: string) {
     // Example using html2pdf:
-    console.log('save pdf',fileName)
-    html2pdf(canvas, { filename: fileName });
+    const pdfBlob = await html2pdf(canvas, { filename: fileName });
+    const pdfDataUrl = URL.createObjectURL(pdfBlob);
+    
+    // Handle the generated PDF data URL as needed
+    console.log("Generated PDF Data URL:", pdfDataUrl);
   }
-
-
-
-
-
-
-
-  
-  
   saveSvg() {
     this.editor.hooksEntity.hookSaveBefore.callAsync('', () => {
       const option = this._getSaveSvgOption();
