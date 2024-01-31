@@ -28,16 +28,8 @@ const state: RootState = {
 const mutations = {
   setMessageFromLaravel(state: RootState, message: string) {
     console.log('setMessageFromLaravel',message);
-    var data= (message);
     state.messageFromLaravel = message;
-    state.userId = data.userId,
-    state.product_id = data.userId,
-    state.token = data.csrf_tokken,
-    state.template_height =  data.template_height,
-    state.template_width = data.template_width,
-    state.front_img_url = data.front_img_url,
-    state.back_img_url = data.back_img_url,
-    state.role = data.role 
+   
   },
 };
 

@@ -18,8 +18,6 @@ let id = urlParams.get('id');
     render: (h) => h('div', 'Loading Template'),
 }); */
 
-const store = useStore();
-var token = computed(() => store.state.token);
 
 
 axios.get(`http://localhost:8000/api/template/showTemp/12/front`, {

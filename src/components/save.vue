@@ -1,10 +1,12 @@
 
 <template>
   <div class="save-box">
+
     <Button style="margin-left: 10px" type="text" @click="beforeClear">
       {{ $t('empty') }}
     </Button>
-    <Dropdown style="margin-left: 10px" @on-click="saveWith">
+
+    <Dropdown v-if="role" style="margin-left: 10px" @on-click="saveWith">
       <Button type="primary">
         {{ $t('keep') }}
         <Icon type="ios-arrow-down"></Icon>
@@ -16,9 +18,14 @@
           <DropdownItem name="saveSvg">{{ $t('save_as_svg') }}</DropdownItem>
           <DropdownItem name="saveJson" divided>{{ $t('save_as_json') }}</DropdownItem>
           <DropdownItem name="saveTemplate" @click="triggerReload" divided>{{ $t('save_as_template') }}</DropdownItem>
+          <DropdownItem name="exit" divided>{{ $t('exit') }}</DropdownItem>
         </DropdownMenu>
       </template>
     </Dropdown>
+    <Button v-else type="primary" style="margin-left: 10px" @click="saveExitModal">
+      {{ $t('saveBtn') }}
+    </Button>
+
   </div>
 </template>
 
@@ -28,6 +35,7 @@ import useSelect from '@/hooks/select';
 
 import { debounce } from 'lodash-es';
 import { useI18n } from 'vue-i18n';
+import { useStore } from 'vuex';
 // import { downloadFile } from '@/utils/utils';
 
 
@@ -55,6 +63,9 @@ const cbMap = {
   saveImg() {
     canvasEditor.saveImg();
   },
+  exit() {
+    window.location.href = '/admin/product';
+  },
 };
 
 const saveWith = debounce(function (type) {
@@ -67,6 +78,9 @@ const saveWith = debounce(function (type) {
 const clear = () => {
   canvasEditor.clear();
 };
+const saveExit = () => {
+  canvasEditor.saveExit();
+};
 
 const beforeClear = () => {
   Modal.confirm({
@@ -77,6 +91,37 @@ const beforeClear = () => {
     onOk: () => clear(),
   });
 };
+const saveExitModal = () => {
+  Modal.confirm({
+    title: t('tip'),
+    content: `<p>${t('saveBtn')}</p>`,
+    okText: t('ok'),
+    cancelText: t('cancel'),
+    onOk: () => saveExit(),
+  });
+};
+
+const store = useStore();
+const messageFromLaravel = computed(() => store.state.messageFromLaravel);
+const role = ref(false);
+const mountedHandler = async () => {
+  try {
+    // Wait for the fetchDataFromLaravel action to complete
+    await store.dispatch('fetchDataFromLaravel');
+
+    // Access the updated store values
+    const parsedData = JSON.parse(messageFromLaravel.value);
+    role.value = parsedData.role;
+    console.log("role  :", role.value);
+    console.log("parsedData.role  :", parsedData.role);
+
+
+
+  } catch (error) {
+    console.error('Error fetching data from Laravel:', error);
+  }
+};
+onMounted(mountedHandler);
 </script>
 
 <style scoped lang="less">

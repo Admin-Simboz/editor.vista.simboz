@@ -13,10 +13,13 @@
 
         <!-- import -->
         <!-- if you want to import as a json file -->
-        <import-JSON></import-JSON>
+
+        <import-JSON v-if="role"></import-JSON>
+        <Divider v-if="role" type="vertical" />
+        <import-file v-if="role"></import-file>
         <Divider type="vertical" />
-        <import-file></import-file>
-        <Divider type="vertical" />
+
+
         <!-- scale switch -->
         <Tooltip :content="$t('grid')">
           <iSwitch v-model="state.ruler" @on-change="rulerSwitch" size="small" class="switch"></iSwitch>
@@ -29,7 +32,7 @@
 
 
           <previewCurrent />
-          <waterMark />
+          <waterMark v-if="role"></waterMark>
           <save></save>
           <!-- <lang></lang> -->
         </div>
@@ -181,12 +184,25 @@ import { useStore } from 'vuex';
 
 const store = useStore();
 const messageFromLaravel = computed(() => store.state.messageFromLaravel);
+const mountedHandler = async () => {
+  try {
+    // Wait for the fetchDataFromLaravel action to complete
+    await store.dispatch('fetchDataFromLaravel');
 
-console.log("index.vue", messageFromLaravel);
+    // Access the updated store values
+    const parsedData = JSON.parse(messageFromLaravel.value);
+    role.value = parsedData.role;
+    console.log("role  :", role.value);
+    console.log("parsedData.role  :", parsedData.role);
 
 
 
+  } catch (error) {
+    console.error('Error fetching data from Laravel:', error);
+  }
+};
 
+onMounted(mountedHandler);
 // Functional components
 import { CanvasEventEmitter } from '@/utils/event/notifier';
 // import { downFile } from '@/utils/utils';
@@ -215,6 +231,7 @@ import Editor, {
 
 const tmplKey = ref(0);
 const userUploadKey = ref(0);
+const role = ref(false);
 
 const reloadImportTmpl = () => {
   setTimeout(() => {
