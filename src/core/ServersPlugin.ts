@@ -273,7 +273,7 @@ class ServersPlugin {
      /*   Spin.hide(); 
       //console.log('Server Response:', response.data);
  */
-      eventBus.ReloadTemplate("userTemp");
+      //eventBus.ReloadTemplate("userTemp");
     } 
     
     catch (error) {

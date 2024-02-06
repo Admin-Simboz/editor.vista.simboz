@@ -21,9 +21,7 @@ let id = urlParams.get('id');
 
 
 axios.get(`http://localhost:8000/api/template/showTemp/12/front`, {
-    headers: {
-        'Authorization': token,
-    }
+
 })
     .then((res) => {
         const { data } = res.data;
