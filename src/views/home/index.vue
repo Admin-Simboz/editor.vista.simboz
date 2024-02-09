@@ -14,9 +14,9 @@
         <!-- import -->
         <!-- if you want to import as a json file -->
 
-        <import-JSON v-if="role"></import-JSON>
-        <Divider v-if="role" type="vertical" />
-        <import-file v-if="role"></import-file>
+        <import-JSON v-if="state.role"></import-JSON>
+        <Divider v-if="state.role" type="vertical" />
+        <import-file v-if="state.role"></import-file>
         <Divider type="vertical" />
 
 
@@ -32,7 +32,7 @@
 
 
           <previewCurrent />
-          <waterMark v-if="role"></waterMark>
+          <waterMark v-if="state.role"></waterMark>
           <save></save>
           <!-- <lang></lang> -->
         </div>
@@ -106,7 +106,7 @@
 
         <!-- Property area 380-->
         <div class="right-bar" v-show="state.attrBarShow">
-          <userTemplate />
+          <userTemplate v-if="state.back" />
           <div v-if="state.show" style="padding-top: 10px">
             <!-- Added font style usage -->
             <!-- <Button @click="getFontJson" size="small">Get Font Data</Button> -->
@@ -176,26 +176,25 @@ import attribute from '@/components/attribute.vue';
 
 import eventBus from '@/components/eventBus.js'; // Import the event bus
 import { watch } from 'vue';
-
+import { sharedState } from '@/components/sharedState.js';
 
 
 
 import { useStore } from 'vuex';
 
 const store = useStore();
-const messageFromLaravel = computed(() => store.state.messageFromLaravel);
+const roleValue = computed(() => store.state.role);
+const backValue = computed(() => store.state.back);
 const mountedHandler = async () => {
   try {
     // Wait for the fetchDataFromLaravel action to complete
     await store.dispatch('fetchDataFromLaravel');
 
     // Access the updated store values
-    const parsedData = JSON.parse(messageFromLaravel.value);
-    role.value = parsedData.role;
-    console.log("role  :", role.value);
-    console.log("parsedData.role  :", parsedData.role);
-
-
+    state.role = roleValue.value;//false
+    state.back = backValue.value;//false
+    /* console.log("role  role :", state.role);
+    console.log("role back :", state.back); */
 
   } catch (error) {
     console.error('Error fetching data from Laravel:', error);
@@ -232,6 +231,7 @@ import Editor, {
 const tmplKey = ref(0);
 const userUploadKey = ref(0);
 const role = ref(false);
+const back = ref(false);
 
 const reloadImportTmpl = () => {
   setTimeout(() => {
@@ -259,6 +259,8 @@ const state = reactive({
   attrBarShow: true,
   select: null,
   ruler: false,
+  role: false,
+  back: false,
 });
 
 onMounted(() => {
@@ -298,20 +300,7 @@ onMounted(() => {
   state.show = true;
 });
 
-// /* Get font data for font style usage
-// getFontJson() {
-//   const activeObject = this.canvas.getActiveObject();
-//   if (activeObject) {
-//     const json = activeObject.toJSON(['id', 'gradientAngle', 'selectable', 'hasControls']);
-//     console.log(json);
-//     const fileStr = `data:text/json;charset=utf-8,${encodeURIComponent(
-//       JSON.stringify(json, null, '\t')
-//     )}`;
-//     downFile(fileStr, 'font.json');
-//     const dataUrl = activeObject.toDataURL();
-//     downFile(dataUrl, 'font.png');
-//   }
-// }, */
+
 
 const rulerSwitch = (val) => {
   if (val) {
@@ -351,11 +340,34 @@ watch(
     if (userUploadValue > 0) {
       reloadUserImages();
       // Handle reloadUserUpoload change
-      console.log('reloadUserUpoload changed');
+      // console.log('reloadUserUpoload changed');
       // Perform actions related to reloadUserUpoload change
     }
   }
 );
+
+
+
+//runs when the sharedState change in the toggleTemp inside ServerPlugins.ts 
+const getUserTemplate = () => {
+  if (sharedState.front) {
+    canvasEditor.insertSvgString(sharedState.front);
+  }
+};
+
+// Watch for changes in sharedState.front and call addTemplate when it becomes available
+watch(sharedState, (newVal) => {
+  getUserTemplate();
+});
+
+
+
+
+
+
+
+
+
 
 
 provide('fabric', fabric);

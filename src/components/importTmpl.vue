@@ -102,7 +102,8 @@ const getTempData = (tmplUrl: string) => {
   getTemp
     .then((res) => {
       const { data } = res.data;
-      //assigining value here means watch function inside userTemplate.vue will work and update the template 
+      console.log(res.data)
+      //assigining value here means watch function inside index.vue will work and update the template 
       if (data && data.front) {
         sharedState.front = data.front;
         sharedState.back = data.back;

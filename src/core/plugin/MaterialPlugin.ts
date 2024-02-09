@@ -19,7 +19,7 @@ class MaterialPlugin {
 
     // Mapping type IDs to corresponding API URLs
     this.apiMapUrl = {
-      template: 'http://127.0.0.1:8000/api/template',
+      template: 'https://vista.simboz.website/api/template',
       svg: 'https://nihaojob.github.io/vue-fabric-editor-static/svg/type.json',
     };
   }

@@ -20,14 +20,14 @@ let id = urlParams.get('id');
 
 
 
-axios.get(`http://localhost:8000/api/template/showTemp/12/front`, {
+axios.get(`https://vista.simboz.website/api/template/editor-vue/12`, {
 
 })
     .then((res) => {
         const { data } = res.data;
         if (data) {
             // Check if 'front' and 'back' fields exist and are not empty
-            const { front, back, backImgUrl, frontImgUrl, position } = data;
+            const { front, back, backImgUrl, frontImgUrl, position, role } = data;
             if (front !== undefined && front !== null) {
                 sharedState.front = front;
             }
@@ -42,6 +42,9 @@ axios.get(`http://localhost:8000/api/template/showTemp/12/front`, {
             }
             if (position !== undefined && position !== null) {
                 sharedState.position = position;
+            }
+            if (role !== undefined && role !== null) {
+                sharedState.role = role;
             }
         } else {
             // console.error('Invalid data received from the API');

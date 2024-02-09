@@ -1,5 +1,5 @@
 
-<template>
+<template   >
     <div class="preview-image">
         <div class=" section" @click="addTemplate('front')">
             <div class="image-frame">
@@ -26,6 +26,7 @@ import useSelect from '@/hooks/select';
 import axios from 'axios';
 import { sharedState } from '@/components/sharedState.js'; // Import the shared state
 import { ref, watch } from 'vue';
+import { useStore } from 'vuex';
 
 const { canvasEditor }: any = useSelect();
 
@@ -33,6 +34,26 @@ const front = ref<string | null>(null);
 const frontImgUrl = ref<string | null>(null);
 const back = ref<string | null>(null);
 const backImgUrl = ref<string | null>(null);
+
+const store = useStore();
+const backValue = computed(() => store.state.back);
+const backTemplate = ref(false);
+
+const mountedHandler = async () => {
+    try {
+        // Wait for the fetchDataFromLaravel action to complete
+        await store.dispatch('fetchDataFromLaravel');
+
+        // Set backTemplate.value to false after successful data fetching
+        backTemplate.value = backValue.value;
+        console.log('fdsds', backTemplate.value);
+    } catch (error) {
+        console.error('Error fetching data from Laravel:', error);
+        // Handle the error gracefully, e.g., display a message to the user
+    }
+};
+
+onMounted(mountedHandler);
 
 
 const addTemplate = async (value: string) => {
@@ -55,11 +76,11 @@ const getUserTemplate = () => {
         frontImgUrl.value = sharedState.frontImgUrl;
         backImgUrl.value = sharedState.backImgUrl;
         front.value = sharedState.front;
-        if (sharedState.position === 'front') {
-            canvasEditor.insertSvgString(sharedState.front);
-        } else {
-            canvasEditor.insertSvgString(sharedState.back);
-        }
+        /*   if (sharedState.position === 'front') { */
+
+        /*   } else {
+              canvasEditor.insertSvgString(sharedState.back);
+          } */
 
     }
 };

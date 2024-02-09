@@ -41,18 +41,29 @@ import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 
 const store = useStore();
-var defaultWidth = computed(() => store.state.template_width);
-var defaultHeight = computed(() => store.state.template_height);
+const template_height = computed(() => store.state.template_height);
+const template_width = computed(() => store.state.template_width);
+const mountedHandler = async () => {
+  try {
+    // Wait for the fetchDataFromLaravel action to complete
+    await store.dispatch('fetchDataFromLaravel');
+    canvasEditor.setSize(template_width.value * 96, template_height.value * 96)
+
+  } catch (error) {
+    console.error('Error fetching data from Laravel:', error);
+  }
+};
+
+onMounted(mountedHandler);
 
 
 const { mixinState, canvasEditor } = useSelect();
 const { t } = useI18n();
 
-const DefaultSize = {/* 
-  width: defaultWidth.value,
-  height: defaultHeight.value, */
-  width: 36,
-  height: 72,
+const DefaultSize = {
+
+  width: template_width,
+  height: template_height,
 };
 
 const showModal = ref(false);

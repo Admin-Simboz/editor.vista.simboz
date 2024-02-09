@@ -79,7 +79,7 @@ const clear = () => {
   canvasEditor.clear();
 };
 const saveExit = () => {
-  canvasEditor.saveExit();
+  canvasEditor.saveTemplate();
 };
 
 const beforeClear = () => {
@@ -101,27 +101,7 @@ const saveExitModal = () => {
   });
 };
 
-const store = useStore();
-const messageFromLaravel = computed(() => store.state.messageFromLaravel);
-const role = ref(false);
-const mountedHandler = async () => {
-  try {
-    // Wait for the fetchDataFromLaravel action to complete
-    await store.dispatch('fetchDataFromLaravel');
 
-    // Access the updated store values
-    const parsedData = JSON.parse(messageFromLaravel.value);
-    role.value = parsedData.role;
-    console.log("role  :", role.value);
-    console.log("parsedData.role  :", parsedData.role);
-
-
-
-  } catch (error) {
-    console.error('Error fetching data from Laravel:', error);
-  }
-};
-onMounted(mountedHandler);
 </script>
 
 <style scoped lang="less">

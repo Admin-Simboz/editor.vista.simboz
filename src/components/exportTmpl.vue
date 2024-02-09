@@ -69,6 +69,7 @@ canvasEditor.getMaterialType('template').then((list: materialTypeI[]) => {
 
 // Insert file
 const insertSvgFile = () => {
+
   canvasEditor.insertSvgFile(state.jsonFile);
 };
 

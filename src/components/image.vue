@@ -73,6 +73,7 @@ function insertImgFile(file) {
 
 function uploadImage(file, name) {
     canvasEditor.uploadImage(file, name);
+
 }
 
 
