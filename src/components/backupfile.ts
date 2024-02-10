@@ -10,7 +10,6 @@ import { ref, Ref } from 'vue';
 import eventBus from '@/components/eventBus.js';
 import { sharedState } from '@/components/sharedState.js';
 
-
 type IEditor = Editor;
 // import { v4 as uuid } from 'uuid';
 
@@ -43,9 +42,11 @@ class ServersPlugin {
   private backTempJson: string | undefined;
   private frontSaveOptions: string = ''; // Initialize with an empty string or with a default value
   private backSaveOptions: string = '';
-  private backTemplateExsist: boolean = false;
   private currentTemp: 'front' | 'back' = 'front';
   private sharedState:any;  
+  
+  
+ 
 
   private hiddenButtonRef: Ref<HTMLButtonElement | null> = ref(null);
   static apis = [
@@ -64,7 +65,6 @@ class ServersPlugin {
     'waitForSharedState',
     'getUserUploads',
     'uploadImage',
-    'insertSvgString',
   ];
   
 
@@ -75,7 +75,6 @@ class ServersPlugin {
     this.initHiddenButtonRef();
     this.sharedState= sharedState;
     this.currentTemp="front";
- 
     this.waitForSharedState();
   }
 
@@ -88,7 +87,6 @@ class ServersPlugin {
         this.frontTempJson = sharedState.front;
         this.backTempJson = sharedState.back;
         this.currentTemp = sharedState.position;
-        this.backTemplateExsist = sharedState.backTemplateExsist;
         // Stop the interval as values are now available
         clearInterval(interval);
         // Proceed with further initialization or actions here
@@ -116,7 +114,7 @@ class ServersPlugin {
 
 
   insertSvgFile(jsonFile:string) {
-    console.log("insert svg file",jsonFile); 
+    //console.log(jsonFile); 
     // preload hook
     this.editor.hooksEntity.hookImportBefore.callAsync(jsonFile, () => {
       this.canvas.loadFromJSON(jsonFile, () => {
@@ -129,30 +127,6 @@ class ServersPlugin {
     }); 
   }
 
-  insertSvgString (svgString: string) {
-    fabric.loadSVGFromString(svgString, (objects, options) => {
-        const item = fabric.util.groupSVGElements(objects, {
-            ...options,
-            name: 'SVG  ',
-            id: uuid(),
-        });
-        
-        this.canvas.add(item)
-        this.canvas.renderAll();
-    });
-
-}
-  
-saveSvg() {
-  this.editor.hooksEntity.hookSaveBefore.callAsync('', () => {
-    const option = this._getSaveSvgOption();
-    const dataUrl = this.canvas.toSVG(option);
-    const fileStr = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(dataUrl)}`;
-    this.editor.hooksEntity.hookSaveAfter.callAsync(fileStr, () => {
-      downFile(fileStr, 'svg');
-    });
-  });
-}
   getJson() {
     return this.canvas.toJSON(['id', 'gradientAngle', 'selectable', 'hasControls']);
   }
@@ -194,63 +168,45 @@ saveSvg() {
   }
 
   toggleTemplate(value: 'front' | 'back') {
-    
    // console.log('inside toggle temp');
     if (value === this.currentTemp) {
       //console.log('inside return');
       return; // Skip if the value is already the current one
     }
     if (value === 'front') {
-      this.editor.hooksEntity.hookSaveBefore.callAsync('', () => {
-        const option = this._getSaveSvgOption();
-        this.backSaveOptions = this.canvas.toSVG(option);
-        
-      });
+   
+      const option = this._getSaveOption();
+      console.log(option);
       
-      //console.log(this.frontSaveOptions);
-      
-      //console.log(this.frontSaveOptions);
-      this.insertSvgString(this.frontSaveOptions);
+      this.backSaveOptions = this.canvas.toSVG(option);
+      //console.log(this.frontTempJson);
+      this.insertSvgFile(this.frontTempJson);
       this.currentTemp = 'front';
     }
 
     if (value === 'back') {
-      this.editor.hooksEntity.hookSaveBefore.callAsync('', () => {
-        const option = this._getSaveSvgOption();
-        this.frontSaveOptions = this.canvas.toSVG(option);
-      });
-      //console.log(this.backSaveOptions);
+      this.frontTempJson = JSON.stringify(this.getJson());
+      const option = this._getSaveOption();
       
-      this.insertSvgString(this.backSaveOptions);
-      
+      this.frontSaveOptions = this.canvas.toSVG(option);
+      //console.log(this.backTempJson);
+      this.insertSvgFile(this.backTempJson);
       this.currentTemp = 'back';
     }
   }
 
 
-
   async saveTemplate() {
-    
+    let frontJson = this.frontTempJson; 
+    let backJson = this.backTempJson;
 
     
     const formData = new FormData();
-  
-    const option = this._getSaveSvgOption();
-    const dataUrl = this.canvas.toSVG(option);
-    
-    /* front = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(dataUrl)}`; */
-   
-    
-    formData.append('frontImage', dataUrl); 
-    formData.append('userId', sharedState.userId);
-    formData.append('templateWidth', sharedState.templateWidth);
-    formData.append('templateHeight', sharedState.templateHeight);
-    formData.append('productId', sharedState.productId);
-    formData.append('role', sharedState.role);
 
-    if(sharedState.back){
-      formData.append('backImage', this.backSaveOptions);
-    }
+    
+    formData.append('frontImage', this.frontSaveOptions);
+    formData.append('backImage', this.backSaveOptions);
+
     if (this.hiddenButtonRef.value) {
       this.hiddenButtonRef.value.click();
     }else{
@@ -269,22 +225,27 @@ saveSvg() {
       });
      /*   Spin.hide(); 
       //console.log('Server Response:', response.data);
- */   if (response.status === 200) {      
-         if(!sharedState.role){
-
-                window.location.href = '/cart';
-          }
-        }
-      
+ */
       eventBus.ReloadTemplate("userTemp");
     } 
     
     catch (error) {
       //console.error('Error:', error);
     }
-  
   }
 
+  
+  
+  saveSvg() {
+    this.editor.hooksEntity.hookSaveBefore.callAsync('', () => {
+      const option = this._getSaveSvgOption();
+      const dataUrl = this.canvas.toSVG(option);
+      const fileStr = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(dataUrl)}`;
+      this.editor.hooksEntity.hookSaveAfter.callAsync(fileStr, () => {
+        downFile(fileStr, 'svg');
+      });
+    });
+  }
 
   saveImg() {
     this.editor.hooksEntity.hookSaveBefore.callAsync('', () => {
@@ -315,36 +276,28 @@ saveSvg() {
 
   
 
-
-  async getUserUploads(id: number): Promise<any[]> {
-    try {
+async getUserUploads(id: string): Promise<any[]> {
   
-  
-      const response: AxiosResponse<any> = await axios.get(` https://vista.simboz.website/api/template/loadUserImages/${id}`);
-  
-      // Check if the response is successful (status code 200)
-      if (response.status === 200) {
-        // Extract the 'data' property from the Axios response
-        const data = response.data.data;
-        
-        // Reload the div containing images
-        ///eventBus.ReloadTemplate("userUploads");
-  
-        // Hide the loading spinner
-        Spin.hide();
-  
-        return data; // Assuming response.data is an object with a 'data' property holding the array
-      } else {
-        // Handle other response status codes if needed
-        // console.error('Non-200 status code:', response.status);
-        return []; // or throw an error or return a specific value
-      }
-    } catch (error) {
-      // Handle error, throw, or return a specific value if needed
-      // console.error('Error:', error);
+  try {
+    
+    const response: AxiosResponse<any> = await axios.get(`https://vista.simboz.website/api/template/loadUserImages/${id}`);
+    // Check if the response is successful (status code 200)
+    if (response.status === 200) {
+      // Extract the 'data' property from the Axios response
+      return response.data.data; // Assuming response.data is an object with a 'data' property holding the array
+      eventBus.ReloadTemplate("userUploads");//to reload the div containing images
+      Spin.hide(); 
+    } else {
+      // Handle other response status codes if needed
+      console.error('Non-200 status code:', response.status);
       return []; // or throw an error or return a specific value
     }
+  } catch (error) {
+    console.error('Error:', error);
+    // Handle error, throw, or return a specific value if needed
+    return []; // or throw an error or return a specific value
   }
+}
 
 async uploadImage(file: string, name: string) {
 
@@ -360,7 +313,6 @@ async uploadImage(file: string, name: string) {
       const response = await axios.post('https://vista.simboz.website/api/template/uploadImage', formData, {
           headers: {
               'Content-Type': 'multipart/form-data',
-              'Authorization': `Bearer ${this.apiToken.value}`,
           },
       });
 
@@ -368,7 +320,7 @@ async uploadImage(file: string, name: string) {
       /* Spin.hide(); */
       // Handle the response if needed
   } catch (error) {
-     // console.error('Error:', error);
+      console.error('Error:', error);
       // Handle error, throw, or return a specific value if needed
   }
 }
@@ -389,14 +341,16 @@ async uploadImage(file: string, name: string) {
   }
 
   _getSaveOption() {
-    const workspace = this.canvas.getObjects() .find((item: fabric.Object) => item.id === 'workspace');
+    const workspace = this.canvas
+      .getObjects()
+      .find((item: fabric.Object) => item.id === 'workspace');
     const { left, top, width, height } = workspace as fabric.Object;
     const option = {
       name: 'New Image',
       format: 'svg',
       quality: 1,
-      /* width:3072,
-      height:6912, */
+      width,
+      height,
       left,
       top,
     };
@@ -414,7 +368,7 @@ async uploadImage(file: string, name: string) {
   }
 
   destroy() {
-    //console.log('pluginDestroy');
+    console.log('pluginDestroy');
   }
 }
 

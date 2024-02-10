@@ -73,7 +73,7 @@ canvasEditor.getMaterialType('template').then((list: materialTypeI[]) => {
 
 // Replacement tips
 const beforeClearTip = (tmplUrl: string) => {
-
+  console.log(tmplUrl);
   Modal.confirm({
     title: t('Warning'),
     content: `<p>${t('replaceTip')}</p>`,
@@ -98,7 +98,7 @@ const getTempData = (tmplUrl: string) => {
 
 
   const getTemp = axios.get(tmplUrl);
-
+  console.log(getTemp);
   getTemp
     .then((res) => {
       const { data } = res.data;
@@ -110,6 +110,8 @@ const getTempData = (tmplUrl: string) => {
         sharedState.frontImgUrl = data.frontImgUrl;
         sharedState.position = data.position;
         sharedState.backImgUrl = data.backImgUrl;
+        console.log(sharedState.front);
+        canvasEditor.insertSvgString(sharedState.front);
         updateValues();//to update sharedState values inside ServersPlugins.ts
         Spin.hide();
 

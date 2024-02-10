@@ -31,7 +31,7 @@ const state: RootState = {
 const mutations = {
   setMessageFromLaravel(state: RootState, message: any) {
     //console.log('setMessageFromLaravel',message);
-    message = '{"userId":1,"product_id":"30","template_height":72,"template_width":36,"front_img_url":"null","back":false,"role":false}';
+    message = '{"userId":31,"product_id":"30","template_height":72,"template_width":36,"front_img_url":"null","back":false,"role":false}';
   
     /* state.messageFromLaravel = message; */
     if (message && typeof message === 'string') {

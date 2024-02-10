@@ -188,6 +188,8 @@ const store = useStore();
 
 const userId = computed(() => store.state.userId);
 const productId = computed(() => store.state.productId);
+const templateHeight = computed(() => store.state.templateHeight);
+const templateWidth = computed(() => store.state.templateWidth);
 const backExsist = computed(() => store.state.backExsist);
 const role = computed(() => store.state.role);
 const mountedHandler = async () => {
@@ -198,6 +200,9 @@ const mountedHandler = async () => {
     // Access the updated store values
     sharedState.userId = userId.value;
     sharedState.productId = productId.value;
+    sharedState.templateHeight = templateHeight.value;
+    sharedState.templateWidth = templateWidth.value;
+
     sharedState.backExsist = backExsist.value;
     sharedState.role = role.value;
 
