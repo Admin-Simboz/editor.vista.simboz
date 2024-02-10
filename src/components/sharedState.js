@@ -10,6 +10,15 @@ export const sharedState = reactive({
     frontImgUrl: '',
     backImgUrl: '',
     position: '',
+    userId: '',
+    productId: '',
+    templateHeight: '',
+    templateWidth: '',
+    frontUrl: '',
+    backUrl: '',
+    backExsist: '',
+    role: '',
+
 });
 const urlParams = new URLSearchParams(window.location.search);
 let id = urlParams.get('id');
@@ -27,7 +36,7 @@ axios.get(`https://vista.simboz.website/api/template/editor-vue/12`, {
         const { data } = res.data;
         if (data) {
             // Check if 'front' and 'back' fields exist and are not empty
-            const { front, back, backImgUrl, frontImgUrl, position, role } = data;
+            const { front, back, backImgUrl, frontImgUrl, position } = data;
             if (front !== undefined && front !== null) {
                 sharedState.front = front;
             }
@@ -42,9 +51,6 @@ axios.get(`https://vista.simboz.website/api/template/editor-vue/12`, {
             }
             if (position !== undefined && position !== null) {
                 sharedState.position = position;
-            }
-            if (role !== undefined && role !== null) {
-                sharedState.role = role;
             }
         } else {
             // console.error('Invalid data received from the API');

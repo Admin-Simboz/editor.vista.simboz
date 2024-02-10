@@ -2,17 +2,18 @@
 
 <template>
   <div v-if="!mixinState.mSelectMode">
-    <Divider plain orientation="left">{{ $t('size') }} (Inch)</Divider>
-    <Form :label-width="40" class="form-wrap">
-      <FormItem :label="$t('width')" prop="name">
-        <InputNumber v-model="width" @on-change="setSize"></InputNumber>
-      </FormItem>
-      <FormItem :label="$t('height')" prop="name">
-        <InputNumber v-model="height" @on-change="setSize"></InputNumber>
-      </FormItem>
-    </Form>
-    <Button type="primary" @click="() => (showModal = true)">Resize</Button>
-
+    <div v-if="modalData.role">
+      <Divider plain orientation="left">{{ $t('size') }} (Inch)</Divider>
+      <Form :label-width="40" class="form-wrap">
+        <FormItem :label="$t('width')" prop="name">
+          <InputNumber v-model="width" @on-change="setSize"></InputNumber>
+        </FormItem>
+        <FormItem :label="$t('height')" prop="name">
+          <InputNumber v-model="height" @on-change="setSize"></InputNumber>
+        </FormItem>
+      </Form>
+      <Button type="primary" @click="() => (showModal = true)">Resize</Button>
+    </div>
     <Modal v-model="showModal" :title="$t('setSizeTip')" @on-ok="handleConfirm" @on-cancel="handleClose">
       <p>{{ $t('default_size') }}</p>
       <ButtonGroup vertical style="margin: 10px 0">
@@ -41,13 +42,17 @@ import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 
 const store = useStore();
-const template_height = computed(() => store.state.template_height);
-const template_width = computed(() => store.state.template_width);
+const template_height = computed(() => store.state.templateHeight);
+const template_width = computed(() => store.state.templateWidth);
+const role = computed(() => store.state.role);
 const mountedHandler = async () => {
   try {
     // Wait for the fetchDataFromLaravel action to complete
     await store.dispatch('fetchDataFromLaravel');
     canvasEditor.setSize(template_width.value * 96, template_height.value * 96)
+    modalData.role = role.value;
+    console.log('test role', role.value);
+    console.log('test modal', modalData.role);
 
   } catch (error) {
     console.error('Error fetching data from Laravel:', error);
@@ -70,6 +75,7 @@ const showModal = ref(false);
 const modalData = reactive({
   width: DefaultSize.width,
   height: DefaultSize.height,
+  role: false,
 });
 let width = ref(DefaultSize.width);
 let height = ref(DefaultSize.height);
@@ -106,6 +112,7 @@ onMounted(() => {
   canvasEditor.on('sizeChange', (width, height) => {
     width.value = width;
     height.value = height;
+
   });
 
   // canvas.editor.editorWorkspace.setSize(width.value, height.value);

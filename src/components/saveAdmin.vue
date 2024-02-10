@@ -6,7 +6,7 @@
       {{ $t('empty') }}
     </Button>
 
-    <Dropdown v-if="role" style="margin-left: 10px" @on-click="saveWith">
+    <Dropdown style="margin-left: 10px" @on-click="saveWith">
       <Button type="primary">
         {{ $t('keep') }}
         <Icon type="ios-arrow-down"></Icon>
@@ -22,9 +22,6 @@
         </DropdownMenu>
       </template>
     </Dropdown>
-    <Button v-else type="primary" style="margin-left: 10px" @click="saveExitModal">
-      {{ $t('saveBtn') }}
-    </Button>
 
   </div>
 </template>
@@ -100,7 +97,6 @@ const saveExitModal = () => {
     onOk: () => saveExit(),
   });
 };
-
 
 </script>
 

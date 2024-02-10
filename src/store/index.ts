@@ -4,27 +4,27 @@ import { createStore, Commit } from 'vuex';
 export interface RootState {
   messageFromLaravel: string;
   userId : string;
-  product_id : string;
+  productId : string;
   token : string;
-  template_height :  string;
-  template_width : string;
-  front_img_url : string;
-  back_img_url : string;
+  templateHeight :  string;
+  templateWidth : string;
+  frontUrl : string;
+  backUrl : string;
   role : boolean;
-  back: boolean;
+  backExsist: boolean;
   
 }
 
 const state: RootState = {
   messageFromLaravel: '',
   userId :'',
-  product_id : '',
+  productId : '',
   token : '',
-  template_height :  '',
-  template_width : '',
-  front_img_url : '',
-  back_img_url : '',
-  back: false,
+  templateHeight :  '',
+  templateWidth : '',
+  frontUrl : '',
+  backUrl : '',
+  backExsist: false,
   role :false,
 };
 
@@ -38,14 +38,14 @@ const mutations = {
       try {
         const parsedMessage = JSON.parse(message);
         state.userId = parsedMessage.userId;
-        state.product_id = parsedMessage.product_id;
+        state.productId = parsedMessage.product_id;
         state.token = parsedMessage.token;
-        state.template_height = parsedMessage.template_height;
-        state.template_width = parsedMessage.template_width;
-        state.front_img_url = parsedMessage.front_img_url; 
-        state.back_img_url = parsedMessage.back_img_url; 
+        state.templateHeight = parsedMessage.template_height;
+        state.templateWidth = parsedMessage.template_width;
+        state.frontUrl = parsedMessage.front_img_url; 
+        state.backUrl = parsedMessage.back_img_url; 
         state.role = parsedMessage.role;
-        state.back = parsedMessage.back;
+        state.backExsist = parsedMessage.back;
       } catch (error) {
         console.error('Error parsing message:', error);
       }

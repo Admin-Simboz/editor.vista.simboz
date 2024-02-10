@@ -33,7 +33,8 @@
 
           <previewCurrent />
           <waterMark v-if="state.role"></waterMark>
-          <save></save>
+          <saveAdmin v-if="state.role"></saveAdmin>
+          <saveUser v-if="!state.role"></saveUser>
           <!-- <lang></lang> -->
         </div>
       </Header>
@@ -151,7 +152,8 @@ import align from '@/components/align.vue';
 import centerAlign from '@/components/centerAlign.vue';
 import flip from '@/components/flip.vue';
 import previewCurrent from '@/components/previewCurrent';
-import save from '@/components/save.vue';
+import saveAdmin from '@/components/saveAdmin.vue';
+import saveUser from '@/components/saveUser.vue';
 //import lang from '@/components/lang.vue';
 import clone from '@/components/clone.vue';
 import group from '@/components/group.vue';
@@ -183,18 +185,27 @@ import { sharedState } from '@/components/sharedState.js';
 import { useStore } from 'vuex';
 
 const store = useStore();
-const roleValue = computed(() => store.state.role);
-const backValue = computed(() => store.state.back);
+
+const userId = computed(() => store.state.userId);
+const productId = computed(() => store.state.productId);
+const backExsist = computed(() => store.state.backExsist);
+const role = computed(() => store.state.role);
 const mountedHandler = async () => {
   try {
     // Wait for the fetchDataFromLaravel action to complete
     await store.dispatch('fetchDataFromLaravel');
 
     // Access the updated store values
-    state.role = roleValue.value;//false
-    state.back = backValue.value;//false
-    /* console.log("role  role :", state.role);
-    console.log("role back :", state.back); */
+    sharedState.userId = userId.value;
+    sharedState.productId = productId.value;
+    sharedState.backExsist = backExsist.value;
+    sharedState.role = role.value;
+
+
+    state.role = role.value;//false
+    state.back = backExsist.value;//false
+    //console.log("role  role :", state.role);
+    //console.log("role back :", state.back);
 
   } catch (error) {
     console.error('Error fetching data from Laravel:', error);
@@ -230,8 +241,7 @@ import Editor, {
 
 const tmplKey = ref(0);
 const userUploadKey = ref(0);
-const role = ref(false);
-const back = ref(false);
+
 
 const reloadImportTmpl = () => {
   setTimeout(() => {
@@ -332,8 +342,10 @@ watch(
     // Perform different actions based on the changed variable
     if (importTmplValue > 0) {
       // Handle reloadImportTmpl change
-      console.log('reloadImportTmpl changed');
-      reloadImportTmpl();
+      if (sharedState.role) {
+        console.log('reloadImportTmpl changed');
+        reloadImportTmpl();
+      }
       // Perform actions related to reloadImportTmpl change
     }
 

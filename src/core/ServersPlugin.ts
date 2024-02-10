@@ -11,14 +11,6 @@ import eventBus from '@/components/eventBus.js';
 import { sharedState } from '@/components/sharedState.js';
 
 
-import { useStore } from 'vuex';
-
-
-const store = useStore();
-const roleValue = computed(() => store.state.role);
-const backValue = computed(() => store.state.back);
-
-
 type IEditor = Editor;
 // import { v4 as uuid } from 'uuid';
 
@@ -51,7 +43,7 @@ class ServersPlugin {
   private backTempJson: string | undefined;
   private frontSaveOptions: string = ''; // Initialize with an empty string or with a default value
   private backSaveOptions: string = '';
-  private role: boolean = false;
+  private backTemplateExsist: boolean = false;
   private currentTemp: 'front' | 'back' = 'front';
   private sharedState:any;  
 
@@ -83,7 +75,7 @@ class ServersPlugin {
     this.initHiddenButtonRef();
     this.sharedState= sharedState;
     this.currentTemp="front";
-    this.role=false;
+ 
     this.waitForSharedState();
   }
 
@@ -96,7 +88,7 @@ class ServersPlugin {
         this.frontTempJson = sharedState.front;
         this.backTempJson = sharedState.back;
         this.currentTemp = sharedState.position;
-        this.role = sharedState.role;
+        this.backTemplateExsist = sharedState.backTemplateExsist;
         // Stop the interval as values are now available
         clearInterval(interval);
         // Proceed with further initialization or actions here
@@ -229,61 +221,54 @@ class ServersPlugin {
 
 
   async saveTemplate() {
-
-    if(this.role){
-        this.editor.hooksEntity.hookSaveBefore.callAsync('', () => {
-        const option = this._getSaveSvgOption();
-        this.frontSaveOptions = this.canvas.toSVG(option);
-        
-      });
-    }
-    console.log(this.frontSaveOptions);
-    const svgString = this.frontSaveOptions;
-
-    if (svgString) {
-      // Convert SVG string to Image
-      const img = new Image();
-      img.src = "data:image/svg+xml;base64," + btoa(svgString);
-
-      // Use await to wait for the image to load
-      await new Promise((resolve) => {
-        img.onload = resolve;
-      });
-
-      const canvas = document.createElement("canvas");
-      canvas.width = img.width;
-      canvas.height = img.height;
-      const ctx = canvas.getContext("2d");
-
-      if (ctx) {
-        ctx.drawImage(img, 0, 0);
-
-        // Convert canvas to PDF
-        await ServersPlugin.saveAsPDF(canvas, 'output.pdf');
-      }
-    }
-  }
-
-  // Your existing saveAsPDF method
-  static async saveAsPDF(canvas: HTMLCanvasElement, fileName: string) {
-    // Example using html2pdf:
-    const pdfBlob = await html2pdf(canvas, { filename: fileName });
-    const pdfDataUrl = URL.createObjectURL(pdfBlob);
     
-    // Handle the generated PDF data URL as needed
-    console.log("Generated PDF Data URL:", pdfDataUrl);
-  }
-  saveSvg() {
+
+
+    const formData = new FormData();
+    
     this.editor.hooksEntity.hookSaveBefore.callAsync('', () => {
       const option = this._getSaveSvgOption();
-      const dataUrl = this.canvas.toSVG(option);
-      //console.log(dataUrl);
-      const fileStr = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(dataUrl)}`;
-      this.editor.hooksEntity.hookSaveAfter.callAsync(fileStr, () => {
-        downFile(fileStr, 'svg');
-      });
+      console.log('option',option);
+      let front = this.canvas.toSVG(option);
+      formData.append('frontImage', front);
+      
     });
+    console.log('front',this.frontSaveOptions);
+    
+    formData.append('userId', sharedState.userId);
+    formData.append('productId', sharedState.productId);
+
+    if(sharedState.back){
+      formData.append('backImage', this.backSaveOptions);
+    }
+    if (this.hiddenButtonRef.value) {
+      this.hiddenButtonRef.value.click();
+    }else{
+      //console.log('hiddenButtonRef empty');
+    }
+    
+   /*   Spin.show({
+      render: (h) => h('div', 'Saving Template'),
+    });  */
+    try {
+     
+      const response = await axios.post('https://vista.simboz.website/api/template/storeTemp', formData, {
+        headers: {
+          'Content-Type': 'application/json', // Set appropriate content type
+        },
+      });
+     /*   Spin.hide(); 
+      //console.log('Server Response:', response.data);
+ */
+      eventBus.ReloadTemplate("userTemp");
+    } 
+    
+    catch (error) {
+      //console.error('Error:', error);
+    }
+  
   }
+
 
   saveImg() {
     this.editor.hooksEntity.hookSaveBefore.callAsync('', () => {
